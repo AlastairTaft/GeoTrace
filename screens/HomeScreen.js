@@ -11,42 +11,15 @@ import {
   TextInput,  
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import * as Permissions from 'expo-permissions'
-import * as Location from 'expo-location'
-import Svg, { Path } from 'react-native-svg'
-import { MonoText } from '../components/StyledText'
-import { BACKGROUND_TRACKING_TASK_NAME } from './../global/backgroundLocationTracking'
 import CheckBox from './../components/CheckBox'
 import Button from './../components/Button'
 import CloseButton from './../components/CloseButton'
 
-const askRequiredPermissions = async () => {
-  var result = await Permissions.askAsync(Permissions.LOCATION)
-
-  if (!result.granted){
-    // Do something to show that background location tracking isn't enabled.
-    return
-  }
-
-  const options = {
-    accuracy: Location.Accuracy.Highest,
-    distanceInterval: 10,
-    timeInterval: 5 * 60000, // 5 minute
-    mayShowUserSettingsDialog: false,
-    activityType: Location.ActivityType.Fitness,
-  }
-  await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
-}
 
 export default function HomeScreen() {
 
-  useEffect(() => {
-    askRequiredPermissions()
-  })
-
   var [showModal, setShowModal] = useState(false)
   
-
   return (
     <View style={styles.container}>
 
@@ -65,9 +38,7 @@ export default function HomeScreen() {
         <View style={styles.welcomeContainer}>
           <Image
             source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
+              require('../assets/images/logo.png')
             }
             style={styles.welcomeImage}
           />

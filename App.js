@@ -1,17 +1,44 @@
-import * as React from 'react';
+import React, { useEffect } from 'react'
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack'
+import * as Permissions from 'expo-permissions'
+import * as Location from 'expo-location'
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import useLinking from './navigation/useLinking';
+import BottomTabNavigator from './navigation/BottomTabNavigator'
+import useLinking from './navigation/useLinking'
+import { BACKGROUND_TRACKING_TASK_NAME } from './global/backgroundLocationTracking'
+
+
+const askRequiredPermissions = async () => {
+  var result = await Permissions.askAsync(Permissions.LOCATION)
+
+  if (!result.granted){
+    // Do something to show that background location tracking isn't enabled.
+    return
+  }
+
+  const options = {
+    accuracy: Location.Accuracy.Highest,
+    distanceInterval: 10,
+    timeInterval: 5 * 60000, // 5 minute
+    mayShowUserSettingsDialog: false,
+    activityType: Location.ActivityType.Fitness,
+  }
+  await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
+}
 
 const Stack = createStackNavigator();
 
 export default function App(props) {
+
+  useEffect(() => {
+    askRequiredPermissions()
+  })
+
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
