@@ -1,14 +1,41 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect } from 'react'
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { 
+  Image, 
+  Platform, 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  View, 
+  Modal, 
+  TextInput,  
+} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import * as Permissions from 'expo-permissions'
-
-import { MonoText } from '../components/StyledText';
+import * as Location from 'expo-location'
+import Svg, { Path } from 'react-native-svg'
+import { MonoText } from '../components/StyledText'
+import { BACKGROUND_TRACKING_TASK_NAME } from './../global/backgroundLocationTracking'
+import CheckBox from './../components/CheckBox'
+import Button from './../components/Button'
+import CloseButton from './../components/CloseButton'
 
 const askRequiredPermissions = async () => {
   var result = await Permissions.askAsync(Permissions.LOCATION)
-  console.log('askRequiredPermissions#result', result)
+
+  if (!result.granted){
+    // Do something to show that background location tracking isn't enabled.
+    return
+  }
+
+  const options = {
+    accuracy: Location.Accuracy.Highest,
+    distanceInterval: 10,
+    timeInterval: 5 * 60000, // 5 minute
+    mayShowUserSettingsDialog: false,
+    activityType: Location.ActivityType.Fitness,
+  }
+  await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
 }
 
 export default function HomeScreen() {
@@ -17,8 +44,23 @@ export default function HomeScreen() {
     askRequiredPermissions()
   })
 
+  var [showModal, setShowModal] = useState(false)
+  
+
   return (
     <View style={styles.container}>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showModal}
+        onRequestClose={() => setShowModal(false)}
+      >
+        <ConfirmInfected 
+          onRequestClose={() => setShowModal(false)}
+        />
+      </Modal>
+
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
           <Image
@@ -46,9 +88,11 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
+          <Button 
+            onPress={() => setShowModal(true)}
+            title="Report, I have COVID-19"
+          />
+
         </View>
 
       </ScrollView>
@@ -99,6 +143,52 @@ function handleHelpPress() {
   WebBrowser.openBrowserAsync(
     'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
   );
+}
+
+const ConfirmInfected = props => {
+
+  var [confirmed, setConfirmed] = useState(false)
+  console.log('ConfirmInfected#confirmed', confirmed)
+
+  return <View 
+    style={styles.modalOuter}
+  >
+    <View style={styles.modalInner}>
+      <Text>How many days ago did you start showing symptoms?</Text>
+      <TextInput  
+        placeholder="Enter number of days"   
+        keyboardType={'numeric'} 
+        style={styles.input}
+      />  
+
+      <View style={styles.confirmContainer}>
+        <View style={{width: '20%'}}>
+          <CheckBox 
+            checked={confirmed}
+            onPress={() => setConfirmed(!confirmed)}
+          />
+        </View>
+        <View style={{width: '80%', paddingLeft: 10, boxSizing: 'border-box'}}>
+          <Text>
+            I acknowledge that I have officially tested positive for COVID-19. 
+            By tapping 'Confirm' I will be helping others avoid infection and I will no
+            longer receive notifications.
+          </Text>
+        </View>
+      </View>
+
+
+      <Button
+        title="Confirm"
+        disabled={!confirmed}
+      />
+
+      <CloseButton 
+        style={styles.closeButton} 
+        onPress={props.onRequestClose}
+      />
+    </View>
+  </View>
 }
 
 const styles = StyleSheet.create({
@@ -181,11 +271,56 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignItems: 'center',
   },
-  helpLink: {
+  primaryButton: {
     paddingVertical: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+    backgroundColor: '#4896ec',
+    borderRadius: 5,
   },
   helpLinkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: 'white',
+  },
+  modalOuter: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00000080',
+  },
+  modalInner: {
+    width: 300,
+    backgroundColor: '#fff',
+    padding: 20,
+    paddingTop: 40,
+    height: 400,
+    borderRadius: 3,
+  },
+  input: {
+    marginTop: 20,
+    marginBottom: 20,
+    padding: 10,
+    fontSize: 26,
+    color: '#2f95dc',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderStyle: 'solid',
+    borderRadius: 3,
+  },
+  confirmContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    marginTop: 40,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: -10,
+    right: 5,
+    width: 50,
+    height: 50,
+    borderWidth: 0,
   },
 });
