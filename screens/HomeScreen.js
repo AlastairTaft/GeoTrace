@@ -14,7 +14,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import CheckBox from './../components/CheckBox'
 import Button from './../components/Button'
 import CloseButton from './../components/CloseButton'
-
+import Colors from './../constants/Colors'
 
 export default function HomeScreen() {
 
@@ -151,14 +151,6 @@ const styles = StyleSheet.create({
   homeScreenFilename: {
     marginVertical: 7,
   },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
   getStartedText: {
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
@@ -187,7 +179,7 @@ const styles = StyleSheet.create({
   },
   tabBarInfoText: {
     fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
+    color: Colors.tintColor,
     textAlign: 'center',
   },
   navigationFilename: {
@@ -201,7 +193,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingLeft: 15,
     paddingRight: 15,
-    backgroundColor: '#4896ec',
+    backgroundColor: Colors.tintColor,
     borderRadius: 5,
   },
   helpLinkText: {
@@ -228,7 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     fontSize: 26,
-    color: '#2f95dc',
+    color: Colors.tintColor,
     borderWidth: 1,
     borderColor: '#ccc',
     borderStyle: 'solid',
