@@ -43,6 +43,6 @@ function getHeaderTitle(route) {
     case 'Home':
       return 'TAS Trace Together';
     case 'Links':
-      return 'Links to learn more';
+      return 'Useful links';
   }
 }

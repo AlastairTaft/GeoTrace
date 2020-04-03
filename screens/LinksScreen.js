@@ -8,23 +8,17 @@ export default function LinksScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <OptionButton
-        icon="md-school"
-        label="Read the Expo documentation"
-        onPress={() => WebBrowser.openBrowserAsync('https://docs.expo.io')}
+        icon="md-heart"
+        label="Coronavirus (COVID-19) health alert - Australia Department of Health"
+        onPress={() => WebBrowser.openBrowserAsync('https://www.health.gov.au/news/health-alerts/novel-coronavirus-2019-ncov-health-alert')}
       />
 
       <OptionButton
-        icon="md-compass"
-        label="Read the React Navigation documentation"
-        onPress={() => WebBrowser.openBrowserAsync('https://reactnavigation.org')}
+        icon="md-business"
+        label="Coronavirus information - Australia Government"
+        onPress={() => WebBrowser.openBrowserAsync('https://www.australia.gov.au/')}
       />
-
-      <OptionButton
-        icon="ios-chatboxes"
-        label="Ask a question on the forums"
-        onPress={() => WebBrowser.openBrowserAsync('https://forums.expo.io')}
-        isLastOption
-      />
+      
     </ScrollView>
   );
 }

@@ -83,13 +83,12 @@ export default function HomeScreen() {
 
         </View>
 
-        <View style={styles.helpContainer}>
+        {/*<View style={styles.helpContainer}>
           <Button 
             onPress={() => setShowModal(true)}
             title="Report, I have COVID-19"
           />
-
-        </View>
+        </View>*/}
 
       </ScrollView>
     </View>
@@ -100,10 +99,6 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
-
-/*function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}*/
 
 const ConfirmInfected = props => {
 
