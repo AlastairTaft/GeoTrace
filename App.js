@@ -1,43 +1,30 @@
-import React, { useEffect } from 'react'
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
-import * as Permissions from 'expo-permissions'
-import * as Location from 'expo-location'
+import * as Sentry from 'sentry-expo'
+import Constants from 'expo-constants'
 
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
-import { BACKGROUND_TRACKING_TASK_NAME } from './global/backgroundLocationTracking'
+import { PermissionsWrapper } from './global/permissions'
 
 
-const askRequiredPermissions = async () => {
-  var result = await Permissions.askAsync(Permissions.LOCATION)
 
-  if (!result.granted){
-    // Do something to show that background location tracking isn't enabled.
-    return
-  }
+Sentry.init({
+  dsn: 'https://6daaa6e11e0642caac142e2b7eceaec5@sentry.io/5188341',
+  enableInExpoDevelopment: true,
+  debug: true
+})
+Sentry.setRelease(Constants.manifest.revisionId)
 
-  const options = {
-    accuracy: Location.Accuracy.Highest,
-    distanceInterval: 10,
-    timeInterval: 5 * 60000, // 5 minute
-    mayShowUserSettingsDialog: false,
-    activityType: Location.ActivityType.Fitness,
-  }
-  await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
-}
 
 const Stack = createStackNavigator();
 
-export default function App(props) {
-
-  useEffect(() => {
-    askRequiredPermissions()
-  })
+function App(props) {
 
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -85,6 +72,10 @@ export default function App(props) {
     );
   }
 }
+
+export default props => <PermissionsWrapper>
+  <App {...props} />
+</PermissionsWrapper>
 
 const styles = StyleSheet.create({
   container: {

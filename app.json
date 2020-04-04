@@ -1,15 +1,31 @@
 {
   "expo": {
     "name": "tas-trace-together",
+    "icon": "./assets/images/icon.png",
+    "version": "0.0.0",
     "slug": "tas-trace-together",
+    "sdkVersion": "37.0.0",
+    "ios": {
+      "icon": "./assets/images/icon-ios.png",
+      "bundleIdentifier": "me.alastairtaft.tastracetogether",
+      "buildNumber": "0.0.0",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
+        "NSLocationAlwaysUsageDescription": "Allow use of your location to track community COVID-19 spread."
+      }
+    },
+    "android": {
+      "package": "me.alastairtaft.tastracetogether",
+      "versionCode": 1
+    },
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -22,13 +38,12 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": false,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
-        "NSLocationAlwaysUsageDescription": "Allow use of your location to track community COVID-19 spread."
-      }
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps"
+        }
+      ]
     }
   }
 }

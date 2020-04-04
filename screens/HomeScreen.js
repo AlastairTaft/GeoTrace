@@ -15,6 +15,7 @@ import CheckBox from './../components/CheckBox'
 import Button from './../components/Button'
 import CloseButton from './../components/CloseButton'
 import Colors from './../constants/Colors'
+import { Consumer } from './../global/permissions'
 
 export default function HomeScreen() {
 
@@ -45,12 +46,22 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.getStartedContainer}>
-
-          <Text style={styles.getStartedText}>
-            You location is being tracked. You will be notified here if you 
-            have been in close contact with someone who has been diagnosed 
-            with COVID-19.
-          </Text>
+          <Consumer>
+            {permissionsOk => {
+              console.log('PermissionsContext.Consumer#permissionsOk', permissionsOk)
+              if (permissionsOk)
+                return <Text style={styles.getStartedText}>
+                  You location is being tracked. You will be notified here if you 
+                  have been in close contact with someone who has been diagnosed 
+                  with COVID-19.
+                </Text>
+              return <Text style={styles.errorMessage}>
+                Unable to get required location tracking permissions from your
+                device.
+              </Text>
+            }}
+          </Consumer>
+          
 
         </View>
 
@@ -156,6 +167,13 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
     textAlign: 'center',
+  },
+  errorMessage: {
+    fontSize: 17,
+    color: Colors.errorText,
+    lineHeight: 24,
+    textAlign: 'center',
+    backgroundColor: Colors.errorBackground,
   },
   tabBarInfoContainer: {
     position: 'absolute',

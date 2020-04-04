@@ -1,4 +1,5 @@
-import * as TaskManager from 'expo-task-manager';
+import * as TaskManager from 'expo-task-manager'
+import * as Sentry from 'sentry-expo'
 import * as trackAPI from './trackAPI'
 import { getDeviceId } from './deviceId'
 
@@ -9,6 +10,7 @@ TaskManager.defineTask(
   async ({ data: { locations }, error }) => {
     if (error) {
       // check `error.message` for more details.
+      Sentry.captureException(error)
       return;
     }
 
@@ -31,7 +33,7 @@ TaskManager.defineTask(
         "heading": l.coords.heading,
         "speed": l.coords.speed,
         "timestamp": l.timestamp,
-        "deviceId": deviceId,
+        "deviceId": deviceId
       },
     }))
     
