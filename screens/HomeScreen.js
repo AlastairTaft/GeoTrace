@@ -11,16 +11,29 @@ import {
   TextInput,  
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import * as TaskManager from 'expo-task-manager'
+import * as Updates from 'expo-updates'
 import CheckBox from './../components/CheckBox'
 import Button from './../components/Button'
 import CloseButton from './../components/CloseButton'
 import Colors from './../constants/Colors'
-import { Consumer } from './../global/permissions'
+import { Consumer as PermissionsConsumer } from './../global/permissions'
+import { Consumer as BackgroundTrackingConsumer } from './../global/backgroundLocationTracking'
 
 export default function HomeScreen() {
 
   var [showModal, setShowModal] = useState(false)
-  
+  var [tasksString, setTasksString] = useState('')
+
+  var getRegisteredTasks = () => {
+    TaskManager.getRegisteredTasksAsync()
+    .then(tasks => {
+      setTasksString(JSON.stringify(tasks, null, 2))
+    })
+  }
+
+  useEffect(getRegisteredTasks)
+
   return (
     <View style={styles.container}>
 
@@ -46,24 +59,40 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.getStartedContainer}>
-          <Consumer>
+          <PermissionsConsumer>
             {permissionsOk => {
               console.log('PermissionsContext.Consumer#permissionsOk', permissionsOk)
-              if (permissionsOk)
-                return <Text style={styles.getStartedText}>
-                  You location is being tracked. You will be notified here if you 
-                  have been in close contact with someone who has been diagnosed 
-                  with COVID-19.
-                </Text>
+              if (permissionsOk){
+                return <BackgroundTrackingConsumer>
+                  {trackingScriptInstalled => {
+                    if (trackingScriptInstalled)
+                      return <Text style={styles.getStartedText}>
+                        You location is being tracked. You will be notified here if you 
+                        have been in close contact with someone who has been diagnosed 
+                        with COVID-19.
+                      </Text>
+                    return <View>
+                      <Text style={styles.errorMessage}>
+                        Background tracking not yet running...
+                      </Text>
+                      <Text />
+                      <Button 
+                        onPress={Updates.reloadAsync}
+                        title="Reload"
+                      />
+                    </View>
+
+                  }}
+                </BackgroundTrackingConsumer>
+              }
               return <Text style={styles.errorMessage}>
                 Unable to get required location tracking permissions from your
                 device.
               </Text>
             }}
-          </Consumer>
-          
-
+          </PermissionsConsumer>
         </View>
+
 
         {/*<View style={styles.helpContainer}>
           <Button 

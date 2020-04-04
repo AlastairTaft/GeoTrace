@@ -5,21 +5,14 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
-import * as Sentry from 'sentry-expo'
-import Constants from 'expo-constants'
-
+import './global/bugTracking' // Bug tracking
+import { BackgroundScriptWrapper } from './global/backgroundLocationTracking' // Background location tracking
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
-import { PermissionsWrapper } from './global/permissions'
+import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
 
 
 
-Sentry.init({
-  dsn: 'https://6daaa6e11e0642caac142e2b7eceaec5@sentry.io/5188341',
-  enableInExpoDevelopment: true,
-  debug: true
-})
-Sentry.setRelease(Constants.manifest.revisionId)
 
 
 const Stack = createStackNavigator();
@@ -74,7 +67,11 @@ function App(props) {
 }
 
 export default props => <PermissionsWrapper>
-  <App {...props} />
+  <PermissionsConsumer>
+    {permissionsOk => <BackgroundScriptWrapper>
+      <App {...props} />
+    </BackgroundScriptWrapper>}
+  </PermissionsConsumer>
 </PermissionsWrapper>
 
 const styles = StyleSheet.create({

@@ -13,7 +13,11 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
-        "NSLocationAlwaysUsageDescription": "Allow use of your location to track community COVID-19 spread."
+        "NSLocationAlwaysUsageDescription": "Allow use of your location to track community COVID-19 spread.",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
       }
     },
     "android": {
@@ -41,7 +45,8 @@
     "hooks": {
       "postPublish": [
         {
-          "file": "sentry-expo/upload-sourcemaps"
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {}
         }
       ]
     }

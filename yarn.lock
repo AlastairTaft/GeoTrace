@@ -5805,6 +5805,13 @@ expo-task-manager@^8.1.0:
   resolved "https://registry.yarnpkg.com/expo-task-manager/-/expo-task-manager-8.1.0.tgz#54ffb17bfe8d337a39e99b0a079ecc1b8cd8e8d0"
   integrity sha512-rhlf5RN8NNHUnQTLnqAKGbEKiWg3WO7Xr3CLSxClFaG0CEkqwlXnlBpeKRkDRe3OcdjBvvJDuCwZlNlc4S1/hw==
 
+expo-updates@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.1.1.tgz#b9bd74959174633a9b2217b0f1faa96e4c889348"
+  integrity sha512-INj6MDlaJ0jx6sZKFv1DeKMh2ufIC+XvzCDA7cEHj4p+MHIvlwn4qGsnyRxYDtvCMmzZ4vJxq35NAnw6Npb5sQ==
+  dependencies:
+    fbemitter "^2.1.1"
+
 expo-web-browser@~8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-8.1.0.tgz#1b4ca25e4dd600fac9ad16e32d81be47778c2667"

@@ -1,7 +1,10 @@
+import React, { useState, useEffect } from 'react'
 import * as TaskManager from 'expo-task-manager'
 import * as Sentry from 'sentry-expo'
+import './bugTracking'
 import * as trackAPI from './trackAPI'
 import { getDeviceId } from './deviceId'
+
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
@@ -33,7 +36,7 @@ TaskManager.defineTask(
         "heading": l.coords.heading,
         "speed": l.coords.speed,
         "timestamp": l.timestamp,
-        "deviceId": deviceId
+        "deviceId": deviceId,
       },
     }))
     
@@ -42,3 +45,27 @@ TaskManager.defineTask(
   }
 )
 
+
+const BackgroundScriptContext = React.createContext()
+
+export const { Provider, Consumer } = BackgroundScriptContext
+
+
+export var BackgroundScriptWrapper = props => {
+  
+  var [locationTrackingInstalled, setLocationTrackingInstalled] = useState()
+
+  useEffect(() => {
+    TaskManager.getRegisteredTasksAsync()
+    .then(tasks => {
+      setLocationTrackingInstalled(tasks.some(
+        t => t['taskName'] == BACKGROUND_TRACKING_TASK_NAME))
+    })
+  })
+
+  return (
+    <Provider value={locationTrackingInstalled}>
+      {props.children}
+    </Provider>
+  )
+}
