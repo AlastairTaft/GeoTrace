@@ -36,7 +36,7 @@ export const getAtRiskHistoricPositions = async function(uniqueId){
 }
 
 export const reportInfected = async function(uniqueId, timestampShowingSymptoms){
-  var response = await fetch(API_URL + 'submit-location-history', {
+  var response = await fetch(API_URL + 'report-infected', {
     method: 'post',
     body: JSON.stringify({
       "uniqueId": uniqueId,

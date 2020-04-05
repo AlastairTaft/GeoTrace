@@ -12,13 +12,17 @@ import StyledText from './../components/StyledText'
 
 const ReportInfected = props => {
   var [confirmed, setConfirmed] = useState(false)
+  var [daysStr, setDaysStr] = useState('')
+  var days = daysStr === '' ? Number('NaN') : Number(daysStr)
   return <View>
     <StyledText>How many days ago did you start showing symptoms?</StyledText>
     
     <TextInput  
-      placeholder="Enter number of days"   
-      keyboardType={'numeric'} 
+      placeholder="Days"   
+      keyboardType="numeric"
       style={styles.input}
+      value={daysStr}
+      onChangeText={value => setDaysStr(value)}
     />  
 
     <Text style={{color: COLORS.warningText}}>
@@ -33,7 +37,8 @@ const ReportInfected = props => {
 
     <Button
       title="Confirm"
-      disabled={!confirmed}
+      disabled={!confirmed || !Number.isInteger(days) || days < 0}
+      onPress={props.onReportInfected}
     />
 
   </View>
@@ -59,5 +64,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderStyle: 'solid',
     borderRadius: 3,
+    width: 60,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 })
