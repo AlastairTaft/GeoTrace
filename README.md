@@ -1,5 +1,8 @@
 # Why?
-One of the most useful tools we have in limiting the spread of the virus is contact tracing. If we can quickly inform those who are at most risk of unknowingly contracting the virus, those individuals can take precutions to prevent passing it on to others. Speed is our best weapon.
+One of the most useful tools we have in limiting the spread of the virus is 
+contact tracing. If we can quickly inform those who are at risk of 
+unknowingly contracting the virus, those individuals can take precautions 
+to prevent passing it on to others. Speed is an advantage.
 
 # About
 Built with contact tracing for Tasmania in mind (disclaimer: that's where I live).
