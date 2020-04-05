@@ -5,7 +5,6 @@ import './bugTracking'
 import * as trackAPI from './trackAPI'
 import { getDeviceId } from './deviceId'
 
-
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
 TaskManager.defineTask(
@@ -51,6 +50,10 @@ const BackgroundScriptContext = React.createContext()
 export const { Provider, Consumer } = BackgroundScriptContext
 
 
+/**
+ * Ensures the background tracking script is installed and pases a boolean value
+ * down through the context.
+ */
 export var BackgroundScriptWrapper = props => {
   
   var [locationTrackingInstalled, setLocationTrackingInstalled] = useState()

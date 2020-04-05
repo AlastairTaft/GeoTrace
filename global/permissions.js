@@ -7,7 +7,9 @@ const PermissionsContext = React.createContext()
 
 export const { Provider, Consumer } = PermissionsContext
 
-
+/**
+ * Ask the user for location permission to do background tracking.
+ */
 const askRequiredPermissions = async () => {
   var result = await Permissions.askAsync(Permissions.LOCATION)
   if (!result.granted){
@@ -23,6 +25,10 @@ const askRequiredPermissions = async () => {
   await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
 }
 
+/**
+ * Askes for background tracking location permission and passes a boolean down 
+ * through the context on whether the user has given the required permissions.
+ */
 export var PermissionsWrapper = props => {
   
   var [hasPermissions, setHasPermissions] = useState()

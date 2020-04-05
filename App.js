@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native'
 import { SplashScreen } from 'expo';
-import * as Font from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
 import './global/bugTracking' // Bug tracking
@@ -10,7 +8,6 @@ import { BackgroundScriptWrapper } from './global/backgroundLocationTracking' //
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
-import * as trackAPI from './global/trackAPI'
 import { getStatus } from './global/userStatus'
 
 const Stack = createStackNavigator();
