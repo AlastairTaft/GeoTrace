@@ -1,6 +1,6 @@
 import * as Sentry from 'sentry-expo'
-//const API_URL = 'https://au-tas-api.trackcovid19spread.com/'
-const API_URL = 'http://localhost:3000/dev/'
+const API_URL = 'https://au-tas-api.trackcovid19spread.com/'
+//const API_URL = 'http://localhost:3000/dev/'
 
 /**
  * @param {Array<GeoJSONFeature>} features
