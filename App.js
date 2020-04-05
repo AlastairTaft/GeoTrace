@@ -10,10 +10,8 @@ import { BackgroundScriptWrapper } from './global/backgroundLocationTracking' //
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
-
-
-
-
+import * as trackAPI from './global/trackAPI'
+import { getStatus } from './global/userStatus'
 
 const Stack = createStackNavigator();
 
@@ -27,22 +25,14 @@ function App(props) {
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
-      try {
-        SplashScreen.preventAutoHide();
-
-        // Load our initial navigation state
-        setInitialNavigationState(await getInitialState());
-
-
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e);
-      } finally {
-        setLoadingComplete(true);
-        SplashScreen.hide();
-      }
+      SplashScreen.preventAutoHide()
+      // Load our initial navigation state
+      setInitialNavigationState(await getInitialState());
+      // Do the work while the splash screen is showing
+      await getStatus()
+      setLoadingComplete(true)
+      SplashScreen.hide()
     }
-
     loadResourcesAndDataAsync();
   }, []);
 

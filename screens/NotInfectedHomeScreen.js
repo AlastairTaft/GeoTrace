@@ -38,6 +38,10 @@ const NotInfectedHomeScreen = props => {
   var getAtRiskData = () => {
     getAtRiskLocationHistory()
     .then(atRiskData => {
+      // TODO Would be better to figure this out before rendering the screen
+      var infected = atRiskData.features.some(f => f.properties['infected'])
+      if (infected)
+        props.setInfected(true)
       setAtRiskHistoricData(atRiskData.features)
     })
   }
@@ -52,9 +56,9 @@ const NotInfectedHomeScreen = props => {
         visible={showModal}
       >
         <ReportInfected 
-          onReportInfected={() => {
+          onReportInfected={(timestampShowingSymptoms) => {
             props.setInfected(true)
-            onReportInfected()
+            onReportInfected(timestampShowingSymptoms)
           }}
         />
       </Modal>
@@ -78,7 +82,7 @@ const NotInfectedHomeScreen = props => {
                   {trackingScriptInstalled => {
                     if (trackingScriptInstalled)
                       return <StyledText>
-                        Your location is being tracked. You will be notified here if you 
+                        Your location is being anonymously tracked. You will be notified here if you 
                         have been in close contact with someone who has been diagnosed 
                         with COVID-19.
                       </StyledText>

@@ -14,8 +14,10 @@ export const trackPositions = async function(features){
     }),
   })
   var result = await response.json()
-  if (response.status != 200)
+  if (response.status != 200){
     Sentry.captureMessage(JSON.stringify(result))
+    throw new Error('Unable to track position.')
+  }
   return result
 }
 
@@ -31,20 +33,31 @@ export const getAtRiskHistoricPositions = async function(uniqueId){
     Sentry.captureMessage(JSON.stringify(result))
     throw new Error('Unable to retrieve historic data.')
   }
-  console.log('getAtRiskHistoricPositions#result', result)
   return result
 }
 
 export const reportInfected = async function(uniqueId, timestampShowingSymptoms){
   var response = await fetch(API_URL + 'report-infected', {
-    method: 'post',
+    method: 'put',
     body: JSON.stringify({
       "uniqueId": uniqueId,
       "timestampShowingSymptoms": timestampShowingSymptoms,
     }),
   })
   var result = await response.json()
-  if (response.status != 200)
+  if (response.status != 200){
     Sentry.captureMessage(JSON.stringify(result))
+    throw new Error('Unable to report user has been diagnosed with COVID-19.')
+  }
+  return result
+}
+
+export const getStatus = async function(uniqueId){
+  var response = await fetch(`${API_URL}status?unique-id=${uniqueId}`)
+  var result = await response.json()
+  if (response.status != 200){
+    Sentry.captureMessage(JSON.stringify(result))
+    throw new Error('Unable to get user status.')
+  }
   return result
 }

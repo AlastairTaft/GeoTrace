@@ -14,6 +14,13 @@ const ReportInfected = props => {
   var [confirmed, setConfirmed] = useState(false)
   var [daysStr, setDaysStr] = useState('')
   var days = daysStr === '' ? Number('NaN') : Number(daysStr)
+
+  var onReportInfected = () => {
+    var showingSymptomsTime = new Date()
+    showingSymptomsTime.setDate(showingSymptomsTime.getDate() - days)
+    props.onReportInfected(showingSymptomsTime.valueOf())
+  }
+
   return <View>
     <StyledText>How many days ago did you start showing symptoms?</StyledText>
     
@@ -38,7 +45,7 @@ const ReportInfected = props => {
     <Button
       title="Confirm"
       disabled={!confirmed || !Number.isInteger(days) || days < 0}
-      onPress={props.onReportInfected}
+      onPress={onReportInfected}
     />
 
   </View>
