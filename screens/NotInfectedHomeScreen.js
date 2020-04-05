@@ -19,7 +19,6 @@ import StyledText from './../components/StyledText'
 import ReportInfected from './ReportInfected'
 import Modal from './../components/Modal'
 
-
 var getAtRiskLocationHistory = async () => {
   var uniqueId = await getDeviceId()
   return trackAPI.getAtRiskHistoricPositions(uniqueId)
@@ -38,10 +37,6 @@ const NotInfectedHomeScreen = props => {
   var getAtRiskData = () => {
     getAtRiskLocationHistory()
     .then(atRiskData => {
-      // TODO Would be better to figure this out before rendering the screen
-      var infected = atRiskData.features.some(f => f.properties['infected'])
-      if (infected)
-        props.setInfected(true)
       setAtRiskHistoricData(atRiskData.features)
     })
   }
@@ -76,7 +71,6 @@ const NotInfectedHomeScreen = props => {
         <View style={styles.innerContentContainer}>
           <PermissionsConsumer>
             {permissionsOk => {
-              console.log('PermissionsContext.Consumer#permissionsOk', permissionsOk)
               if (permissionsOk){
                 return <BackgroundTrackingConsumer>
                   {trackingScriptInstalled => {
