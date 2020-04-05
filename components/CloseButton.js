@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
+import COLORS from './../constants/Colors'
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +29,7 @@ export default CloseButton
 
 const CrossIcon = props => <Svg 
   viewBox="0 0 24 24" 
-  fill="black" 
+  fill={COLORS.altTintColor} 
   width="100%" 
   height="100%"
 >

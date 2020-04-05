@@ -16,6 +16,7 @@ export const trackPositions = async function(features){
   var result = await response.json()
   if (response.status != 200)
     Sentry.captureMessage(JSON.stringify(result))
+  return result
 }
 
 
@@ -31,5 +32,19 @@ export const getAtRiskHistoricPositions = async function(uniqueId){
     throw new Error('Unable to retrieve historic data.')
   }
   console.log('getAtRiskHistoricPositions#result', result)
+  return result
+}
+
+export const reportInfected = async function(uniqueId, timestampShowingSymptoms){
+  var response = await fetch(API_URL + 'submit-location-history', {
+    method: 'post',
+    body: JSON.stringify({
+      "uniqueId": uniqueId,
+      "timestampShowingSymptoms": timestampShowingSymptoms,
+    }),
+  })
+  var result = await response.json()
+  if (response.status != 200)
+    Sentry.captureMessage(JSON.stringify(result))
   return result
 }
