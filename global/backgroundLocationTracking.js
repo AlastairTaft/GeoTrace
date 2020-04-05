@@ -36,7 +36,7 @@ TaskManager.defineTask(
         "heading": l.coords.heading,
         "speed": l.coords.speed,
         "timestamp": l.timestamp,
-        "deviceId": deviceId,
+        "uniqueId": deviceId,
       },
     }))
     

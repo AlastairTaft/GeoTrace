@@ -19,20 +19,29 @@ import CloseButton from './../components/CloseButton'
 import Colors from './../constants/Colors'
 import { Consumer as PermissionsConsumer } from './../global/permissions'
 import { Consumer as BackgroundTrackingConsumer } from './../global/backgroundLocationTracking'
+import { getAtRiskHistoricPositions } from './../global/trackAPI'
+import { getDeviceId } from './../global/deviceId'
+import AtRiskInfo from './../components/AtRiskInfo'
+import StyledText from './../components/StyledText'
+
+var getAtRiskLocationHistory = async () => {
+  var uniqueId = await getDeviceId()
+  return getAtRiskHistoricPositions(uniqueId)
+}
 
 export default function HomeScreen() {
 
   var [showModal, setShowModal] = useState(false)
-  var [tasksString, setTasksString] = useState('')
+  var [atRiskHistoricData, setAtRiskHistoricData] = useState([])
 
-  var getRegisteredTasks = () => {
-    TaskManager.getRegisteredTasksAsync()
-    .then(tasks => {
-      setTasksString(JSON.stringify(tasks, null, 2))
+  var getAtRiskData = () => {
+    getAtRiskLocationHistory()
+    .then(atRiskData => {
+      setAtRiskHistoricData(atRiskData.features)
     })
   }
 
-  useEffect(getRegisteredTasks)
+  useEffect(getAtRiskData, [])
 
   return (
     <View style={styles.container}>
@@ -66,11 +75,11 @@ export default function HomeScreen() {
                 return <BackgroundTrackingConsumer>
                   {trackingScriptInstalled => {
                     if (trackingScriptInstalled)
-                      return <Text style={styles.getStartedText}>
-                        You location is being tracked. You will be notified here if you 
+                      return <StyledText>
+                        Your location is being tracked. You will be notified here if you 
                         have been in close contact with someone who has been diagnosed 
                         with COVID-19.
-                      </Text>
+                      </StyledText>
                     return <View>
                       <Text style={styles.errorMessage}>
                         Background tracking not yet running...
@@ -91,15 +100,21 @@ export default function HomeScreen() {
               </Text>
             }}
           </PermissionsConsumer>
+
+          <View style={styles.helpContainer}>
+            <Button 
+              onPress={() => setShowModal(true)}
+              title="Report, I have COVID-19"
+            />
+          </View>
+
+          <View style={styles.atRiskContainer}>
+            {atRiskHistoricData.length ? <AtRiskInfo atRiskLocationData={atRiskHistoricData} /> : null}
+          </View>
         </View>
 
 
-        {/*<View style={styles.helpContainer}>
-          <Button 
-            onPress={() => setShowModal(true)}
-            title="Report, I have COVID-19"
-          />
-        </View>*/}
+        
 
       </ScrollView>
     </View>
@@ -191,12 +206,6 @@ const styles = StyleSheet.create({
   homeScreenFilename: {
     marginVertical: 7,
   },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
   errorMessage: {
     fontSize: 17,
     color: Colors.errorText,
@@ -287,5 +296,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderWidth: 0,
+  },
+  atRiskContainer: {
+    marginTop: 40,
   },
 });
