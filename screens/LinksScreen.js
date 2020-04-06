@@ -15,9 +15,16 @@ export default function LinksScreen() {
 
       <OptionButton
         icon="md-business"
+        label="Coronavirus information - Tasmanian Government"
+        onPress={() => WebBrowser.openBrowserAsync('https://www.coronavirus.tas.gov.au')}
+      />
+
+      <OptionButton
+        icon="md-business"
         label="Coronavirus information - Australia Government"
         onPress={() => WebBrowser.openBrowserAsync('https://www.australia.gov.au/')}
       />
+      
       
     </ScrollView>
   );
