@@ -24,6 +24,14 @@ export default function LinksScreen() {
         label="Coronavirus information - Australia Government"
         onPress={() => WebBrowser.openBrowserAsync('https://www.australia.gov.au/')}
       />
+
+      <OptionButton
+        icon="ios-information"
+        label="Coronavirus information - World Health Organization"
+        onPress={() => WebBrowser.openBrowserAsync('https://www.who.int/emergencies/diseases/novel-coronavirus-2019')}
+      />
+
+      
       
       
     </ScrollView>
