@@ -1,6 +1,6 @@
 import * as Sentry from 'sentry-expo'
-const API_URL = 'https://au-tas-api.trackcovid19spread.com/'
-//const API_URL = 'http://localhost:3000/dev/'
+//const API_URL = 'https://au-tas-api.trackcovid19spread.com/'
+const API_URL = 'http://localhost:3000/dev/'
 
 /**
  * Submits location data to the server
@@ -32,7 +32,7 @@ export const getAtRiskHistoricPositions = async function(uniqueId){
   var response = await fetch(`
     ${API_URL}location-history
     ?unique-id=${uniqueId}
-    s&at-risk=true
+    &at-risk=true
   `.replace(/\s+/g, ''))
   var result = await response.json()
   if (response.status != 200){
