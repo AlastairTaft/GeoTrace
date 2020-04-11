@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 const CheckBox = props => {
   return <TouchableOpacity 
     onPress={props.onPress}
-    style={styles.container}
+    style={[styles.container, props.style]}
   >
     {props.checked ? <CheckIcon /> : null}
   </TouchableOpacity>

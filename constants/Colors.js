@@ -8,8 +8,8 @@ export default {
   errorBackground: 'red',
   errorText: '#fff',
   warningBackground: '#EAEB5E',
-  warningText: '#666804',
+  warningText: '#3750B5',
   noticeBackground: tintColor,
   noticeText: '#fff',
-  altTintColor: '#4896ec',
+  altTintColor: '#3750B5',
 };
