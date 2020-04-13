@@ -16,7 +16,6 @@ const ReportInfectedScreen = props => {
 
   return <UserStatusConsumer>
     {status => {
-      console.log('#status', status)
       if (status.infected)
         return <ReportThankyouScreen />
       return <View style={styles.container}>
@@ -60,7 +59,7 @@ const ReportInfectedScreen = props => {
             onPress={() => {
               var showingSymptomsTime = new Date()
               showingSymptomsTime.setDate(showingSymptomsTime.getDate() - days) 
-              status.reportInfected(showingSymptomsTime)
+              status.reportInfected(showingSymptomsTime.valueOf())
             }}
           />
         </View>

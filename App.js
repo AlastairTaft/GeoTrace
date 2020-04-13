@@ -43,7 +43,7 @@ function App(props) {
   }, []);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return <Text>Test</Text>;
+    return null
   } else {
     return (
       <View style={styles.container}>

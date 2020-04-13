@@ -13,7 +13,7 @@ const ReportThankyouScreen = props => {
       <ConfirmIllustration />
     </View>
     <StyledText style={{fontSize: 20}}>
-      Your location is being <HighlightText>anonymously</HighlightText> tracked to inform others
+      Your location is being <HighlightText style={{fontSize: 20}}>anonymously</HighlightText> tracked to inform others
       who may be at risk.
     </StyledText>
     <Text />

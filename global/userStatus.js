@@ -21,12 +21,10 @@ export const getStatus = () => {
   .then(deviceId => trackAPI.getStatus(deviceId))
 }
 
-
 var reportInfected = async (timestampShowingSymptoms) => {
   var uniqueId = await getDeviceId()
   await trackAPI.reportInfected(uniqueId, timestampShowingSymptoms) 
 }
-
 
 const PermissionsContext = React.createContext()
 
@@ -50,7 +48,7 @@ export var UserStatusWrapper = props => {
             ...status,
             infected: true,
           })
-          //return reportInfected(...args)
+          return reportInfected(...args)
         }
       }
       setStatus(status)
