@@ -1,10 +1,12 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import StyledText from './../components/StyledText'
+import HighlightText from './../components/HighlightText'
 
 const TrackingScreen = props => {
   return <View style={styles.content}>
-    <StyledText>You have not crossed paths with with anyone who has self
+    <StyledText>You have <HighlightText>not</HighlightText> crossed paths with 
+      with anyone who has self
       identified as having COVID-19.
     </StyledText>
   </View>

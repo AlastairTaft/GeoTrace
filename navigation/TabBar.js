@@ -42,13 +42,18 @@ function TabBar({ state, descriptors, navigation }) {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.navItem}
+            style={[
+              styles.navItem,
+              isFocused ? styles.navItemFocused : undefined,
+            ]}
             key={title}
           >
-            <View style={styles.iconContainer}>
+            <View style={[
+              styles.iconContainer,
+            ]}>
               <TabBarIcon focused={isFocused} />
             </View>
-            <Text style={[styles.navText, { color: isFocused ? '#673ab7' : '#222' }]}>
+            <Text style={[styles.navText]}>
               {title}
             </Text>
           </TouchableOpacity>
@@ -67,17 +72,20 @@ const styles = StyleSheet.create({
     borderStyle: 'solid', 
     backgroundColor: 'white',
     flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   navText: {
-    //fontFamily: 'Avenir-Roman',
+    fontFamily: 'Avenir-Book',
   },
   iconContainer: {
     height: 48,
+  },
+  navItemFocused: {
+    backgroundColor: '#D2DBFF88',
   },
 })
