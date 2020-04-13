@@ -1,19 +1,18 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-const StyledText = props => <Text 
+const HeaderText = props => <Text 
   {...props} 
   style={[styles.regularText, props.style]}
 />
 
-export default StyledText
+export default HeaderText
 
 
 var styles = StyleSheet.create({
   regularText: {
-    fontSize: 16,
-    color: '#172150',
-    lineHeight: 24,
+    fontSize: 26,
+    color: '#627EEE',
     textAlign: 'center',
     fontFamily: 'Avenir-Medium',
     fontWeight: 'bold',

@@ -4,6 +4,7 @@
  * down to our HomeScreen component and at the same time have the splash screen
  * shown while we're fetching.
  */
+import React, { useState, useEffect } from 'react'
 import { getDeviceId } from './deviceId'
 import * as trackAPI from './trackAPI'
 
@@ -18,4 +19,45 @@ export const getStatus = () => {
     return getStatusResolver
   return getDeviceId()
   .then(deviceId => trackAPI.getStatus(deviceId))
+}
+
+var reportInfected = async (timestampShowingSymptoms) => {
+  var uniqueId = await getDeviceId()
+  await trackAPI.reportInfected(uniqueId, timestampShowingSymptoms) 
+}
+
+const PermissionsContext = React.createContext()
+
+export const { Provider, Consumer } = PermissionsContext
+
+/**
+ * Askes for background tracking location permission and passes a boolean down 
+ * through the context on whether the user has given the required permissions.
+ */
+export var UserStatusWrapper = props => {
+  
+  var [status, setStatus] = useState(null)
+  console.log('UserStatusWrapper#status', status)
+  useEffect(() => {
+    getStatus()
+    .then(status => {
+      status = {
+        ...status,
+        reportInfected: (...args) => {
+          setStatus({
+            ...status,
+            infected: true,
+          })
+          return reportInfected(...args)
+        }
+      }
+      setStatus(status)
+    })
+  }, [])
+
+  return (
+    <Provider value={status}>
+      {props.children}
+    </Provider>
+  )
 }
