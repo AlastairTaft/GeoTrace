@@ -22,6 +22,11 @@ export const getStatus = () => {
 }
 
 
+var reportInfected = async (timestampShowingSymptoms) => {
+  var uniqueId = await getDeviceId()
+  await trackAPI.reportInfected(uniqueId, timestampShowingSymptoms) 
+}
+
 
 const PermissionsContext = React.createContext()
 
@@ -34,11 +39,23 @@ export const { Provider, Consumer } = PermissionsContext
 export var UserStatusWrapper = props => {
   
   var [status, setStatus] = useState(null)
-
+  console.log('UserStatusWrapper#status', status)
   useEffect(() => {
     getStatus()
-    .then(status => setStatus(status))
-  })
+    .then(status => {
+      status = {
+        ...status,
+        reportInfected: (...args) => {
+          setStatus({
+            ...status,
+            infected: true,
+          })
+          //return reportInfected(...args)
+        }
+      }
+      setStatus(status)
+    })
+  }, [])
 
   return (
     <Provider value={status}>

@@ -8,11 +8,11 @@ import HighlightText from './../components/HighlightText'
 const ReportThankyouScreen = props => {
   return <View style={styles.content}>
     <HeaderText>Thank you</HeaderText>
-    <StyledText>For reporting your diagnosis</StyledText>
+    <StyledText style={{fontSize: 20}}>For reporting your diagnosis</StyledText>
     <View style={styles.illustrationContainer}>
       <ConfirmIllustration />
     </View>
-    <StyledText>
+    <StyledText style={{fontSize: 20}}>
       Your location is being <HighlightText>anonymously</HighlightText> tracked to inform others
       who may be at risk.
     </StyledText>
@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 50,
     minHeight: '100%',
+    paddingLeft: 30,
+    paddingRight: 30,
   },
   illustrationContainer: {
     marginTop: 50,

@@ -5,6 +5,8 @@ import StyledText from './../components/StyledText'
 import HighlightText from './../components/HighlightText'
 import CheckBox from './../components/CheckBox'
 import DaysSelectControl from './../components/DaysSelectControl'
+import { Consumer as UserStatusConsumer } from './../global/userStatus'
+import ReportThankyouScreen from './ReportThankyouScreen'
 
 const ReportInfectedScreen = props => {
 
@@ -12,55 +14,59 @@ const ReportInfectedScreen = props => {
   var [confirmed, setConfirmed] = useState(false)
   var [days, setDays] = useState(0)
 
-  var onReportInfected = () => {
-    var showingSymptomsTime = new Date()
-    showingSymptomsTime.setDate(showingSymptomsTime.getDate() - days)
-    onReportInfectedToAPI(showingSymptomsTime.valueOf())
-    setInfected(true)
-  }
+  return <UserStatusConsumer>
+    {status => {
+      console.log('#status', status)
+      if (status.infected)
+        return <ReportThankyouScreen />
+      return <View style={styles.container}>
+        <View style={styles.explanationText}>
+          <StyledText style={{fontSize: 20}}>
+            Report: I have <HighlightText>COVID-19</HighlightText>
+          
+            {'\n'}{'\n'}
+            Number of days since symptoms started showing.
+          </StyledText>
+        </View>
+        <View style={styles.daysControlContainer}>
+          <DaysSelectControl 
+            value={days}
+            onChange={setDays}
+            height={400}
+            style={{height: 400}}
+          />
+        </View>
 
-  return <View style={styles.container}>
-    <View style={styles.explanationText}>
-      <StyledText style={{fontSize: 20}}>
-        Report: I have <HighlightText>COVID-19</HighlightText>
-      
-        {'\n'}{'\n'}
-        Number of days since symptoms started showing.
-      </StyledText>
-    </View>
-    <View style={styles.daysControlContainer}>
-      <DaysSelectControl 
-        value={days}
-        onChange={setDays}
-        height={400}
-        style={{height: 400}}
-      />
-    </View>
+        <View style={styles.confirmContainer}>
+          <View style={styles.confirmCheckboxContainer}>
+            <CheckBox 
+              checked={confirmed}
+              onPress={() => setConfirmed(!confirmed)}
+              style={styles.confirmCheckbox}
+            />
+          </View>
+          <View style={styles.confirmTextContainer}>
+            <Text style={styles.confirmText}>
+              I confirm that I have officially tested positive for COVID-19.
+            </Text>
+          </View>
+        </View>
 
-    <View style={styles.confirmContainer}>
-      <View style={styles.confirmCheckboxContainer}>
-        <CheckBox 
-          checked={confirmed}
-          onPress={() => setConfirmed(!confirmed)}
-          style={styles.confirmCheckbox}
-        />
+        <View style={styles.confirmButtonContainer}>
+          
+          <Button
+            title="Confirm"
+            disabled={!confirmed}
+            onPress={() => {
+              var showingSymptomsTime = new Date()
+              showingSymptomsTime.setDate(showingSymptomsTime.getDate() - days) 
+              status.reportInfected(showingSymptomsTime)
+            }}
+          />
+        </View>
       </View>
-      <View style={styles.confirmTextContainer}>
-        <Text style={styles.confirmText}>
-          I confirm that I have officially tested positive for COVID-19.
-        </Text>
-      </View>
-    </View>
-
-    <View style={styles.confirmButtonContainer}>
-      
-      <Button
-        title="Confirm"
-        disabled={!confirmed}
-        onPress={onReportInfected}
-      />
-    </View>
-  </View>
+    }}
+  </UserStatusConsumer>
 }
 
 export default ReportInfectedScreen

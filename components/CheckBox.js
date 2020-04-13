@@ -6,12 +6,13 @@ const styles = StyleSheet.create({
   container: {
     width: 30,
     height: 30,
-    borderRadius: 3,
+    borderRadius: 7,
     marginTop: 15,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#3750B5',
     borderStyle: 'solid',
+    backgroundColor: '#E7EBFF',
   },
 })
 

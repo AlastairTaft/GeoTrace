@@ -12,11 +12,6 @@ import ReportThankyouScreen from './ReportThankyouScreen'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import ReportInfectedScreen from './ReportInfectedScreen'
 
-var onReportInfectedToAPI = async (timestampShowingSymptoms) => {
-  var uniqueId = await getDeviceId()
-  await trackAPI.reportInfected(uniqueId, timestampShowingSymptoms) 
-}
-
 const ReportInfected = props => {
 
 
@@ -28,9 +23,7 @@ const ReportInfected = props => {
 
   return <UserStatusConsumer>
     {status => {
-      if (status.infected)
-        return null // TODO
-      
+      // TODO Report 
       return <ReportInfectedScreen />
     }}
   </UserStatusConsumer>
