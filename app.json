@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "tas-trace-together",
+    "name": "geo-trace",
     "icon": "./assets/images/logo.png",
-    "version": "0.0.0",
-    "slug": "tas-trace-together",
+    "version": "0.1.0",
+    "slug": "geo-trace",
     "sdkVersion": "37.0.0",
     "ios": {
       "icon": "./assets/images/icon-ios.png",
-      "bundleIdentifier": "me.alastairtaft.tastracetogether",
+      "bundleIdentifier": "me.alastairtaft.geotrace",
       "buildNumber": "0.0.0",
       "supportsTablet": false,
       "infoPlist": {
@@ -21,7 +21,7 @@
       }
     },
     "android": {
-      "package": "me.alastairtaft.tastracetogether",
+      "package": "me.alastairtaft.geotrace",
       "versionCode": 1
     },
     "platforms": [
