@@ -10,6 +10,7 @@ import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
 import { getStatus } from './global/userStatus'
 import { useFonts } from '@use-expo/font'
+import { UserStatusWrapper } from './global/userStatus'
 
 const Stack = createStackNavigator();
 
@@ -49,7 +50,7 @@ function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen component={BottomTabNavigator} />
+            <Stack.Screen name="Home" component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
@@ -57,13 +58,15 @@ function App(props) {
   }
 }
 
-export default props => <PermissionsWrapper>
-  <PermissionsConsumer>
-    {permissionsOk => <BackgroundScriptWrapper>
-      <App {...props} />
-    </BackgroundScriptWrapper>}
-  </PermissionsConsumer>
-</PermissionsWrapper>
+export default props => <UserStatusWrapper>
+  <PermissionsWrapper>
+    <PermissionsConsumer>
+      {permissionsOk => <BackgroundScriptWrapper>
+        <App {...props} />
+      </BackgroundScriptWrapper>}
+    </PermissionsConsumer>
+  </PermissionsWrapper>
+</UserStatusWrapper>
 
 const styles = StyleSheet.create({
   container: {

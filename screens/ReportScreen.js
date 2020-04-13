@@ -5,16 +5,12 @@ import {
   TextInput,  
   StyleSheet,
 } from 'react-native'
-import CheckBox from './../components/CheckBox'
 import COLORS from './../constants/Colors'
-import Button from './../components/Button'
-import StyledText from './../components/StyledText'
-import HighlightText from './../components/HighlightText'
 import { getDeviceId } from './../global/deviceId'
 import * as trackAPI from './../global/trackAPI'
 import ReportThankyouScreen from './ReportThankyouScreen'
-
-import { getStatus } from './../global/userStatus'
+import { Consumer as UserStatusConsumer } from './../global/userStatus'
+import ReportInfectedScreen from './ReportInfectedScreen'
 
 var onReportInfectedToAPI = async (timestampShowingSymptoms) => {
   var uniqueId = await getDeviceId()
@@ -22,70 +18,22 @@ var onReportInfectedToAPI = async (timestampShowingSymptoms) => {
 }
 
 const ReportInfected = props => {
-  var [confirmed, setConfirmed] = useState(false)
-  var [daysStr, setDaysStr] = useState('')
-  var days = daysStr === '' ? Number('NaN') : Number(daysStr)
 
 
   var [infected, setInfected] = useState(false)
-  var [status, setStatus] = useState(null)
 
-  useEffect(() => {
-    getStatus()
-    .then(status => {
-      setInfected(status.infected)
-      setStatus(status)
-    })
-  })
 
-  var onReportInfected = () => {
-    var showingSymptomsTime = new Date()
-    showingSymptomsTime.setDate(showingSymptomsTime.getDate() - days)
-    onReportInfectedToAPI(showingSymptomsTime.valueOf())
-    setInfected(true)
-  }
-
-  console.log('ReportInfected#infected', infected)
   if (infected)
     return <ReportThankyouScreen />
 
-  return <View style={styles.container}>
-    <View style={styles.content}>
-      <StyledText>Report: I have <HighlightText>COVID-19</HighlightText></StyledText>
-      <Text />
-      <StyledText>Number of days since symptoms started showing.</StyledText>
+  return <UserStatusConsumer>
+    {status => {
+      if (status.infected)
+        return null // TODO
       
-      <TextInput  
-        placeholder="Days"   
-        keyboardType="numeric"
-        style={styles.input}
-        value={daysStr}
-        onChangeText={value => setDaysStr(value)}
-      />  
-
-      <View style={styles.confirmContainer}>
-        <CheckBox 
-          checked={confirmed}
-          onPress={() => setConfirmed(!confirmed)}
-          style={styles.confirmCheckbox}
-        />
-        <Text style={styles.confirmText}>
-          I acknowledge that I have officially tested positive for COVID-19. 
-          By tapping 'Confirm' I will be helping others avoid infection and I will no
-          longer receive notifications.
-        </Text>
-      </View>
-
-      <Button
-        title="Confirm"
-        disabled={!confirmed || !Number.isInteger(days) || days < 0}
-        onPress={onReportInfected}
-      />
-    </View>
-
-    
-
-  </View>
+      return <ReportInfectedScreen />
+    }}
+  </UserStatusConsumer>
 }
 
 export default ReportInfected
