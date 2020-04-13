@@ -1,6 +1,9 @@
 import * as Sentry from 'sentry-expo'
-//const API_URL = 'https://au-tas-api.trackcovid19spread.com/'
-const API_URL = 'http://localhost:3000/dev/'
+
+if (__DEV__)
+  var API_URL = 'http://localhost:3000/dev/'
+else 
+  var API_URL = 'https://au-tas-api.trackcovid19spread.com/'
 
 /**
  * Submits location data to the server
