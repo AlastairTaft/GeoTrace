@@ -11,7 +11,7 @@ export default StyledText
 
 var styles = StyleSheet.create({
   regularText: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#172150',
     lineHeight: 24,
     textAlign: 'center',

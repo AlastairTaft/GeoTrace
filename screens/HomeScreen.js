@@ -29,61 +29,31 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         
-        <View style={styles.logoContainer}>
-          <Image
-            source={
-              require('../assets/images/logo.png')
-            }
-            style={styles.logoImage}
-          />
-          <TextLogo />
-        </View>
-
-        <View style={styles.innerContentContainer}>
-          <Divider style={{width: 231, marginTop: 50, marginBottom: 50,}} />
-          <PermissionsConsumer>
-            {permissionsOk => {
-              if (permissionsOk){
-                return <BackgroundTrackingConsumer>
-                  {trackingScriptInstalled => {
-                    if (trackingScriptInstalled)
-                      return <Fragment>
-                        <StyledText>
-                          Your location is being <HighlightText>anonymously</HighlightText> tracked. 
-                        
-                        </StyledText>
-                        <Text />
-                        <StyledText>
-                          You will be notified here if you 
-                          have been in close contact with someone who has been diagnosed 
-                          with COVID-19.
-                        </StyledText>
-                      </Fragment>
-                    return <View>
-                      <Text style={styles.errorMessage}>
-                        Background tracking not yet running...
-                      </Text>
-                      <Text />
-                      <Button 
-                        onPress={Updates.reloadAsync}
-                        title="Reload"
-                      />
-                    </View>
-
-                  }}
-                </BackgroundTrackingConsumer>
-              }
-              return <Text style={styles.errorMessage}>
-                Unable to get required location tracking permissions from your
-                device.
-              </Text>
-            }}
-          </PermissionsConsumer>
-          <Neighbourhood />
-        </View>
-      </ScrollView>
+      <View style={styles.logoContainer}>
+        <Image
+          source={
+            require('../assets/images/logo.png')
+          }
+          style={styles.logoImage}
+        />
+        <TextLogo />
+      </View>
+      <View style={styles.dividerContainer}>
+        <Divider style={{width: 231}} />
+      </View>
+      <View style={styles.contentContainer}>
+        <TrackingMessage />
+        <Text />
+        <StyledText>
+          You will be notified here if you 
+          have been in close contact with someone who has been diagnosed 
+          with COVID-19.
+        </StyledText>
+      </View>
+      <View style={styles.illustrationContainer}>
+        <Neighbourhood />
+      </View>
     </View>
   )
 }
@@ -98,15 +68,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  contentContainer: {
-    paddingTop: 30,
-  },
+
   logoContainer: {
+    flex: 2.6,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
     flexDirection: 'row',
+  },
+  dividerContainer: {
+    flex: 0.8,
+    alignItems: 'center',
+  },
+  contentContainer: {
+    flex: 3,
+    paddingLeft: 30,
+    paddingRight: 30,
+  },
+  illustrationContainer: {
+    flex: 3,
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   logoImage: {
     width: 100,
@@ -115,13 +97,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginLeft: -10,
   },
-  innerContentContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
   errorMessage: {
     fontSize: 17,
     color: Colors.errorText,
@@ -129,50 +104,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: Colors.errorBackground,
   },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: Colors.tintColor,
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  primaryButton: {
-    paddingVertical: 15,
-    paddingLeft: 15,
-    paddingRight: 15,
-    backgroundColor: Colors.tintColor,
-    borderRadius: 5,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: 'white',
-  },
-  atRiskContainer: {
-    marginTop: 40,
-  },
 });
+
+const TrackingMessage = props => <PermissionsConsumer>
+  {permissionsOk => {
+    if (permissionsOk){
+      return <BackgroundTrackingConsumer>
+        {trackingScriptInstalled => {
+          if (trackingScriptInstalled)
+            return <Fragment>
+              <StyledText>
+                Your location is being <HighlightText>anonymously</HighlightText> tracked. 
+              
+              </StyledText>
+            </Fragment>
+          return <View>
+            <Text style={styles.errorMessage}>
+              Background tracking not yet running...
+            </Text>
+            <Text />
+            <Button 
+              onPress={Updates.reloadAsync}
+              title="Reload"
+            />
+          </View>
+
+        }}
+      </BackgroundTrackingConsumer>
+    }
+    return <Text style={styles.errorMessage}>
+      Unable to get required location tracking permissions from your
+      device.
+    </Text>
+  }}
+</PermissionsConsumer>

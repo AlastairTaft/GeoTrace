@@ -39,8 +39,14 @@ TaskManager.defineTask(
       },
     }))
     
-    await trackAPI.trackPositions(features)
-  
+    try {
+      await trackAPI.trackPositions(features)
+    } catch (err){
+      if (__DEV__)
+        throw err
+      else 
+        Sentry.captureException(error)
+    }
   }
 )
 
