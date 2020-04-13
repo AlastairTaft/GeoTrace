@@ -2,7 +2,7 @@ import * as Sentry from 'sentry-expo'
 import Constants from 'expo-constants'
 
 Sentry.init({
-  dsn: 'https://6daaa6e11e0642caac142e2b7eceaec5@sentry.io/5188341',
+  dsn: 'https://2529c3502e454d8eaf3a911134bfa720@o372872.ingest.sentry.io/5198818',
   //enableInExpoDevelopment: true,
   //debug: true
 })
