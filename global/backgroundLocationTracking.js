@@ -28,6 +28,18 @@ TaskManager.defineTask(
     locations = scrambleSensitiveLocations(locations)
 
     // We need to map each location to its respective grid block
+    var blocks = locations.map(l => {
+      // Location type info here 
+      // https://docs.expo.io/versions/latest/sdk/location/#location
+
+      // Calculate the block width at current latitude
+
+      var layerABlock = getBlockIdentifierForLocation(l.coords)
+      var layerBBlock = getBlockIdentifierForLocation({
+        latitude: l.latitude + (LATITUDE_BLOCK_SIZE * 1 / 3),
+        longitude: l.longitude 
+      })
+    })
 
 
     var deviceId = await getDeviceId()

@@ -6,8 +6,9 @@
 // In metres
 const EARTH_CIRCUMFERENCE = 40075000
 const EARTH_CIRCUMFERENCE_POLE_TO_POLE = 40008000
-
-const APPROX_BLOCK_SIZE = 10
+const APPROX_BLOCK_SIZE = 10 // Meters
+const LATITUDE_BLOCK_SIZE = 90 / 
+  Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / 10)
 
 /**
  * Get the Earth's circumference at a specific latitude, i.e. if the sphere 
@@ -41,31 +42,24 @@ export const getNoBlocksAtLatitude = function(latitude){
 export const getBlockIdentifierForLocation = function(location){
   var { latitude, longitude } = location
   ////0.000001 accurate to 0.11m which is accurate enough for our purposes
-  //var totalLatBlocks = Math.round(EARTH_CIRCUMFERENCE_POLE_TO_POLE / 10)
-  var latIncrements = 90 / Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / 10)
-  console.log('getBlockIdentifierForLocation#latIncrements', latIncrements)
-  
-  var latBlockNumber = Math.floor(latitude / latIncrements)
-  var blockLatStart = latBlockNumber * latIncrements
-  
-  
+  var latBlockNumber = Math.floor(latitude / LATITUDE_BLOCK_SIZE)
+  var blockLatStart = latBlockNumber * LATITUDE_BLOCK_SIZE
   var circumferenceAtLatitude = getEarthCircumferenceAtLatitude(blockLatStart)
   var arc = circumferenceAtLatitude / 2
-  //console.log('getBlockIdentifierForLocation#circumferenceAtLatitude', circumferenceAtLatitude)
-  
   var totalBlocksOnArc = Math.round(arc / 10)
   var widthPerBlock = arc / totalBlocksOnArc
-  //console.log('getBlockIdentifierForLocation#widthPerBlock', widthPerBlock)
-  
-  var longBlockBumber = (longitude / 180) * totalBlocksOnArc
-  var blockLongStart = 180 * (longBlockBumber / totalBlocksOnArc)
-
-  var latBlockIncrements = latIncrements
-
-  if (latitude < 0)
-    latBlockIncrements = - latBlockIncrements
+  var longitudeBlockSize = 180 / totalBlocksOnArc
+  console.log('getBlockIdentifierForLocation#longitudeBlockSize', longitudeBlockSize)
+  var longBlockNumber = Math.floor((longitude / 180) * totalBlocksOnArc)
+  var blockLongStart = 180 * (longBlockNumber / totalBlocksOnArc)
+  var latBlockIncrements = (latitude >= 0) 
+    ? LATITUDE_BLOCK_SIZE 
+    : -LATITUDE_BLOCK_SIZE
   var result = { 
-    id: { blockLat: blockLatStart, blockLong: blockLongStart },
+    id: { 
+      latitudeNumber: latBlockNumber, 
+      longitudeNumber: longBlockNumber, 
+    },
     // Only useful to verify we're creating the correct blocks
     geoJSON: {
       "type": "Feature",
@@ -79,16 +73,18 @@ export const getBlockIdentifierForLocation = function(location){
               blockLatStart,
             ],
             [
-              blockLongStart + (360 * (widthPerBlock / EARTH_CIRCUMFERENCE)), 
+              blockLongStart + longitudeBlockSize, 
+              //blockLongStart + (360 * (widthPerBlock / EARTH_CIRCUMFERENCE)), 
               blockLatStart
             ],
             [
-              blockLongStart + (360 * (widthPerBlock / EARTH_CIRCUMFERENCE)), 
-              blockLatStart + latBlockIncrements,
+              blockLongStart + longitudeBlockSize, 
+              //blockLongStart + (360 * (widthPerBlock / EARTH_CIRCUMFERENCE)), 
+              blockLatStart + LATITUDE_BLOCK_SIZE,
             ],
             [
               blockLongStart, 
-              blockLatStart + latBlockIncrements,
+              blockLatStart + LATITUDE_BLOCK_SIZE,
             ],
             [
               blockLongStart, 
