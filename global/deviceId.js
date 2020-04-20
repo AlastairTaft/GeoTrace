@@ -14,5 +14,6 @@ export const getDeviceId = () => {
       Crypto.CryptoDigestAlgorithm.SHA512,
       '🚀 Saving the world 🌍 one step 👣 at a time 🕘.' + Constants.installationId
     )
+  // TODO Increase entrophy
   return deviceIdResolver
 }

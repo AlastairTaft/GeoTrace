@@ -32,13 +32,37 @@ TaskManager.defineTask(
       // Location type info here 
       // https://docs.expo.io/versions/latest/sdk/location/#location
 
-      // Calculate the block width at current latitude
-
+      // Here we shift the grid by a third of the block size. So that if users
+      // are at the very edge of a block we have a different frame that's closer
+      // to centering them in it
+      var totalBlocksAtLatitude = getNoLongitudeBlocks(l.coords.latitude)
+      var longitudeBlockSize = 180 / totalBlocksAtLatitude
       var layerABlock = getBlockIdentifierForLocation(l.coords)
       var layerBBlock = getBlockIdentifierForLocation({
         latitude: l.latitude + (LATITUDE_BLOCK_SIZE * 1 / 3),
-        longitude: l.longitude 
+        longitude: l.longitude + (longitudeBlockSize * 1 / 3),
       })
+      var layerCBlock = getBlockIdentifierForLocation({
+        latitude: l.latitude + (LATITUDE_BLOCK_SIZE * 2 / 3),
+        longitude: l.longitude + (longitudeBlockSize * 2 / 3),
+      })
+      // The current time right now is 10:06 AEST, we don't care about anything
+      // before then so let's remove that time from the EPOCH.
+      var elapsed = l.timestamp - 1587384430649
+
+      // Gets logarithmic points up to 52 hours after. This results in 
+      // 9 data points of increasing time apart
+      for (var i = 1; i <= 5; i += 0.5){
+        // Block size in minutes.
+        var timestampBlockSizeMins = Math.floow(Math.pow(Math.E, 1.6095 * i))
+        var timestampBlockSize = timestampBlockSizeMins * 60 * 1000
+        var timeBlockA = getBlockIdentifierForTimestamp(
+          elapsed, timestampBlockSize)
+        var timeBlockB = getBlockIdentifierForTimestamp(
+          elapsed + Math.floor(timestampBlockSize / 2), 
+          timestampBlockSize
+        )
+      }
     })
 
 

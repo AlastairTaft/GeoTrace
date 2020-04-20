@@ -35,6 +35,19 @@ export const getNoBlocksAtLatitude = function(latitude){
 }
 
 /**
+ * We fit blocks perpendicular to the equator alont the latitude. This function
+ * returns how many blocks we can fit at a specific latitude.
+ * @param {number} latitude
+ * @returns {number}
+ */
+export const getNoLongitudeBlocks = function(latitude){
+  var circumferenceAtLatitude = getEarthCircumferenceAtLatitude(latitude)
+  var arc = circumferenceAtLatitude / 2
+  var totalBlocksOnArc = Math.round(arc / 10)
+  return totalBlocksOnArc
+}
+
+/**
  * @param {number} location.latitude
  * @param {number} location.longitude
  * @returns {tbd}
@@ -44,18 +57,11 @@ export const getBlockIdentifierForLocation = function(location){
   ////0.000001 accurate to 0.11m which is accurate enough for our purposes
   var latBlockNumber = Math.floor(latitude / LATITUDE_BLOCK_SIZE)
   var blockLatStart = latBlockNumber * LATITUDE_BLOCK_SIZE
-  var circumferenceAtLatitude = getEarthCircumferenceAtLatitude(blockLatStart)
-  var arc = circumferenceAtLatitude / 2
-  var totalBlocksOnArc = Math.round(arc / 10)
-  var widthPerBlock = arc / totalBlocksOnArc
+  var totalBlocksOnArc = getNoLongitudeBlocks(blockLatStart)
   var longitudeBlockSize = 180 / totalBlocksOnArc
-  console.log('getBlockIdentifierForLocation#longitudeBlockSize', longitudeBlockSize)
   var longBlockNumber = Math.floor((longitude / 180) * totalBlocksOnArc)
   var blockLongStart = 180 * (longBlockNumber / totalBlocksOnArc)
-  var latBlockIncrements = (latitude >= 0) 
-    ? LATITUDE_BLOCK_SIZE 
-    : -LATITUDE_BLOCK_SIZE
-  var result = { 
+  return { 
     id: { 
       latitudeNumber: latBlockNumber, 
       longitudeNumber: longBlockNumber, 
@@ -74,12 +80,10 @@ export const getBlockIdentifierForLocation = function(location){
             ],
             [
               blockLongStart + longitudeBlockSize, 
-              //blockLongStart + (360 * (widthPerBlock / EARTH_CIRCUMFERENCE)), 
               blockLatStart
             ],
             [
               blockLongStart + longitudeBlockSize, 
-              //blockLongStart + (360 * (widthPerBlock / EARTH_CIRCUMFERENCE)), 
               blockLatStart + LATITUDE_BLOCK_SIZE,
             ],
             [
@@ -95,6 +99,16 @@ export const getBlockIdentifierForLocation = function(location){
       },
     }
   }
-  console.log('getBlockIdentifierForLocation#result', JSON.stringify(result, null, 2))
-  return result
+}
+
+
+/**
+ * Get the block identifier for the timestamp
+ * @param {number} elapsed
+ * @param {number} blockSize The block size in milliseconds
+ * @returns {number} A value uniquely identifying the block that the 
+ * milliseconds amount falls within.
+ */
+export const getBlockIdentifierForTimestamp = function(elapsed, blockSize){
+  return Math.floor(elapsed / blockSize)
 }
