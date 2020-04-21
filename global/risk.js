@@ -4,6 +4,7 @@ import {
   LATITUDE_BLOCK_SIZE,
   getBlockIdentifierForLocation, 
   getNoLongitudeBlocks,
+  getBlockIdentifierForTimestamp,
 } from './blocks'
 
 /**
@@ -27,7 +28,6 @@ export const getRiskPoints = function(location, elapsed){
     })
     .id
   )
-
   var riskPoints = []
   positionBlocks.forEach(position => {
     var t3Hours = 1000 * 60 * 60 * 3
@@ -37,8 +37,8 @@ export const getRiskPoints = function(location, elapsed){
       var timeBlock = getBlockIdentifierForTimestamp(elapsed + i, tBlockSize)
       riskPoints.push({
         // The point in time this block represents
-        time: timeBlock,
         timeBlockSize: tBlockSize,
+        timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
         position,
       })
@@ -50,8 +50,8 @@ export const getRiskPoints = function(location, elapsed){
       var timeBlock = getBlockIdentifierForTimestamp(elapsed + i, t2BlockSize)
       riskPoints.push({
         // The point in time this block represents
-        time: timeBlock,
         timeBlockSize: t2BlockSize,
+        timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
         position,
       })

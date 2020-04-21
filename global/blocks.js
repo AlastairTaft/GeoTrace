@@ -4,10 +4,10 @@
  */
 
 // In metres
-const EARTH_CIRCUMFERENCE = 40075000
-const EARTH_CIRCUMFERENCE_POLE_TO_POLE = 40008000
-const APPROX_BLOCK_SIZE = 10 // Meters
-const LATITUDE_BLOCK_SIZE = 90 / 
+export const EARTH_CIRCUMFERENCE = 40075000
+export const EARTH_CIRCUMFERENCE_POLE_TO_POLE = 40008000
+export const APPROX_BLOCK_SIZE = 10 // Meters
+export const LATITUDE_BLOCK_SIZE = 90 / 
   Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / 10)
 
 /**
@@ -63,8 +63,8 @@ export const getBlockIdentifierForLocation = function(location){
   var blockLongStart = 180 * (longBlockNumber / totalBlocksOnArc)
   return { 
     id: { 
-      latitudeNumber: latBlockNumber, 
-      longitudeNumber: longBlockNumber, 
+      latitudeBlockNumber: latBlockNumber, 
+      longitudeBlockNumber: longBlockNumber, 
     },
     // Only useful to verify we're creating the correct blocks
     geoJSON: {

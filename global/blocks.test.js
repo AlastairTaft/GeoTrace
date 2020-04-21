@@ -42,8 +42,8 @@ describe('#blocks', () => {
       })
       expect(result).toEqual({
         "id": {
-          "latitudeNumber": 542971,
-          "longitudeNumber": 16801
+          "latitudeBlockNumber": 542971,
+          "longitudeBlockNumber": 16801
         },
         "geoJSON": {
           "type": "Feature",
@@ -86,8 +86,8 @@ describe('#blocks', () => {
       })
       expect(result).toEqual({
         "id": {
-          "latitudeNumber": 61660,
-          "longitudeNumber": -2140
+          "latitudeBlockNumber": 61660,
+          "longitudeBlockNumber": -2140
         },
         "geoJSON": {
           "type": "Feature",
@@ -130,8 +130,8 @@ describe('#blocks', () => {
       })
       expect(result).toEqual({
         "id": {
-          "latitudeNumber": 874163,
-          "longitudeNumber": 35714
+          "latitudeBlockNumber": 874163,
+          "longitudeBlockNumber": 35714
         },
         "geoJSON": {
           "type": "Feature",
@@ -174,8 +174,8 @@ describe('#blocks', () => {
       })
       expect(result).toEqual({
         "id": {
-          "latitudeNumber": -234293,
-          "longitudeNumber": -1821266
+          "latitudeBlockNumber": -234293,
+          "longitudeBlockNumber": -1821266
         },
         "geoJSON": {
           "type": "Feature",
@@ -220,8 +220,8 @@ describe('#blocks', () => {
       })
       expect(result).toEqual({
         "id": {
-          "latitudeNumber": -491999,
-          "longitudeNumber": -1405144
+          "latitudeBlockNumber": -491999,
+          "longitudeBlockNumber": -1405144
         },
         "geoJSON": {
           "type": "Feature",
@@ -264,8 +264,8 @@ describe('#blocks', () => {
       })
       expect(result).toEqual({
         "id": {
-          "latitudeNumber": -1,
-          "longitudeNumber": 105161
+          "latitudeBlockNumber": -1,
+          "longitudeBlockNumber": 105161
         },
         "geoJSON": {
           "type": "Feature",
@@ -293,6 +293,49 @@ describe('#blocks', () => {
                 [
                   9.446777292576419,
                   -0.00008998200359928014
+                ]
+              ]
+            ]
+          }
+        }
+      })
+    })
+    it(`should get the right value at the 0,0 coordinates`, () => {
+      var result = methods.getBlockIdentifierForLocation({
+        latitude: 0,
+        longitude: 0,
+      })
+      expect(result).toEqual({
+        "id": {
+          "latitudeBlockNumber": 0,
+          "longitudeBlockNumber": 0
+        },
+        "geoJSON": {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.00008983156581409856,
+                  0
+                ],
+                [
+                  0.00008983156581409856,
+                  0.00008998200359928014,
+                ],
+                [
+                  0,
+                  0.00008998200359928014,
+                ],
+                [
+                  0,
+                  0
                 ]
               ]
             ]
