@@ -35,13 +35,14 @@ The user installs our app. In the background it tracks their location every 5 mi
 ### 3.1 Location bit algorithm
 Each location position is roughly accurate to 10 meters. If we receive a location position that is not accurate to at least 10 meters then we discard it.
 
-We prune this data to remove the user’s home location and any location points that are near to here, we can figure this out by it being where the user spends time at night (may need to store points in local storage to be able to figure this out). This better anonymises users as a last line of defence if the data can ever be reverse engineered.
+We scramble this data to remove the user’s home location and any location points that are near to here, we can figure this out by it being where the user spends time at night (may need to store points in local storage to be able to figure this out). This better anonymises users as a last line of defence if the data can ever be reverse engineered.
 
-We then split the world into three predefined 10 meter squared hexagonal grids, each one shifted to compensate if location points are at the edge of any hexagon, so we have a hexagon layer A, B and C. Each hexagonal block is then given a predefined number N. We also divide the area over a single hexagonal grid that’s split by 20 kilometer squared blocks, layer D (used to get the salt, more on that later).
+We then split the world into three predefined roughly 10 metre squared blocks, each one shifted to compensate if location points are at the edge of any block, so we have a block layer A, B and C. Each block is then given a predefined reference value. We also divide the area over a single hexagonal grid that’s split by 20 kilometer squared blocks, layer D (used to get the salt, more on that later).
 
-Layer A, B and C looks like this. ![example hexagon grids](https://i.imgur.com/wC0rKkT.png)
- 
+Layer A, B and C looks like this. ![example square grids](https://i.imgur.com/7r6WFnL.png)
 Red dots indicate real location positions. They are sifted into their matching hexagonal block for each layer.
+
+Note: Hexagon grids would likely be better [!example](https://i.imgur.com/wC0rKkT.png) however it turns out splitting a sphere into hexagon areas is quite a complex problem to solve, perhaps can be done in the future.
 
 We also split each timestamp into 5 minute blocks. And for the same reason as using multiple layers to match when a user is near to an infected user in the adjacent block, we split the timestamps into a second timestamp block that’s shifted by 2.5 minutes and given a number 1 to n.
 

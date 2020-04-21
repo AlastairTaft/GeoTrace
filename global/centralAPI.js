@@ -10,18 +10,18 @@ else
  * @param {Array<GeoJSONFeature>} features
  * @returns {Promise}
  */
-export const trackPositions = async function(features){
-  var response = await fetch(API_URL + 'submit-location-history', {
+export const logRiskPoints = async function(deviceId, riskPoints){
+  var response = await fetch(API_URL + 'risk-points', {
     method: 'post',
     body: JSON.stringify({
-      "type": "FeatureCollection",
-      "features": features,
+      deviceId,
+      riskPoints,
     }),
   })
   var result = await response.json()
   if (response.status != 200){
     Sentry.captureMessage(JSON.stringify(result))
-    throw new Error('Unable to track position.')
+    throw new Error('Unable to log risk points.')
   }
   return result
 }
