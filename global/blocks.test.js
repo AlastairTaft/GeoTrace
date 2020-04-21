@@ -301,4 +301,31 @@ describe('#blocks', () => {
       })
     })
   })
+
+  describe('#getBlockIdentifierForTimestamp', () => {
+    it('should get the first block for 5 minute blocks', () => {
+      var result = methods.getBlockIdentifierForTimestamp(0, 1000 * 60 * 5)
+      expect(result).toBe(0)
+    })
+    it('should get the first block for 5 minute blocks', () => {
+      var result = methods.getBlockIdentifierForTimestamp(1234, 1000 * 60 * 5)
+      expect(result).toBe(0)
+    })
+    it('should get the second block for 5 minute blocks', () => {
+      var result = methods.getBlockIdentifierForTimestamp(301234, 1000 * 60 * 5)
+      expect(result).toBe(1)
+    })
+    it('should get the first block for 1 hour blocks', () => {
+      var result = methods.getBlockIdentifierForTimestamp(0, 1000 * 60 * 60)
+      expect(result).toBe(0)
+    })
+    it('should get the first block for 1 hour blocks', () => {
+      var result = methods.getBlockIdentifierForTimestamp(1234, 1000 * 60 * 5)
+      expect(result).toBe(0)
+    })
+    it('should get the second block for 1 hour blocks', () => {
+      var result = methods.getBlockIdentifierForTimestamp(3601234, 1000 * 60 * 60)
+      expect(result).toBe(1)
+    })
+  })
 })
