@@ -4,6 +4,8 @@ import * as Sentry from 'sentry-expo'
 import './bugTracking'
 import * as trackAPI from './centralAPI'
 import { getDeviceId } from './deviceId'
+import { getRiskPoints } from './risk'
+import { getBlockIdentifierForLocation } from './blocks'
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
@@ -37,8 +39,22 @@ TaskManager.defineTask(
       // before then so let's remove that time from the EPOCH.
       var elapsed = l.timestamp - 1587384430649
      
+      var riskPoints = getRiskPoints(l.coords, elapsed)
 
-      
+      // Not specific geographic block the user is in, used to get the salt
+      var nonSpecificGeoBlock = getBlockIdentifierForLocation(
+        {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+        1000 * 50 // Will represent a 50km squared block
+      )
+      .id
+
+      return {
+        nonSpecificGeoBlock,
+        riskPoints,
+      }
       
     })
 
