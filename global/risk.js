@@ -5,6 +5,7 @@ import {
   getBlockIdentifierForLocation, 
   getNoLongitudeBlocks,
   getBlockIdentifierForTimestamp,
+  APPROX_BLOCK_SIZE,
 } from './blocks'
 
 /**
@@ -22,10 +23,13 @@ export const getRiskPoints = function(location, elapsed){
   var totalBlocksAtLatitude = getNoLongitudeBlocks(location.latitude)
   var longitudeBlockSize = 180 / totalBlocksAtLatitude
   var positionBlocks = [1/3,2/3,3/3].map(fraction => 
-    getBlockIdentifierForLocation({
-      latitude: location.latitude + (LATITUDE_BLOCK_SIZE * fraction),
-      longitude: location.longitude + (longitudeBlockSize * fraction),
-    })
+    getBlockIdentifierForLocation(
+      {
+        latitude: location.latitude + (LATITUDE_BLOCK_SIZE * fraction),
+        longitude: location.longitude + (longitudeBlockSize * fraction),
+      },
+      APPROX_BLOCK_SIZE,
+    )
     .id
   )
   var riskPoints = []
@@ -54,8 +58,32 @@ export const getRiskPoints = function(location, elapsed){
         timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
         position,
+        positionBlockSize: APPROX_BLOCK_SIZE,
       })
     }
   })
   return riskPoints
+}
+
+/**
+ * Hash a risk point.
+ */
+export const hashRiskPoint = async function(riskPoint){
+  var { 
+    timeBlockSize,
+    timeBlockNumber,
+    timePassedSinceExposure,
+    position,
+    positionBlockSize,
+  } = riskPoint
+
+  return Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA512,
+    'some random text' + JSON.stringify({
+      timeBlockSize,
+      timeBlockNumber,
+      position,
+      positionBlockSize
+    })
+  )
 }

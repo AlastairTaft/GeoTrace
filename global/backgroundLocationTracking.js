@@ -6,6 +6,7 @@ import * as trackAPI from './centralAPI'
 import { getDeviceId } from './deviceId'
 import { getRiskPoints } from './risk'
 import { getBlockIdentifierForLocation } from './blocks'
+import { RELATIVE_EPOCH_START } from './constants'
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
@@ -37,7 +38,7 @@ TaskManager.defineTask(
       
       // The current time right now is 10:06 AEST, we don't care about anything
       // before then so let's remove that time from the EPOCH.
-      var elapsed = l.timestamp - 1587384430649
+      var elapsed = l.timestamp - RELATIVE_EPOCH_START
      
       var riskPoints = getRiskPoints(l.coords, elapsed)
 
@@ -58,18 +59,6 @@ TaskManager.defineTask(
       
     })
 
-
-    var deviceId = await getDeviceId()
-
-    
-    try {
-      await trackAPI.trackPositions(features)
-    } catch (err){
-      if (__DEV__)
-        throw err
-      else 
-        Sentry.captureException(error)
-    }
   }
 )
 
