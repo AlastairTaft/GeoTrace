@@ -5,13 +5,10 @@ import HighlightText from './../components/HighlightText'
 
 const TrackingScreen = props => {
   return <View style={styles.content}>
-    <StyledText>You have <HighlightText>not</HighlightText> crossed paths with 
-      with anyone who has self
-      identified as having COVID-19.
+    <StyledText><HighlightText>No</HighlightText> exposure detected.
     </StyledText>
   </View>
 }
-
 
 export default TrackingScreen
 
