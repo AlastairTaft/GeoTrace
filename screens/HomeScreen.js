@@ -1,6 +1,4 @@
 import React, { Fragment } from 'react'
-import NotInfectedHomeScreen from './NotInfectedHomeScreen'
-import InfectedHomeScreen from './InfectedHomeScreen'
 import { 
   Image, 
   Platform, 
@@ -13,9 +11,7 @@ import * as Updates from 'expo-updates'
 import Button from './../components/Button'
 import Colors from './../constants/Colors'
 import { Consumer as PermissionsConsumer } from './../global/permissions'
-import { Consumer as BackgroundTrackingConsumer } from './../global/backgroundLocationTracking'
-import * as trackAPI from './../global/trackAPI'
-import { getDeviceId } from './../global/deviceId'
+import { Consumer as BackgroundTrackingConsumer } from './BackgroundScriptWrapper'
 import AtRiskInfo from './../components/AtRiskInfo'
 import StyledText from './../components/StyledText'
 import HighlightText from './../components/HighlightText'

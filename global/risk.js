@@ -1,5 +1,4 @@
-
-
+import * as Crypto from 'expo-crypto'
 import { 
   LATITUDE_BLOCK_SIZE,
   getBlockIdentifierForLocation, 
@@ -45,15 +44,16 @@ export const getRiskPoints = function(location, elapsed){
         timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
         position,
+        positionBlockSize: APPROX_BLOCK_SIZE,
       })
     }
-    var t72Hours = 1000 * 60 * 60 * 72
-    // Let's record every hour block after that up to 72 hours
+    var t9Hours = 1000 * 60 * 60 * 9
+    // Let's record every hour block after that up to 9 hours
     var t2BlockSize = 1000 * 60 * 60
-    for (; i < t72Hours; i += t2BlockSize){
+    for (; i < t9Hours; i += t2BlockSize){
       var timeBlock = getBlockIdentifierForTimestamp(elapsed + i, t2BlockSize)
       riskPoints.push({
-        // The point in time this block represents
+        // The point in time this block representss
         timeBlockSize: t2BlockSize,
         timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
@@ -67,6 +67,7 @@ export const getRiskPoints = function(location, elapsed){
 
 /**
  * Hash a risk point.
+ * @returns {Promise<string>}
  */
 export const hashRiskPoint = async function(riskPoint){
   var { 
@@ -76,14 +77,17 @@ export const hashRiskPoint = async function(riskPoint){
     position,
     positionBlockSize,
   } = riskPoint
-
   return Crypto.digestStringAsync(
     Crypto.CryptoDigestAlgorithm.SHA512,
-    'some random text' + JSON.stringify({
+    `This additional text here doesn\'t do much apart from make a malicious 
+     actor have to track this down in the source code.` + JSON.stringify({
       timeBlockSize,
       timeBlockNumber,
       position,
       positionBlockSize
-    })
+    }),
+    {
+      encoding: Crypto.CryptoEncoding.BASE64,
+    }
   )
 }

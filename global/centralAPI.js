@@ -7,40 +7,27 @@ else
 
 /**
  * Submits location data to the server
- * @param {Array<GeoJSONFeature>} features
+ * @param {string} deviceId
+ * @param {string} riskPoints[0].hash
+ * @param {number} riskPoints[0].timePassedSinceExposure
  * @returns {Promise}
  */
-export const logRiskPoints = async function(deviceId, riskPoints){
-  var response = await fetch(API_URL + 'risk-points', {
+export const submitRiskMap = async function(deviceId, riskPoints){
+  console.log('submitRiskMap#riskPoints', riskPoints)
+  var response = await fetch(API_URL + 'submit-risk-map', {
     method: 'post',
     body: JSON.stringify({
-      deviceId,
-      riskPoints,
+      uniqueId: deviceId,
+      hashes: riskPoints.map(rp => ({
+        timePassedSinceExposure: rp.timePassedSinceExposure,
+        hash: rp.hash,
+      })),
     }),
   })
   var result = await response.json()
   if (response.status != 200){
     Sentry.captureMessage(JSON.stringify(result))
-    throw new Error('Unable to log risk points.')
-  }
-  return result
-}
-
-/**
- * Get the list of points that the user was at risk.
- * @param {string} uniqueId
- * @returns {Promise<GeoJSONFeatureCollection>}
- */
-export const getAtRiskHistoricPositions = async function(uniqueId){
-  var response = await fetch(`
-    ${API_URL}location-history
-    ?unique-id=${uniqueId}
-    &at-risk=true
-  `.replace(/\s+/g, ''))
-  var result = await response.json()
-  if (response.status != 200){
-    Sentry.captureMessage(JSON.stringify(result))
-    throw new Error('Unable to retrieve historic data.')
+    throw new Error('Unable to submit risk map.')
   }
   return result
 }

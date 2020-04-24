@@ -4,13 +4,15 @@ import { SplashScreen } from 'expo';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import './global/bugTracking' // Bug tracking
-import { BackgroundScriptWrapper } from './global/backgroundLocationTracking' // Background location tracking
+import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // Background location tracking
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
 import { getStatus } from './global/userStatus'
 import { useFonts } from '@use-expo/font'
 import { UserStatusWrapper } from './global/userStatus'
+// Fire off the background scripts
+import './global/backgroundLocationTracking'
 
 const Stack = createStackNavigator();
 
@@ -35,7 +37,9 @@ function App(props) {
       // Load our initial navigation state
       setInitialNavigationState(await getInitialState());
       // Do the work while the splash screen is showing
+      
       await getStatus()
+      
       setLoadingComplete(true)
       SplashScreen.hide()
     }
