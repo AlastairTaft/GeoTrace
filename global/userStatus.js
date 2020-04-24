@@ -6,7 +6,7 @@
  */
 import React, { useState, useEffect } from 'react'
 import { getDeviceId } from './deviceId'
-import * as trackAPI from './trackAPI'
+import * as trackAPI from './centralAPI'
 
 var getStatusResolver
 
@@ -37,7 +37,6 @@ export const { Provider, Consumer } = PermissionsContext
 export var UserStatusWrapper = props => {
   
   var [status, setStatus] = useState(null)
-  console.log('UserStatusWrapper#status', status)
   useEffect(() => {
     getStatus()
     .then(status => {

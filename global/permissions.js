@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
+import * as BackgroundFetch from 'expo-background-fetch'
 import { BACKGROUND_TRACKING_TASK_NAME } from './../global/backgroundLocationTracking'
+import { BACKGROUND_SYNC_TASK_NAME } from './../global/backgroundSync'
 
 const PermissionsContext = React.createContext()
 
@@ -23,6 +25,11 @@ const askRequiredPermissions = async () => {
     activityType: Location.ActivityType.Fitness,
   }
   await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
+  await BackgroundFetch.registerTaskAsync(BACKGROUND_SYNC_TASK_NAME, {
+    minimumInterval: 1 * 60 * 60, // 1 hour 
+    stopOnTerminate: false,
+    startOnBoot: true,
+  })
 }
 
 /**

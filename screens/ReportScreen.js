@@ -6,8 +6,6 @@ import {
   StyleSheet,
 } from 'react-native'
 import COLORS from './../constants/Colors'
-import { getDeviceId } from './../global/deviceId'
-import * as trackAPI from './../global/trackAPI'
 import ReportThankyouScreen from './ReportThankyouScreen'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import ReportInfectedScreen from './ReportInfectedScreen'

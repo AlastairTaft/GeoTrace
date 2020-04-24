@@ -12,7 +12,10 @@ export const getDeviceId = () => {
   if (!deviceIdResolver)
     deviceIdResolver = Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA512,
-      '🚀 Saving the world 🌍 one step 👣 at a time 🕘.' + Constants.installationId
+      '🚀 Saving the world 🌍 one step 👣 at a time 🕘.' + Constants.installationId,
+      {
+        encoding: Crypto.CryptoEncoding.BASE64,
+      }
     )
   // TODO Increase entrophy
   return deviceIdResolver

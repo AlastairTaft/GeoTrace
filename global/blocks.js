@@ -27,10 +27,15 @@ export const convertDegreesToRadians = function(degrees){
 
 /**
  * Get the number of blocks needed to fill along the longitude.
+ * @param {number} latitude
+ * @param {number} opt_blockSize The desired block size
  */
-export const getNoBlocksAtLatitude = function(latitude){
+export const getNoBlocksAtLatitude = function(
+  latitude, 
+  opt_blockSize = APPROX_BLOCK_SIZE
+){
   return Math.round(
-    getEarthCircumferenceAtLatitude(latitude) / APPROX_BLOCK_SIZE
+    getEarthCircumferenceAtLatitude(latitude) / opt_blockSize
   )
 }
 
@@ -38,12 +43,16 @@ export const getNoBlocksAtLatitude = function(latitude){
  * We fit blocks perpendicular to the equator alont the latitude. This function
  * returns how many blocks we can fit at a specific latitude.
  * @param {number} latitude
+ * @param {number} opt_blockSize The desired block size
  * @returns {number}
  */
-export const getNoLongitudeBlocks = function(latitude){
+export const getNoLongitudeBlocks = function(
+  latitude, 
+  opt_blockSize = APPROX_BLOCK_SIZE
+){
   var circumferenceAtLatitude = getEarthCircumferenceAtLatitude(latitude)
   var arc = circumferenceAtLatitude / 2
-  var totalBlocksOnArc = Math.round(arc / 10)
+  var totalBlocksOnArc = Math.round(arc / opt_blockSize)
   return totalBlocksOnArc
 }
 
@@ -52,11 +61,16 @@ export const getNoLongitudeBlocks = function(latitude){
  * @param {number} location.longitude
  * @returns {tbd}
  */
-export const getBlockIdentifierForLocation = function(location){
+export const getBlockIdentifierForLocation = function(
+  location, 
+  opt_blockSize = APPROX_BLOCK_SIZE
+){
   var { latitude, longitude } = location
+  var latBlockSize = 90 / 
+    Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / opt_blockSize)
   ////0.000001 accurate to 0.11m which is accurate enough for our purposes
-  var latBlockNumber = Math.floor(latitude / LATITUDE_BLOCK_SIZE)
-  var blockLatStart = latBlockNumber * LATITUDE_BLOCK_SIZE
+  var latBlockNumber = Math.floor(latitude / latBlockSize)
+  var blockLatStart = latBlockNumber * latBlockSize
   var totalBlocksOnArc = getNoLongitudeBlocks(blockLatStart)
   var longitudeBlockSize = 180 / totalBlocksOnArc
   var longBlockNumber = Math.floor((longitude / 180) * totalBlocksOnArc)
@@ -84,11 +98,11 @@ export const getBlockIdentifierForLocation = function(location){
             ],
             [
               blockLongStart + longitudeBlockSize, 
-              blockLatStart + LATITUDE_BLOCK_SIZE,
+              blockLatStart + latBlockSize,
             ],
             [
               blockLongStart, 
-              blockLatStart + LATITUDE_BLOCK_SIZE,
+              blockLatStart + latBlockSize,
             ],
             [
               blockLongStart, 

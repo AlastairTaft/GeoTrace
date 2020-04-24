@@ -1,10 +1,10 @@
-
-
+import * as Crypto from 'expo-crypto'
 import { 
   LATITUDE_BLOCK_SIZE,
   getBlockIdentifierForLocation, 
   getNoLongitudeBlocks,
   getBlockIdentifierForTimestamp,
+  APPROX_BLOCK_SIZE,
 } from './blocks'
 
 /**
@@ -22,10 +22,13 @@ export const getRiskPoints = function(location, elapsed){
   var totalBlocksAtLatitude = getNoLongitudeBlocks(location.latitude)
   var longitudeBlockSize = 180 / totalBlocksAtLatitude
   var positionBlocks = [1/3,2/3,3/3].map(fraction => 
-    getBlockIdentifierForLocation({
-      latitude: location.latitude + (LATITUDE_BLOCK_SIZE * fraction),
-      longitude: location.longitude + (longitudeBlockSize * fraction),
-    })
+    getBlockIdentifierForLocation(
+      {
+        latitude: location.latitude + (LATITUDE_BLOCK_SIZE * fraction),
+        longitude: location.longitude + (longitudeBlockSize * fraction),
+      },
+      APPROX_BLOCK_SIZE,
+    )
     .id
   )
   var riskPoints = []
@@ -41,21 +44,50 @@ export const getRiskPoints = function(location, elapsed){
         timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
         position,
+        positionBlockSize: APPROX_BLOCK_SIZE,
       })
     }
-    var t72Hours = 1000 * 60 * 60 * 72
-    // Let's record every hour block after that up to 72 hours
+    var t9Hours = 1000 * 60 * 60 * 9
+    // Let's record every hour block after that up to 9 hours
     var t2BlockSize = 1000 * 60 * 60
-    for (; i < t72Hours; i += t2BlockSize){
+    for (; i < t9Hours; i += t2BlockSize){
       var timeBlock = getBlockIdentifierForTimestamp(elapsed + i, t2BlockSize)
       riskPoints.push({
-        // The point in time this block represents
+        // The point in time this block representss
         timeBlockSize: t2BlockSize,
         timeBlockNumber: timeBlock,
         timePassedSinceExposure: i,
         position,
+        positionBlockSize: APPROX_BLOCK_SIZE,
       })
     }
   })
   return riskPoints
+}
+
+/**
+ * Hash a risk point.
+ * @returns {Promise<string>}
+ */
+export const hashRiskPoint = async function(riskPoint){
+  var { 
+    timeBlockSize,
+    timeBlockNumber,
+    timePassedSinceExposure,
+    position,
+    positionBlockSize,
+  } = riskPoint
+  return Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA512,
+    `This additional text here doesn\'t do much apart from make a malicious 
+     actor have to track this down in the source code.` + JSON.stringify({
+      timeBlockSize,
+      timeBlockNumber,
+      position,
+      positionBlockSize
+    }),
+    {
+      encoding: Crypto.CryptoEncoding.BASE64,
+    }
+  )
 }
