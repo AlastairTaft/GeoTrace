@@ -5,8 +5,7 @@ import COLOURS from './../constants/Colors'
 
 const AtRiskInfo = props => {
   return <View>
-      <StyledText>You have crossed paths with people who have self identified as having 
-        COVID-19 at these points in time.</StyledText>
+      <StyledText>Possible exposure detected. It is recommended you self isolate.</StyledText>
     <View style={styles.tableContainer}>
       {props.atRiskLocationData.map((feature, i) => <View 
         style={[

@@ -20,11 +20,14 @@ export const popStoredRiskData = async function(){
 
 
 /**
- * @param {number} riskData[0].timestamp
- * @param {object} riskData[0].riskPoint
+ * @param {object} riskPoints[0].preSaltHash
+ * @param {object} riskPoints[0].hashedRiskPoints
+ * @param {string} riskPoints[0].hashedRiskPoints[0].hash
+ * @param {number} riskPoints[0].hashedRiskPoints[0].timePassedSinceExposure     
+ * @param {object} riskPoints[0].timestamp
  */
-export const setStoredRiskData = async function(riskData){
-  await AsyncStorage.setItem('riskPoints', JSON.stringify(riskData))
+export const setStoredRiskData = async function(riskPoints){
+  await AsyncStorage.setItem('riskPoints', JSON.stringify(riskPoints))
 }
 
 /**
@@ -53,6 +56,8 @@ export const purgeStaleRiskPoints = function(
  * Adds new risk points to existing stored risk points
  * @param {object} newRiskPoints[0].preSaltHash
  * @param {object} newRiskPoints[0].hashedRiskPoints
+ * @param {string} newRiskPoints[0].hashedRiskPoints[0].hash
+ * @param {number} newRiskPoints[0].hashedRiskPoints[0].timePassedSinceExposure     
  * @param {object} newRiskPoints[0].timestamp
  */
 export const pushRiskPoints = async function(newRiskPoints){

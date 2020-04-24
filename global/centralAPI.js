@@ -35,15 +35,16 @@ export const submitRiskMap = async function(deviceId, riskPoints){
 /**
  * Report the user has been diagnosed with COVID-19.
  * @param {string} uniqueId
- * @param {number} timestampShowingSymptoms
+ * @param {number} code A code to validate the result came from a health 
+ * authority
  * @returns {Promise}
  */
-export const reportInfected = async function(uniqueId, timestampShowingSymptoms){
+export const reportInfected = async function(uniqueId, code){
   var response = await fetch(API_URL + 'report-infected', {
     method: 'put',
     body: JSON.stringify({
       "uniqueId": uniqueId,
-      "timestampShowingSymptoms": timestampShowingSymptoms,
+      "code": code,
     }),
   })
   var result = await response.json()
