@@ -1,20 +1,20 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-import { headerSize, headerColor } from '../styles/text'
+import { emphasizedSize, emphasizedColor } from '../styles/text'
 
-const HeaderText = props => <Text 
+const EmphasizedText = props => <Text 
   {...props} 
   style={[styles.regularText, props.style]}
 />
 
-export default HeaderText
+export default EmphasizedText
 
 
 var styles = StyleSheet.create({
   regularText: {
-    fontSize: headerSize,
-    color: headerColor,
+    fontSize: emphasizedSize,
+    color: emphasizedColor,
     textAlign: 'left',
     fontFamily: 'Avenir-Medium',
     fontWeight: 'bold',

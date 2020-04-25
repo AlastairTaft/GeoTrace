@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native'
 import { SplashScreen } from 'expo';
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import './global/bugTracking' // Bug tracking
 import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // Background location tracking
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
 import { getStatus } from './global/userStatus'
-import { useFonts } from '@use-expo/font'
+import * as Font from 'expo-font'
 import { UserStatusWrapper } from './global/userStatus'
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function App(props) {
 
@@ -22,13 +22,13 @@ function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
-  let [fontsLoaded] = useFonts({
+  let customFonts = {
     'Avenir-Roman': require('./assets/fonts/AvenirLTStd-Roman.otf'),
     'Avenir-Book': require('./assets/fonts/AvenirLTStd-Book.otf'),
     'Avenir-Medium': require('./assets/fonts/AvenirLTStd-Medium.otf'),
     'SpaceMono-Regular': require('./assets/fonts/SpaceMono-Regular.ttf'),
-  });
-  
+  };
+
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
@@ -37,9 +37,10 @@ function App(props) {
       // Load our initial navigation state
       setInitialNavigationState(await getInitialState());
       // Do the work while the splash screen is showing
-      
-      await getStatus()
-      
+
+      // await getStatus()
+      await Font.loadAsync(customFonts);
+
       setLoadingComplete(true)
       SplashScreen.hide()
     }
@@ -53,9 +54,7 @@ function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            <Stack.Screen name="Home" component={BottomTabNavigator} />
-          </Stack.Navigator>
+          <BottomTabNavigator />
         </NavigationContainer>
       </View>
     );
@@ -76,6 +75,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    
+
   },
 });

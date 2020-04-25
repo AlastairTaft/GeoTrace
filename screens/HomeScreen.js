@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { 
   Image, 
   Platform, 
@@ -14,40 +15,41 @@ import { Consumer as PermissionsConsumer } from './../global/permissions'
 import { Consumer as BackgroundTrackingConsumer } from './BackgroundScriptWrapper'
 import AtRiskInfo from './../components/AtRiskInfo'
 import StyledText from './../components/StyledText'
+import HeaderText from './../components/HeaderText'
+import EmphasizedText from './../components/EmphasizedText'
+import LinkText from './../components/LinkText'
 import HighlightText from './../components/HighlightText'
 import Modal from './../components/Modal'
 import TextLogo from './../assets/images/TextLogo'
+import { headerColor, headerSize, linkColor, linkSize } from '../styles/text'
 import Divider from './../components/Divider'
 import Neighbourhood from './../assets/images/Neighbourhood'
 
 export default function HomeScreen() {
 
-
   return (
     <View style={styles.container}>
         
-      <View style={styles.logoContainer}>
-        <Image
-          source={
-            require('../assets/images/logo.png')
-          }
-          style={styles.logoImage}
-        />
-        <TextLogo />
+      <View style={styles.headerContainer}>
+        <HeaderText style={styles.mainHeader}>
+        COVID-19
+        </HeaderText>
       </View>
-      <View style={styles.dividerContainer}>
-        <Divider style={{width: 231}} />
+      <View style={styles.statusContainer}>
+        <HeaderText>
+          <Icon name="verified-user" backgroundColor={headerColor} size={headerSize} />
+          No exposure detected.
+          </HeaderText>
       </View>
       <View style={styles.contentContainer}>
-        <TrackingMessage />
         <Text />
-        <StyledText>
-          You will be notified here if you 
-          have been in close contact with someone who has been diagnosed 
-          with COVID-19.
-        </StyledText>
+        <EmphasizedText>
+          Based on available location data, you have not been in contact with COVID-19.
+        </EmphasizedText>
+        <Text />
+        <LinkText>Learn about privacy <Icon name="keyboard-arrow-right" backgroundColor={linkColor} size={linkSize * 1.5} /></LinkText>
       </View>
-      <View style={styles.illustrationContainer}>
+      <View style={styles.buttonsContainer}>
         <Neighbourhood />
       </View>
     </View>
@@ -62,28 +64,40 @@ HomeScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#0c0d0b',
   },
 
-  logoContainer: {
-    flex: 2.6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+  button: {
+    borderRadius: "12px"
   },
-  dividerContainer: {
-    flex: 0.8,
-    alignItems: 'center',
+
+  mainHeader: {
+    color: "white"
+  },
+
+  headerContainer: {
+    flex: 1,
+    flexDirection: "column",
+    marginTop: "30%",
+    marginLeft: 15
+  },
+
+  statusContainer: {
+    flex: 2,
+    alignItems: "flex-end",
+    flexDirection: 'row',
+    marginLeft: 15,
+    marginRight: 30
   },
   contentContainer: {
     flex: 3,
-    paddingLeft: 30,
+    paddingLeft: 15,
     paddingRight: 30,
   },
-  illustrationContainer: {
+  buttonContainer: {
     flex: 3,
     alignItems: 'flex-end',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   logoImage: {
@@ -102,35 +116,35 @@ const styles = StyleSheet.create({
   },
 });
 
-const TrackingMessage = props => <PermissionsConsumer>
-  {permissionsOk => {
-    if (permissionsOk){
-      return <BackgroundTrackingConsumer>
-        {trackingScriptInstalled => {
-          if (trackingScriptInstalled)
-            return <Fragment>
-              <StyledText>
-                Your location is being <HighlightText>anonymously</HighlightText> tracked. 
+// const TrackingMessage = props => <PermissionsConsumer>
+//   {permissionsOk => {
+//     if (permissionsOk){
+//       return <BackgroundTrackingConsumer>
+//         {trackingScriptInstalled => {
+//           if (trackingScriptInstalled)
+//             return <Fragment>
+//               <StyledText>
+//                 Your location is being <HighlightText>anonymously</HighlightText> tracked. 
               
-              </StyledText>
-            </Fragment>
-          return <View>
-            <Text style={styles.errorMessage}>
-              Background tracking not yet running...
-            </Text>
-            <Text />
-            <Button 
-              onPress={Updates.reloadAsync}
-              title="Reload"
-            />
-          </View>
+//               </StyledText>
+//             </Fragment>
+//           return <View>
+//             <Text style={styles.errorMessage}>
+//               Background tracking not yet running...
+//             </Text>
+//             <Text />
+//             <Button 
+//               onPress={Updates.reloadAsync}
+//               title="Reload"
+//             />
+//           </View>
 
-        }}
-      </BackgroundTrackingConsumer>
-    }
-    return <Text style={styles.errorMessage}>
-      Unable to get required location tracking permissions from your
-      device.
-    </Text>
-  }}
-</PermissionsConsumer>
+//         }}
+//       </BackgroundTrackingConsumer>
+//     }
+//     return <Text style={styles.errorMessage}>
+//       Unable to get required location tracking permissions from your
+//       device.
+//     </Text>
+//   }}
+// </PermissionsConsumer>

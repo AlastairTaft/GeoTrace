@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { itemInactive, itemActive } from '../styles/navigation';
 
 function TabBar({ state, descriptors, navigation }) {
   return (
@@ -43,8 +44,7 @@ function TabBar({ state, descriptors, navigation }) {
             onPress={onPress}
             onLongPress={onLongPress}
             style={[
-              styles.navItem,
-              isFocused ? styles.navItemFocused : undefined,
+              styles.navItem
             ]}
             key={title}
           >
@@ -53,7 +53,10 @@ function TabBar({ state, descriptors, navigation }) {
             ]}>
               <TabBarIcon focused={isFocused} />
             </View>
-            <Text style={[styles.navText]}>
+            <Text style={[
+              styles.navText,
+              isFocused ? styles.navTextActive : undefined
+            ]}>
               {title}
             </Text>
           </TouchableOpacity>
@@ -67,25 +70,23 @@ export default TabBar
 
 const styles = StyleSheet.create({
   tabBar: {
-    borderTopColor: '#00000032',
-    borderWidth: 1,
-    borderStyle: 'solid', 
-    backgroundColor: 'white',
+    backgroundColor: '#2b2b2b',
     flexDirection: 'row',
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 4,
+    paddingBottom: 6,
   },
   navText: {
     fontFamily: 'Avenir-Book',
+    color: itemInactive
+  },
+  navTextActive: {
+    color: itemActive
   },
   iconContainer: {
-    height: 48,
-  },
-  navItemFocused: {
-    backgroundColor: '#D2DBFF88',
-  },
+    height: 36,
+  }
 })
