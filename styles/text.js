@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stylesheet } from 'react-native';
 
-export const headerColor = '#0091ff';
+export const headerColor = '#49a5b0';
 export const headerSize = 46;
 
 export const emphasizedSize = 18;

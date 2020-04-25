@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { itemInactive, itemActive } from '../styles/navigation';
+import { itemInactive, itemActive, tabBarBackground } from '../styles/navigation';
 
 function TabBar({ state, descriptors, navigation }) {
   return (
@@ -70,7 +70,7 @@ export default TabBar
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#2b2b2b',
+    backgroundColor: tabBarBackground,
     flexDirection: 'row',
   },
   navItem: {

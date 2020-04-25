@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { 
-  Image, 
-  Platform, 
-  StyleSheet, 
-  Text, 
-  View, 
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import * as Updates from 'expo-updates'
@@ -30,28 +30,18 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
         
-      <View style={styles.headerContainer}>
-        <HeaderText style={styles.mainHeader}>
-        COVID-19
-        </HeaderText>
-      </View>
-      <View style={styles.statusContainer}>
-        <HeaderText>
-          <Icon name="verified-user" backgroundColor={headerColor} size={headerSize} />
-          No exposure detected.
-          </HeaderText>
-      </View>
       <View style={styles.contentContainer}>
-        <Text />
-        <EmphasizedText>
+        <View>
+          <Icon name="verified-user" color={headerColor} size={headerSize} />
+        </View>
+        <HeaderText>
+          No exposure detected
+        </HeaderText>
+        <EmphasizedText style={styles.emphasized}>
           Based on available location data, you have not been in contact with COVID-19.
         </EmphasizedText>
-        <Text />
-        <LinkText>Learn about privacy <Icon name="keyboard-arrow-right" backgroundColor={linkColor} size={linkSize * 1.5} /></LinkText>
       </View>
-      <View style={styles.buttonsContainer}>
-        <Neighbourhood />
-      </View>
+      
     </View>
   )
 }
@@ -64,40 +54,35 @@ HomeScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0c0d0b',
+    backgroundColor: '#ffffff',
   },
 
-  button: {
-    borderRadius: "12px"
-  },
-
-  mainHeader: {
-    color: "white"
-  },
-
-  headerContainer: {
-    flex: 1,
-    flexDirection: "column",
-    marginTop: "30%",
-    marginLeft: 15
-  },
-
-  statusContainer: {
-    flex: 2,
-    alignItems: "flex-end",
-    flexDirection: 'row',
-    marginLeft: 15,
-    marginRight: 30
-  },
   contentContainer: {
-    flex: 3,
-    paddingLeft: 15,
-    paddingRight: 30,
+    flex: 2.6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  buttonContainer: {
+
+  emphasized: {
+    paddingTop: 30,
+    marginLeft: "10%",
+    marginRight: "10%"
+  },
+
+  dividerContainer: {
+    flex: 0.8,
+    alignItems: 'center',
+  },
+  // contentContainer: {
+  //   flex: 3,
+  //   paddingLeft: 30,
+  //   paddingRight: 30,
+  // },
+  illustrationContainer: {
     flex: 3,
     alignItems: 'flex-end',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
   },
   logoImage: {

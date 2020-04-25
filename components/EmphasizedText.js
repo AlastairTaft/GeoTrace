@@ -15,7 +15,7 @@ var styles = StyleSheet.create({
   regularText: {
     fontSize: emphasizedSize,
     color: emphasizedColor,
-    textAlign: 'left',
+    textAlign: 'center',
     fontFamily: 'Avenir-Medium',
     fontWeight: 'bold',
   }

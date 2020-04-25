@@ -15,7 +15,7 @@ var styles = StyleSheet.create({
   regularText: {
     fontSize: headerSize,
     color: headerColor,
-    textAlign: 'left',
+    textAlign: 'center',
     fontFamily: 'Avenir-Medium',
     fontWeight: 'bold',
   }
