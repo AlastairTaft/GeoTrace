@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-import { headerSize, headerColor } from '../styles/text'
+import SIZES from '../constants/Sizes'
+import COLORS from '../constants/Colors'
 
 const HeaderText = props => <Text 
   {...props} 
@@ -13,10 +14,11 @@ export default HeaderText
 
 var styles = StyleSheet.create({
   regularText: {
-    fontSize: headerSize,
-    color: headerColor,
+    fontSize: SIZES.headerSize,
+    color: COLORS.headerText,
     textAlign: 'center',
     fontFamily: 'Niveau-Grotesk',
     fontWeight: 'bold',
+    marginHorizontal: "10%"
   }
 })

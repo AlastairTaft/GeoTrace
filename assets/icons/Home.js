@@ -1,10 +1,11 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { itemInactive, itemActive, iconSize } from '../../styles/navigation';
+import COLORS from '../../constants/Colors'
+import SIZES from '../../constants/Sizes'
 
 export default props => {
-    let color = props.focused ? itemActive : itemInactive;
+    let color = props.focused ? COLORS.tabItemActive : COLORS.tabItemInactive;
     return(
-        <Icon name="home" size={iconSize} color={color} rounded />
+        <Icon name="home" size={SIZES.tabIconSize} color={color} rounded />
     )
 }

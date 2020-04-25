@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-import { linkSize, linkColor } from '../styles/text'
+import SIZES from "../constants/Sizes"
+import COLORS from "../constants/Colors"
 
 const LinkText = props => <Text 
   {...props} 
@@ -13,8 +14,8 @@ export default LinkText
 
 var styles = StyleSheet.create({
   regularText: {
-    fontSize: linkSize,
-    color: linkColor,
+    fontSize: SIZES.linkSize,
+    color: COLORS.linkColor,
     textAlign: 'left',
     fontFamily: 'Niveau-Grotesk',
   }

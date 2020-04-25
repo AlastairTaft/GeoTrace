@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-import { headerColor } from '../styles/text'
+import COLORS from "../constants/Colors"
 
 const StyledText = props => <Text 
   {...props} 
@@ -14,7 +14,7 @@ export default StyledText
 var styles = StyleSheet.create({
   regularText: {
     fontSize: 16,
-    color: headerColor,
+    color: COLORS.headerText,
     lineHeight: 24,
     textAlign: 'center',
     fontFamily: 'Niveau-Grotesk',

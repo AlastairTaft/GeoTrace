@@ -1,7 +1,8 @@
 import React from 'react'
 import { Text, StyleSheet, TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import COLORS from './../constants/Colors'
-import { headerColor } from '../styles/text'
+import SIZES from './../constants/Sizes'
 
 const styles = StyleSheet.create({
   button: {
@@ -12,8 +13,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    fontSize: 16,
-    color: headerColor,
+    fontSize: SIZES.buttonFontSize,
+    color: COLORS.altTextColor,
     textAlign: 'center',
   },
   disabled: {
@@ -31,7 +32,7 @@ const Button = props => {
       props.disabled ? styles.disabled : undefined,
     ]}
   >
-    <Text style={styles.text}>{props.title}</Text>
+    <Text style={styles.text}>{props.title} <Icon name="keyboard-arrow-right" color={COLORS.altTextColor} size={SIZES.buttonFontSize} /></Text>
   </TouchableOpacity>
 }
 

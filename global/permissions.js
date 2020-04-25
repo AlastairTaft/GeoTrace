@@ -32,6 +32,14 @@ const askRequiredPermissions = async () => {
   })
 }
 
+export async function HasPermissions() {
+  let hasPermissions
+  await askRequiredPermissions().then(status => {
+    hasPermissions = status
+  })
+  return hasPermissions
+}
+
 /**
  * Askes for background tracking location permission and passes a boolean down 
  * through the context on whether the user has given the required permissions.
