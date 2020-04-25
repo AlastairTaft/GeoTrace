@@ -70,9 +70,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  confirmContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
   }
 })

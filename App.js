@@ -13,6 +13,7 @@ import * as Font from 'expo-font'
 import { UserStatusWrapper } from './global/userStatus'
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
+import { useFonts } from '@use-expo/font'
 
 const Tab = createBottomTabNavigator();
 
@@ -23,12 +24,9 @@ function App(props) {
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
   let customFonts = {
-    'Avenir-Roman': require('./assets/fonts/AvenirLTStd-Roman.otf'),
-    'Avenir-Book': require('./assets/fonts/AvenirLTStd-Book.otf'),
-    'Avenir-Medium': require('./assets/fonts/AvenirLTStd-Medium.otf'),
+    'Niveau-Grotesk': require('./assets/fonts/Niveau-Grotesk-Regular.otf'),
     'SpaceMono-Regular': require('./assets/fonts/SpaceMono-Regular.ttf'),
-  };
-
+  }
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {

@@ -16,7 +16,7 @@ var styles = StyleSheet.create({
     fontSize: headerSize,
     color: headerColor,
     textAlign: 'center',
-    fontFamily: 'Avenir-Medium',
+    fontFamily: 'Niveau-Grotesk',
     fontWeight: 'bold',
   }
 })

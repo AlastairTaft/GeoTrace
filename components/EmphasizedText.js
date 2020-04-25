@@ -16,7 +16,7 @@ var styles = StyleSheet.create({
     fontSize: emphasizedSize,
     color: emphasizedColor,
     textAlign: 'center',
-    fontFamily: 'Avenir-Medium',
+    fontFamily: 'Niveau-Grotesk',
     fontWeight: 'bold',
   }
 })
