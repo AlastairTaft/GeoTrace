@@ -15,7 +15,7 @@ var styles = StyleSheet.create({
     color: '#627EEE',
     lineHeight: 24,
     textAlign: 'center',
-    fontFamily: 'Avenir-Medium',
+    fontFamily: 'Niveau-Grotesk',
     fontWeight: 'bold',
   }
 })

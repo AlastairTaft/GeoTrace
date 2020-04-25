@@ -16,6 +16,6 @@ var styles = StyleSheet.create({
     fontSize: linkSize,
     color: linkColor,
     textAlign: 'left',
-    fontFamily: 'Avenir-Medium',
+    fontFamily: 'Niveau-Grotesk',
   }
 })

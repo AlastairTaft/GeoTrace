@@ -44,19 +44,19 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Report"
-        component={ReportScreen}
-        options={{
-          title: 'Report',
-          tabBarIcon: ({ focused }) => <ReportIcon />,
-        }}
-      />
-      <BottomTab.Screen
         name="Resources"
         component={LinksScreen}
         options={{
           title: 'Resources',
           tabBarIcon: ({ focused }) => <ResourcesIcon />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Report"
+        component={ReportScreen}
+        options={{
+          title: 'Report',
+          tabBarIcon: ({ focused }) => <ReportIcon />,
         }}
       />
     </BottomTab.Navigator>

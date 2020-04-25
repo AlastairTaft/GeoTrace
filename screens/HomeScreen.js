@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    borderRadius: "12px"
+    borderRadius: 12
   },
 
   mainHeader: {

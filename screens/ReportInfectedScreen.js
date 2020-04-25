@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   confirmText: {
     color: '#3750B5',
     fontSize: 17,
-    fontFamily: 'Avenir-Roman',
+    fontFamily: 'Niveau-Grotesk',
   },
   errorContainer: {
     flex: 3,

@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
   },
   navText: {
-    fontFamily: 'Avenir-Book',
+    fontFamily: 'Niveau-Grotesk',
     color: itemInactive
   },
   navTextActive: {

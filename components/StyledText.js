@@ -17,7 +17,7 @@ var styles = StyleSheet.create({
     color: headerColor,
     lineHeight: 24,
     textAlign: 'center',
-    fontFamily: 'Avenir-Medium',
+    fontFamily: 'Niveau-Grotesk',
     fontWeight: 'bold',
   }
 })
