@@ -3,8 +3,10 @@ import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import ResourcesViewScreen from './../screens/ResourcesViewScreen';
 import ReportScreen from './../screens/ReportScreen'
+import LinksScreen from './../screens/LinksScreen'
+import GoogleTakeoutsScreen from './../screens/GoogleTakeoutsScreen'
 import TrackingScreen from './../screens/TrackingScreen'
 import TrackingIcon from './../assets/icons/Tracking'
 import ReportIcon from './../assets/icons/Report'
@@ -51,11 +53,19 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Resources"
-        component={LinksScreen}
+        component={ResourcesViewScreen}
         options={{
           title: 'Resources',
           tabBarIcon: ({ focused }) => <ResourcesIcon />,
         }}
+      />
+      <BottomTab.Screen
+        name="Links"
+        component={LinksScreen}
+      />
+      <BottomTab.Screen
+        name="GoogleTakeouts"
+        component={GoogleTakeoutsScreen}
       />
     </BottomTab.Navigator>
   );
