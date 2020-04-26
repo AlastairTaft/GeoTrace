@@ -1,10 +1,28 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native'
 import COLORS from '../constants/Colors'
 import TabBarText from '../navigation/TabBarText'
 import { Vibration } from "react-native"
 
 function TabBar({ state, descriptors, navigation }) {
+  const [keyboardVisible, setKeyboardVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    if (Platform.OS !== "android") {
+      return;
+    }
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>  setKeyboardVisible(true), this);
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>  setKeyboardVisible(false), this);
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    }
+  }, []);
+
+  if (keyboardVisible) {
+    return <View/>
+  }
+
   return (
     <View style={styles.tabBar}>
       {state.routes

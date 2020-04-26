@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
 import LineText from '../components/LineText'
 import Modal from './../components/Modal'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
-import { verifyPinRegex } from './../global/verifyPinRegex'
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
+import PinInput from '../components/PinInput'
 
 // Used to calculate image dimensions
 const deviceWidth = Dimensions.get('window').width;
@@ -30,58 +30,52 @@ export const ReportInfectedScreen = (props) => {
       // if (status.infected)
       //   return <ReportThankYouScreen />
         return(
-          <View style={styles.container}>
+          <KeyboardAvoidingView behavior="height" style={styles.container}>
+            <ScrollView>
+              <Modal visible={errorMessage} onRequestClose={() => {setModalVisible(false);setErrorMessage(null)}}>
+                <Text>{errorMessage}</Text>
+              </Modal>
 
-            <Modal visible={errorMessage} onRequestClose={() => {setModalVisible(false);setErrorMessage(null)}}>
-              <Text>{errorMessage}</Text>
-            </Modal>
-
-            <HeaderText style={styles.headerText}>
+              <HeaderText style={styles.headerText}>
               Anonymous COVID-19 Alert
-            </HeaderText>
+              </HeaderText>
 
-            <HeaderText style={styles.subheaderText}>
-              QR Scan
-            </HeaderText>
+              <HeaderText style={styles.subheaderText}>
+                QR Scan
+              </HeaderText>
 
-            <TouchableOpacity
-              style={styles.imageContainer}
-              onPress={async () => {
-                const { status } = await BarCodeScanner.requestPermissionsAsync();
-                setHasPermission(status === "granted")
-                if (status === "granted")
-                  showBarcodeScanner()
-              }}
+              <TouchableOpacity
+                style={styles.imageContainer}
+                onPress={async () => {
+                  const { status } = await BarCodeScanner.requestPermissionsAsync();
+                  setHasPermission(status === "granted")
+                  if (status === "granted")
+                    showBarcodeScanner()
+                }}
               >
-              <Image source={require("../assets/images/qrscan.png")} resizeMode={"contain"} style={styles.qrImage} />
-            </TouchableOpacity>
+                <Image source={require("../assets/images/qrscan.png")} resizeMode={"contain"} style={styles.qrImage} />
+              </TouchableOpacity>
 
-            <LineText title="Or" />
+              <LineText title="Or" />
 
-            <HeaderText style={styles.subheaderText}>
-              Type PIN Code
-            </HeaderText>
+              <HeaderText style={styles.subheaderText}>
+                Type PIN Code
+              </HeaderText>
 
-            <TextInput
-              style={styles.textInputPin}
-              placeholder="3423 - 3234 - 3256"
-              autoCorrect={false}
-              autoCompleteType={"off"}
-              autoCapitalize={"characters"}
-              onChangeText={(pin) => {
-                setPinSubmitEnabled(verifyPinRegex(pin))
-              }}
-            />
-
-            <View style={styles.submitContainer}>
-              <Button
-                disabled={!pinSubmitEnabled}
-                title="Submit"
-                // TODO: hook up submit function (check if pin is (in)valid)
-                onPress={() => {console.warn("Hook me up!")}}
+              <PinInput
+                onValidation={(valid) => setPinSubmitEnabled(valid)}
               />
-            </View>
-          </View>
+
+              <View style={styles.submitContainer}>
+                <Button
+                  disabled={!pinSubmitEnabled}
+                  title="Submit"
+                  // TODO: hook up submit function (check if pin is (in)valid)
+                  onPress={() => {console.warn("Hook me up!")}}
+                />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         )
       }
     }
@@ -118,17 +112,6 @@ const styles = StyleSheet.create({
     width: undefined
   },
 
-  textInputPin: {
-    borderRadius: 10,
-    backgroundColor: COLORS.textInputBackground,
-    height: 65,
-    marginHorizontal: "5%",
-    marginTop: 22,
-    textAlign: "center",
-    fontSize: 27,
-    fontWeight: "bold"
-  },
-
   imageContainer: {
     height: deviceWidth * 0.9 * ratio,
     width: deviceWidth * 0.9,
@@ -138,7 +121,7 @@ const styles = StyleSheet.create({
 
   submitContainer: {
     marginHorizontal: "15%",
-    marginTop: "10%"
+    margin: 20
   },
 
 }) 
