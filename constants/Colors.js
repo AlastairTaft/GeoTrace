@@ -1,7 +1,7 @@
 const tintColor = '#00dc7f'
 
 export default {
-  tabItemInactive: "#b1b1b1",
+  tabItemInactive: "#91959f",
   tabItemActive: "#0091ff",
   tabBackground: "#ffffff",
   headerText: "#49a5b0",

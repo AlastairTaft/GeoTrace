@@ -68,6 +68,10 @@ const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: COLORS.tabBackground,
     flexDirection: 'row',
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: -3 },
+    shadowColor: '#000000',
+    elevation: 10
   },
   navItem: {
     flex: 1,
