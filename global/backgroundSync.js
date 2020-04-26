@@ -31,7 +31,7 @@ const taskFunc = async () => {
       var { success, hash: salt, error } = salts[i]
       if (!success){
         Sentry.captureMessage(Sentry.captureMessage(error))
-        return
+        return BackgroundFetch.Result.Failed
       }
       var { timePassedSinceExposure, hash } = dto
       var saltedHash = await Crypto.digestStringAsync(
@@ -57,7 +57,6 @@ const taskFunc = async () => {
 }
 
 TaskManager.defineTask(BACKGROUND_SYNC_TASK_NAME, taskFunc);
-taskFunc()
 
 function groupBy(arr, key) {
   var obj = {}

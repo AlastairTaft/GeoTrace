@@ -1,5 +1,4 @@
 import { AsyncStorage } from 'react-native'
-import { RELATIVE_EPOCH_START } from './constants'
 
 /**
  * Returns a hash map of RiskDataPoint where the key is the hash.

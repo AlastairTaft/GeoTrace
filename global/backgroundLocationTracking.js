@@ -2,13 +2,12 @@ import * as TaskManager from 'expo-task-manager'
 import * as Sentry from 'sentry-expo'
 import * as Crypto from 'expo-crypto'
 import './bugTracking'
-import * as trackAPI from './centralAPI'
-import { getDeviceId } from './deviceId'
 import { getRiskPoints } from './risk'
 import { getBlockIdentifierForLocation } from './blocks'
 import { RELATIVE_EPOCH_START } from './constants'
 import { pushRiskPoints } from './storage'
 import { hashRiskPoint } from './risk'
+import { AsyncStorage } from 'react-native'
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
@@ -20,6 +19,15 @@ TaskManager.defineTask(
       Sentry.captureException(error)
       return;
     }
+
+    var lastTrackTime = await AsyncStorage.getItem('lastTrackTime')
+    var t5MinsAgo = (new Date()).valueOf() - (1000 * 60 * 5)
+    if (lastTrackTime && Number(lastTrackTime) > t5MinsAgo){
+      // Don't track another data point if the last one was less
+      // than 5 minutes ago
+      return
+    }
+    await AsyncStorage.setItem('lastTrackTime', (new Date()).valueOf())
 
     // If the accuracy is less than 10 meters, discard it
     locations = locations.filter(l => l.coords.accuracy <= 10)
