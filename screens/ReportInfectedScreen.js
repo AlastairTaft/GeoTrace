@@ -74,29 +74,13 @@ export const ReportInfectedScreen = (props) => {
               Type PIN Code
             </HeaderText>
 
-            <TextInput style={styles.textInputPin} placeholder="COV9 - IT42" />
-
-            {/* {(hasPermission === false || errorMessage) ? <View style={styles.errorContainer}>
-              {hasPermission === false ? 
-                <Text style={styles.errorMessage}>
-                  Missing required permissions to scan QR code.
-                </Text> : null}
-              {errorMessage ? 
-                <Text style={styles.errorMessage}>
-                  {errorMessage}
-                </Text> : null}
-            </View> : null}
-            <View style={styles.confirmButtonContainer}>
-              <Button
-                title={(hasPermission === false || errorMessage) ? "Try again" : "Scan and Report"}
-                onPress={async () => {
-                  const { status } = await BarCodeScanner.requestPermissionsAsync();
-                  setHasPermission(status === 'granted')
-                  setShowBarCodeScanner(true)
-                }}
-                icon="keyboard-arrow-right"
-              />
-            </View> */}
+            <TextInput
+              style={styles.textInputPin}
+              placeholder="COV9 - IT42"
+              autoCorrect={false}
+              autoCompleteType={"off"}
+              autoCapitalize={"characters"}
+            />
             
           </View>
         )
@@ -146,12 +130,12 @@ const styles = StyleSheet.create({
 
   headerText: {
     fontSize: SIZES.reportHeaderSize,
-    color: COLORS.reportHeaderText,
+    color: COLORS.altTintColor,
     textAlign: "left"
   },
 
   subheaderText: {
-    color: COLORS.reportHeaderText,
+    color: COLORS.altTintColor,
     fontSize: SIZES.reportAltHeaderSize,
     textAlign: "left"
   },

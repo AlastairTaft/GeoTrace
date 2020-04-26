@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import COLORS from '../constants/Colors'
+import TabBarText from '../navigation/TabBarText'
+import { Vibration } from "react-native"
 
 function TabBar({ state, descriptors, navigation }) {
   return (
@@ -17,6 +19,7 @@ function TabBar({ state, descriptors, navigation }) {
         const isFocused = state.index === index;
 
         const onPress = () => {
+          Vibration.vibrate(10)
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -53,12 +56,7 @@ function TabBar({ state, descriptors, navigation }) {
             ]}>
               <TabBarIcon focused={isFocused} />
             </View>
-            <Text style={[
-              styles.navText,
-              isFocused ? styles.navTextActive : undefined
-            ]}>
-              {title}
-            </Text>
+            <TabBarText focused={isFocused}>{title}</TabBarText>
           </TouchableOpacity>
         );
       })}
@@ -72,6 +70,10 @@ const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: COLORS.tabBackground,
     flexDirection: 'row',
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: -3 },
+    shadowColor: '#000000',
+    elevation: 10
   },
   navItem: {
     flex: 1,

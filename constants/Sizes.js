@@ -9,5 +9,6 @@ export default {
     reportAltHeaderSize: 27,
     textInputSize: 27,
 
-    stackHeaderSize: 22
+    stackHeaderSize: 22,
+    tabBarTextSize: 12
 }
