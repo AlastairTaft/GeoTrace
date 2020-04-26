@@ -1,17 +1,12 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
-import { createStackNavigator } from '@react-navigation/stack'
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
 import LineText from '../components/LineText'
 import Modal from './../components/Modal'
-import StackHeaderText from '../components/StackHeaderText'
-
-import ScanQRCodeScreen, { stackHeader } from './ScanQRCode'
 
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import * as centralAPI from './../global/centralAPI'
@@ -32,7 +27,7 @@ export const ReportInfectedScreen = (props) => {
   var [modalVisible, setModalVisible] = useState(false)
   var [pinSubmitEnabled, setPinSubmitEnabled] = useState(false)
 
-  function funShowBarcodeScanner() {
+  function showBarcodeScanner() {
     props.navigation.navigate("Scan")
   }
 
@@ -60,9 +55,8 @@ export const ReportInfectedScreen = (props) => {
               onPress={async () => {
                 const { status } = await BarCodeScanner.requestPermissionsAsync();
                 setHasPermission(status === "granted")
-                // setShowBarCodeScanner(hasPermission)
                 if (status === "granted")
-                  funShowBarcodeScanner()
+                  showBarcodeScanner()
               }}
               >
               <Image source={require("../assets/images/qrscan.png")} resizeMode={"contain"} style={styles.qrImage} />
@@ -89,7 +83,7 @@ export const ReportInfectedScreen = (props) => {
               <Button
                 disabled={!pinSubmitEnabled}
                 title="Submit"
-                // TODO: hook up submit function
+                // TODO: hook up submit function (check if pin is (in)valid)
                 onPress={() => {console.warn("Hook me up!")}}
               />
             </View>
@@ -101,27 +95,6 @@ export const ReportInfectedScreen = (props) => {
 }
 
 export default ReportInfectedScreen
-
-const AlertStack = createStackNavigator();
-export function ReportNavigator() {
-  return(
-    <AlertStack.Navigator>
-      <AlertStack.Screen options={{headerShown: false}} name="Main" component={ReportInfectedScreen} />
-      <AlertStack.Screen options={
-          ({navigation}) => ({
-            headerTransparent: true,
-            // headerTransparent: true,
-            title: "",
-            headerLeft: () => (
-              <StackHeaderText onPress={ () => navigation.goBack() } ><Icon name="keyboard-arrow-left" size={SIZES.stackHeaderSize} />Back</StackHeaderText>
-            ),
-          })
-        }
-        name="Scan"
-        component={ScanQRCodeScreen} />
-      </AlertStack.Navigator>
-  )
-}
 
 const styles = StyleSheet.create({
   container: {

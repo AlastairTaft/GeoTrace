@@ -4,10 +4,11 @@ import { StyleSheet, Text } from 'react-native'
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
 
-const StackHeaderText = props => <Text 
-  {...props} 
-  style={[styles.regularText, props.style]}
-/>
+const StackHeaderText = props => 
+  <Text
+    {...props}
+    style={[styles.regularText, props.style]}
+  />
 
 export default StackHeaderText
 
