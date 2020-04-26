@@ -3,6 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import COLORS from '../constants/Colors'
 
 export default function GuideScreen() {
   return (
@@ -56,7 +57,7 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.appBackground,
   },
   contentContainer: {
     paddingTop: 15,

@@ -8,12 +8,12 @@ import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // B
 import BottomTabNavigator from './navigation/BottomTabNavigator'
 import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
-import { getStatus } from './global/userStatus'
 import * as Font from 'expo-font'
 import { UserStatusWrapper } from './global/userStatus'
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
 import { useFonts } from '@use-expo/font'
+import COLORS from './constants/Colors'
 
 const Tab = createBottomTabNavigator();
 
@@ -73,6 +73,6 @@ export default props => <UserStatusWrapper>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: COLORS.appBackground
   },
 });

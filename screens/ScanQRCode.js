@@ -1,66 +1,103 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import Button from './../components/Button'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import HeaderText from './../components/HeaderText'
-import LinkText from '../components/LinkText'
-import Modal from './../components/Modal'
-import DaysSelectControl from './../components/DaysSelectControl'
-import { Consumer as UserStatusConsumer } from './../global/userStatus'
-import ReportThankyouScreen from './ReportThankyouScreen'
-import * as centralAPI from './../global/centralAPI'
 import { getDeviceId } from './../global/deviceId'
-
 import { useHeaderHeight } from '@react-navigation/stack'
+import { Vibration } from "react-native"
+import { Pulse } from 'react-native-loader'
+import BarcodeMask  from 'react-native-barcode-mask'
 
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
+import * as trackAPI from '../global/centralAPI'
+import EmphasizedText from '../components/EmphasizedText'
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
-
-export default ({ navigation: { goBack } }) => {
+export default ({ navigation }) => {
   var [scanned, setScanned] = useState(false)
   const headerHeight = useHeaderHeight()
+
+  const renderScan = () => {
+    if(scanned) {
+      return (
+        <View style={styles.contentContainer}>
+          <Pulse
+            size={50}
+            color={ COLORS.altTintColor }
+          />
+          <EmphasizedText>
+            You are saving lives!
+          </EmphasizedText>
+        </View>
+      )
+    } else {
+      return (
+        <BarCodeScanner
+          style={styles.scanner}
+          type={BarCodeScanner.Constants.Type.back}
+          barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
+          onBarCodeScanned={scanned ? undefined : async function({ data }) {
+            setScanned(true)
+            Vibration.vibrate(200)
+
+            try {
+              const report = await trackAPI.checkAnalysisReport(data)
+              if (!report) {
+                navigation.goBack()
+                navigation.navigate('ReportFailed')
+              }
+              if(!report.used) {
+                // TODO: Report infected
+                await trackAPI.reportInfected()
+              }
+              navigation.goBack()
+              navigation.navigate('ReportThankYou')
+            } catch(e) {
+              navigation.goBack()
+              navigation.navigate('ReportFailed')
+            }
+          }}
+        >
+          <BarcodeMask
+            backgroundColor="rgba(255, 255, 255, .1)"
+            width="80%"
+            height="80%"
+            edgeRadius={1}
+          />
+        </BarCodeScanner>
+      )
+    }
+  }
+
   return (
-    <View style={StyleSheet.create({paddingTop: headerHeight})}>
+    <View style={[StyleSheet.create({paddingTop: headerHeight}), styles.container]}>
       <HeaderText style={styles.headerText}>
         QR Scan
       </HeaderText>
-      <BarCodeScanner
-        style={styles.scanner}
-        type={BarCodeScanner.Constants.Type.back}
-        barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
-        onBarCodeScanned={scanned ? undefined : async function({ data, type }) {
-          var deviceId = await getDeviceId()
-          await status.reportInfected(deviceId, data)
-        }}
-      >
-      </BarCodeScanner>
+
+      <View style={styles.contentContainer}>
+        { renderScan() }
+      </View>
     </View>
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center"
-    // backgroundColor: "#ffffff",
   },
-
+  contentContainer: {
+    flex: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
   headerText: {
     fontSize: SIZES.reportHeaderSize,
     color: COLORS.altTintColor,
     textAlign: "left",
   },
-
   scanner: {
-    height: height * 0.8,
-    width: width * 0.8,
-    marginLeft: "10%",
-    borderRadius: 10,
-    overflow: "hidden"
-  }
+    height: "100%",
+    width: "100%"
+  },
 })

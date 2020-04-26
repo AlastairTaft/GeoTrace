@@ -17,6 +17,7 @@ export default {
   altTextColor: "#ffffff",
   linkColor: "#5b5b5c",
   emphasizedColor: "#5b5b5c",
+  appBackground: "#ffffff",
   
   lineText: "#5656564d",
   line: "#56565680",

@@ -5,7 +5,7 @@ export default {
     linkSize: 16,
     emphasizedSize: 18,
 
-    reportHeaderSize: 30,
+    reportHeaderSize: 45,
     reportAltHeaderSize: 27,
     textInputSize: 27,
 

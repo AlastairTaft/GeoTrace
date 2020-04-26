@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import StyledText from './../components/StyledText'
+import COLORS from '../constants/Colors'
 
 const InfectedHomeScreen = props => {
 
@@ -37,7 +38,7 @@ export default InfectedHomeScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.appBackground,
   },
   contentContainer: {
     paddingTop: 30,

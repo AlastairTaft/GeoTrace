@@ -1,21 +1,16 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
 import LineText from '../components/LineText'
 import Modal from './../components/Modal'
-import DaysSelectControl from './../components/DaysSelectControl'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
-import ReportThankyouScreen from './ReportThankyouScreen'
+import ReportThankYouScreen from './ReportThankYouScreen'
+import ReportFailedScreen from './ReportFailedScreen'
 import ScanQRCodeScreen, { stackHeader } from './ScanQRCode'
-import * as centralAPI from './../global/centralAPI'
-import { getDeviceId } from './../global/deviceId'
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
-
 import Icon from 'react-native-vector-icons/MaterialIcons'
-
 import { createStackNavigator } from '@react-navigation/stack';
 import StackHeaderText from '../components/StackHeaderText'
 
@@ -24,8 +19,6 @@ const deviceWidth = Dimensions.get('window').width;
 const ratio = 365/771;
 
 export const ReportInfectedScreen = (props) => {
-
-
   var [hasPermission, setHasPermission] = useState(null)
   var [showBarCodeScanner, setShowBarCodeScanner] = useState(false)
   var [scanned, setScanned] = useState(false)
@@ -33,13 +26,14 @@ export const ReportInfectedScreen = (props) => {
   var [modalVisible, setModalVisible] = useState(false)
 
   function funShowBarcodeScanner() {
+    setScanned(false)
     props.navigation.navigate("Scan")
   }
 
   return <UserStatusConsumer>
     {status => {
       // if (status.infected)
-      //   return <ReportThankyouScreen />
+      //   return <ReportThankYouScreen />
         return(
           <View style={styles.container}>
 
@@ -76,7 +70,7 @@ export const ReportInfectedScreen = (props) => {
 
             <TextInput
               style={styles.textInputPin}
-              placeholder="COV9 - IT42"
+              placeholder="3423 - 3234 - 3256"
               autoCorrect={false}
               autoCompleteType={"off"}
               autoCapitalize={"characters"}
@@ -93,21 +87,22 @@ export default ReportInfectedScreen
 
 const AlertStack = createStackNavigator();
 export function ReportNavigator() {
+  const options = ({navigation}) => ({
+    headerTransparent: true,
+    title: "",
+    headerLeft: () =>
+      <StackHeaderText onPress={ () => navigation.goBack() }>
+        <Icon name="keyboard-arrow-left" size={SIZES.stackHeaderSize} />
+        Back
+      </StackHeaderText>
+  })
+
   return(
     <AlertStack.Navigator>
       <AlertStack.Screen options={{headerShown: false}} name="MAIN" component={ReportInfectedScreen} />
-      <AlertStack.Screen options={
-          ({navigation}) => ({
-            headerTransparent: true,
-            // headerTransparent: true,
-            title: "",
-            headerLeft: () => (
-              <StackHeaderText onPress={ () => navigation.goBack() } ><Icon name="keyboard-arrow-left" size={SIZES.stackHeaderSize} />Back</StackHeaderText>
-            ),
-          })
-        }
-        name="Scan"
-        component={ScanQRCodeScreen} />
+      <AlertStack.Screen options={options} name="Scan" component={ScanQRCodeScreen}/>
+      <AlertStack.Screen options={options} name="ReportThankYou" component={ReportThankYouScreen} />
+      <AlertStack.Screen options={options} name="ReportFailed" component={ReportFailedScreen} />
       </AlertStack.Navigator>
   )
 }
@@ -115,7 +110,7 @@ export function ReportNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.appBackground,
   },
 
   headerTextTop: {

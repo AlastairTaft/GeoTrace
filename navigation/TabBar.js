@@ -73,7 +73,9 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOffset: { width: 0, height: -3 },
     shadowColor: '#000000',
-    elevation: 10
+    elevation: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0"
   },
   navItem: {
     flex: 1,

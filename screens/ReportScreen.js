@@ -1,30 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import {  
-  Text, 
-  View, 
-  TextInput,  
-  StyleSheet,
-} from 'react-native'
+import { StyleSheet } from 'react-native'
 import COLORS from './../constants/Colors'
-import ReportThankyouScreen from './ReportThankyouScreen'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import ReportInfectedScreen from './ReportInfectedScreen'
 
 const ReportInfected = props => {
-
-
-  var [infected, setInfected] = useState(false)
-
-
-  if (infected)
-    return <ReportThankyouScreen />
-
-  return <UserStatusConsumer>
-    {status => {
-      // TODO Report 
-      return <ReportInfectedScreen />
-    }}
-  </UserStatusConsumer>
+  return (
+    <UserStatusConsumer>
+      <ReportInfectedScreen />
+    </UserStatusConsumer>
+  )
 }
 
 export default ReportInfected
