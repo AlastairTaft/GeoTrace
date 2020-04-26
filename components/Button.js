@@ -19,21 +19,37 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.2,
-  }, 
+  },
 })
 
 const Button = props => {
-
-  return <TouchableOpacity 
-    onPress={props.onPress}
-    disabled={props.disabled} 
-    style={[
-      styles.button,
-      props.disabled ? styles.disabled : undefined,
-    ]}
-  >
-    <Text style={styles.text}>{props.title} <Icon name="keyboard-arrow-right" color={COLORS.altTextColor} size={SIZES.buttonFontSize} /></Text>
-  </TouchableOpacity>
+  if (props.icon === undefined) {
+    return(
+      <TouchableOpacity 
+        onPress={props.onPress}
+        disabled={props.disabled} 
+        style={[
+          styles.button,
+          props.disabled ? styles.disabled : undefined,
+        ]}
+      >
+        <Text style={styles.text}>{props.title}</Text>
+      </TouchableOpacity>
+    );
+  } else {
+    return(
+      <TouchableOpacity 
+        onPress={props.onPress}
+        disabled={props.disabled} 
+        style={[
+          styles.button,
+          props.disabled ? styles.disabled : undefined,
+        ]}
+      >
+        <Text style={styles.text}>{props.title} <Icon name={props.icon} color={COLORS.altTextColor} size={SIZES.buttonFontSize} /></Text>
+      </TouchableOpacity>
+    );
+  }
 }
 
 export default Button

@@ -4,11 +4,13 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import ReportScreen from './../screens/ReportScreen'
+// import ReportScreen from './../screens/ReportScreen'
+import ReportInfectedScreen from './../screens/ReportInfectedScreen'
 import TrackingScreen from './../screens/TrackingScreen'
 import HomeIcon from '../assets/icons/Home'
+import AlertIcon from '../assets/icons/Alert';
 import TrackingIcon from './../assets/icons/Tracking'
-import ReportIcon from './../assets/icons/Report'
+// import ReportIcon from './../assets/icons/Report'
 import ResourcesIcon from './../assets/icons/Resources'
 import TabBar from './TabBar'
 
@@ -51,14 +53,23 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <ResourcesIcon />,
         }}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Report"
         component={ReportScreen}
         options={{
           title: 'Report',
           tabBarIcon: ({ focused }) => <ReportIcon />,
         }}
+      /> */}
+      <BottomTab.Screen
+        name="Alert"
+        component={ReportInfectedScreen}
+        options={{
+          title: "Alert",
+          tabBarIcon: ({ focused }) => <AlertIcon focused={focused} />,
+        }}
       />
+
     </BottomTab.Navigator>
   );
 }
@@ -71,5 +82,7 @@ function getHeaderTitle(route) {
     case 'Tracking': return 'Tracking'
     case 'Report': return 'Report'
     case 'Resources': return 'Resources'
+    case 'Report': return 'Report'
+    case "Alert": return "Alert"
   }
 }

@@ -85,7 +85,7 @@ export default function HomeScreen() {
             Based on available location data, you may have come into contact with COVID-19.
           </EmphasizedText>
           <View style={styles.buttonContainer}>
-            <Button title="Next steps" style={styles.buttonContainer} />
+            <Button title="Next steps" style={styles.buttonContainer} icon="keyboard-arrow-right" />
           </View>
         </View>
       </View>
@@ -122,7 +122,7 @@ export default function HomeScreen() {
             I can’t tell if you’ve been in contact unless you enable the app to access your location.
           </EmphasizedText>
           <View style={styles.buttonContainer}>
-            <Button title="Enable location data" style={styles.buttonContainer} />
+            <Button title="Enable location data" style={styles.buttonContainer} icon="keyboard-arrow-right" />
           </View>
         </View>
       </View>
