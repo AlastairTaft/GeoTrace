@@ -19,6 +19,6 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Niveau-Grotesk',
     fontWeight: 'bold',
-    marginHorizontal: "10%"
+    marginHorizontal: "5%"
   }
 })

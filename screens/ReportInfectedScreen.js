@@ -17,14 +17,12 @@ const ratio = 365/771;
 export const ReportInfectedScreen = (props) => {
   var [hasPermission, setHasPermission] = useState(null)
   var [showBarCodeScanner, setShowBarCodeScanner] = useState(false)
-  var [scanned, setScanned] = useState(false)
   var [errorMessage, setErrorMessage] = useState(null)
   var [modalVisible, setModalVisible] = useState(false)
   var [pinSubmitEnabled, setPinSubmitEnabled] = useState(false)
   var [pin, setPin] = useState('')
 
   function showBarcodeScanner() {
-    setScanned(false)
     props.navigation.navigate("Scan")
   }
 
@@ -40,7 +38,7 @@ export const ReportInfectedScreen = (props) => {
               </Modal>
 
               <HeaderText style={styles.headerText}>
-                Share your COVID-19 test results anonymously.
+              Anonymous COVID-19 Alert
               </HeaderText>
 
               <HeaderText style={styles.subheaderText}>
@@ -126,9 +124,9 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    height: deviceWidth * 0.8 * ratio,
-    width: deviceWidth * 0.8,
-    marginHorizontal: "10%",
+    height: deviceWidth * 0.9 * ratio,
+    width: deviceWidth * 0.9,
+    marginHorizontal: "5%",
     marginVertical: 10
   },
 

@@ -5,7 +5,9 @@ export default {
   tabItemActive: "#0091ff",
   tabBackground: "#ffffff",
   headerText: "#49a5b0",
-  reportHeaderText: "#00a7b2",
+  
+  reportHeaderText: "#000000",
+
   errorBackground: 'red',
   errorText: '#e02020',
   unknownColor: "#676767",
@@ -23,5 +25,14 @@ export default {
   line: "#56565680",
   
   textInputBackground: "#EFEFEFB3",
-  textInputColor: "#5b5b5c"
+  textInputColor: "#5b5b5c",
+
+  logo: "#000000",
+  logoTint: "#00a9bd",
+
+  verified: "#6dd400",
+
+  radioInactive: "#d7d7d7",
+  radioInactiveText: "#4f4f4f",
+  radioActiveText: "#ffffff"
 };

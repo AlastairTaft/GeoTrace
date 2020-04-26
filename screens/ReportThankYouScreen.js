@@ -1,11 +1,14 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import HeaderText from './../components/HeaderText'
+
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import COLORS from '../constants/Colors'
-import SIZES from '../constants/Sizes'
+
+import HeaderText from './../components/HeaderText'
 import EmphasizedText from '../components/EmphasizedText'
 import { useHeaderHeight } from '@react-navigation/stack'
+
+import COLORS from '../constants/Colors'
+import SIZES from '../constants/Sizes'
 
 const ReportThankYouScreen = props => {
   const headerHeight = useHeaderHeight()

@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Vibration } from 'react-native'
+
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import HeaderText from './../components/HeaderText'
-import { getDeviceId } from './../global/deviceId'
+
 import { useHeaderHeight } from '@react-navigation/stack'
-import { Vibration } from "react-native"
 import { Pulse } from 'react-native-loader'
 import BarcodeMask  from 'react-native-barcode-mask'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 
+import { getDeviceId } from './../global/deviceId'
+import * as trackAPI from '../global/centralAPI'
+
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
-import * as trackAPI from '../global/centralAPI'
+
+import HeaderText from './../components/HeaderText'
 import EmphasizedText from '../components/EmphasizedText'
 
 export default ({ navigation }) => {
@@ -86,6 +89,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.reportHeaderSize,
     color: COLORS.altTintColor,
     textAlign: "left",
+    marginBottom: 50
   },
   scanner: {
     height: "100%",
