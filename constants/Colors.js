@@ -5,7 +5,9 @@ export default {
   tabItemActive: "#0091ff",
   tabBackground: "#ffffff",
   headerText: "#49a5b0",
-  reportHeaderText: "#00a7b2",
+  
+  reportHeaderText: "#000000",
+
   errorBackground: 'red',
   errorText: '#e02020',
   unknownColor: "#676767",
@@ -17,6 +19,7 @@ export default {
   altTextColor: "#ffffff",
   linkColor: "#5b5b5c",
   emphasizedColor: "#5b5b5c",
+  appBackground: "#ffffff",
   
   lineText: "#5656564d",
   line: "#56565680",
@@ -24,7 +27,8 @@ export default {
   textInputBackground: "#EFEFEFB3",
   textInputColor: "#5b5b5c",
 
-  logo: "#00a9bd",
+  logo: "#000000",
+  logoTint: "#00a9bd",
 
   verified: "#6dd400",
 

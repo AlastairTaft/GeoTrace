@@ -9,7 +9,6 @@ import Button from './../components/Button'
 import EmphasizedText from "../components/EmphasizedText"
 
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
-import ReportThankyouScreen from './ReportThankyouScreen'
 import * as centralAPI from './../global/centralAPI'
 import { getDeviceId } from './../global/deviceId'
 

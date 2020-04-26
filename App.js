@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from 'react'
-
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native'
-
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-
 import StackNavigator from './navigation/StackNavigator'
 import useLinking from './navigation/useLinking'
-
+import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font'
-
 import './global/bugTracking' // Bug tracking
 import { UserStatusWrapper } from './global/userStatus'
-import { getStatus } from './global/userStatus'
-import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
-
 import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // Background location tracking
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
+import COLORS from './constants/Colors'
 
 const Tab = createBottomTabNavigator();
 
@@ -78,6 +72,6 @@ export default props => <UserStatusWrapper>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: COLORS.appBackground
   },
 });

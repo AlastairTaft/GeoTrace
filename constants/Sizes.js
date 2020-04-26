@@ -1,16 +1,17 @@
 export default {
-    tabIconSize: 36,
+    tabIconSize: 38,
+    tabBarTextSize: 11.1,
+
     headerSize: 49,
     buttonFontSize: 16,
     linkSize: 16,
     emphasizedSize: 18,
 
-    reportHeaderSize: 30,
+    reportHeaderSize: 40,
     reportAltHeaderSize: 27,
-    textInputSize: 27,
+    textInputSize: 23,
 
     stackHeaderSize: 22,
-    tabBarTextSize: 12,
 
     selfReportHeader: 40,
     logo: 38.4,

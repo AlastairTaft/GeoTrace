@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   circle: {
-    color: COLORS.logo,
+    color: COLORS.logoTint,
     fontSize: SIZES.logo,
     letterSpacing: -1,
   }

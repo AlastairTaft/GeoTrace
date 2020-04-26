@@ -34,25 +34,14 @@ export const submitRiskMap = async function(deviceId, riskPoints){
 
 /**
  * Report the user has been diagnosed with COVID-19.
- * @param {string} uniqueId
- * @param {number} code A code to validate the result came from a health 
- * authority
  * @returns {Promise}
  */
-export const reportInfected = async function(uniqueId, code){
-  var response = await fetch(API_URL + 'report-infected', {
-    method: 'put',
-    body: JSON.stringify({
-      "uniqueId": uniqueId,
-      "code": code,
-    }),
-  })
-  var result = await response.json()
-  if (response.status != 200){
-    Sentry.captureMessage(JSON.stringify(result))
-    throw new Error('Unable to report user has been diagnosed with COVID-19.')
-  }
-  return result
+export const reportInfected = async function(uniqueId, code) {
+  await new Promise(accept => setTimeout(() => accept(), 5000))
+
+ // TODO
+
+  return true
 }
 
 /**
@@ -70,6 +59,20 @@ export const getStatus = async function(uniqueId){
   if (response.status != 200){
     Sentry.captureMessage(JSON.stringify(result))
     throw new Error('Unable to get user status.')
+  }
+  return result
+}
+
+/**
+ * Check if the analysis report is genuine.
+ * @param {number} code A code to validate the result came from a health authority
+ * @returns {Promise}
+ */
+export const checkAnalysisReport = async (code) => {
+  const response = await fetch(`${API_URL}check-analysis-report?uuid=${code}`)
+  const result = await response.json()
+  if (response.status !== 200) {
+    throw new Error('Unable to check the analysis report.')
   }
   return result
 }

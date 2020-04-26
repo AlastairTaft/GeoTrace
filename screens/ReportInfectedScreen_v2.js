@@ -6,7 +6,8 @@ import HighlightText from './../components/HighlightText'
 import CheckBox from './../components/CheckBox'
 import DaysSelectControl from './../components/DaysSelectControl'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
-import ReportThankyouScreen from './ReportThankyouScreen'
+import ReportThankYouScreen from './ReportThankYouScreen'
+import COLORS from '../constants/Colors'
 
 const ReportInfectedScreen = props => {
 
@@ -17,7 +18,7 @@ const ReportInfectedScreen = props => {
   return <UserStatusConsumer>
     {status => {
       if (status.infected)
-        return <ReportThankyouScreen />
+        return <ReportThankYouScreen />
       return <View style={styles.container}>
         <View style={styles.explanationText}>
           <StyledText style={{fontSize: 20}}>
@@ -73,7 +74,7 @@ export default ReportInfectedScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.appBackground,
   },
   explanationText: {
     flex: 1,
