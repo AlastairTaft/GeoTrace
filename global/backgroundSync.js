@@ -10,7 +10,11 @@ import * as Sentry from 'sentry-expo'
 export const BACKGROUND_SYNC_TASK_NAME = 'COVID19_RISK_SYNC'
 
 const taskFunc = async () => {
-  var riskPoints = await popStoredRiskData()
+  var riskPointsHash = await popStoredRiskData()
+  /**
+   * @type {Array<RiskDataPoint>}
+   */
+  var riskPoints = Object.values(riskPointsHash)
   if (!riskPoints.length)
     return BackgroundFetch.Result.NoData
   var finalHashes = []
@@ -24,25 +28,20 @@ const taskFunc = async () => {
     var saltDtos = saltGroups[preSaltHash]
     var salts = await saltAPI.getSalts(saltServerUrl, saltDtos) 
     await Promise.all(saltDtos.map(async (dto, i) => {
-      var { hashedRiskPoints } = dto
       var { success, hash: salt, error } = salts[i]
       if (!success){
         Sentry.captureMessage(Sentry.captureMessage(error))
         return
       }
-      await Promise.all(
-        hashedRiskPoints.map(async riskPoint => {
-          var { timePassedSinceExposure, hash } = riskPoint
-          var saltedHash = await Crypto.digestStringAsync(
-            Crypto.CryptoDigestAlgorithm.SHA512,
-            hash + '-' + salt,
-            {
-              encoding: Crypto.CryptoEncoding.BASE64,
-            },
-          )
-          finalHashes.push({ hash: saltedHash, timePassedSinceExposure })
-        })
+      var { timePassedSinceExposure, hash } = dto
+      var saltedHash = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA512,
+        hash + '-' + salt,
+        {
+          encoding: Crypto.CryptoEncoding.BASE64,
+        },
       )
+      finalHashes.push({ hash: saltedHash, timePassedSinceExposure })
     }))
   }))
   var deviceId = await getDeviceId()
@@ -58,6 +57,7 @@ const taskFunc = async () => {
 }
 
 TaskManager.defineTask(BACKGROUND_SYNC_TASK_NAME, taskFunc);
+taskFunc()
 
 function groupBy(arr, key) {
   var obj = {}
