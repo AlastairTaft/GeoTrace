@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import Button from './../components/Button'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   scanner: {
     height: height * 0.8,
     width: width * 0.8,
-    marginLeft: "10%",
+    marginLeft: "5%",
     borderRadius: 10,
     overflow: "hidden"
   }

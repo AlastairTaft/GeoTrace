@@ -22,5 +22,13 @@ export default {
   line: "#56565680",
   
   textInputBackground: "#EFEFEFB3",
-  textInputColor: "#5b5b5c"
+  textInputColor: "#5b5b5c",
+
+  logo: "#00a9bd",
+
+  verified: "#6dd400",
+
+  radioInactive: "#d7d7d7",
+  radioInactiveText: "#4f4f4f",
+  radioActiveText: "#ffffff"
 };

@@ -28,7 +28,8 @@ export const ReportInfectedScreen = (props) => {
   var [pinSubmitEnabled, setPinSubmitEnabled] = useState(false)
 
   function showBarcodeScanner() {
-    props.navigation.navigate("Scan")
+    // TODO: should be "Scan", I'm modifying it for development purposes
+    props.navigation.navigate("SelfReport")
   }
 
   return <UserStatusConsumer>
@@ -99,7 +100,7 @@ export default ReportInfectedScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
 
   headerText: {
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: COLORS.textInputBackground,
     height: 65,
-    marginHorizontal: "10%",
+    marginHorizontal: "5%",
     marginTop: 22,
     textAlign: "center",
     fontSize: 27,
@@ -136,9 +137,9 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    height: deviceWidth * 0.8 * ratio,
-    width: deviceWidth * 0.8,
-    marginHorizontal: "10%",
+    height: deviceWidth * 0.9 * ratio,
+    width: deviceWidth * 0.9,
+    marginHorizontal: "5%",
     marginVertical: 10
   },
 

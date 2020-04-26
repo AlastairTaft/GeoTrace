@@ -10,5 +10,12 @@ export default {
     textInputSize: 27,
 
     stackHeaderSize: 22,
-    tabBarTextSize: 12
+    tabBarTextSize: 12,
+
+    selfReportHeader: 40,
+    logo: 38.4,
+    verified: 30,
+
+    selfReportButtonSmall: 17,
+    selfReportButton: 30
 }

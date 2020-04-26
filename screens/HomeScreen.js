@@ -36,7 +36,7 @@ export default function HomeScreen() {
           <View>
             <Icon name="verified-user" color={COLORS.headerText} size={SIZES.headerSize} />
           </View>
-          <HeaderText>
+          <HeaderText style={styles.headerText}>
             You are a hero
           </HeaderText>
           <EmphasizedText style={styles.emphasized}>
@@ -142,15 +142,15 @@ const styles = StyleSheet.create({
   },
 
   errorHeader: {
-    color: COLORS.errorText
+    color: COLORS.errorText,
   },
 
   unknownHeader: {
-    color: COLORS.unknownColor
+    color: COLORS.unknownColor,
   },
 
   warningHeader: {
-    color: COLORS.warningText
+    color: COLORS.warningText,
   },
 
   contentContainer: {
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
 
   emphasized: {
     paddingTop: "5%",
-    marginHorizontal: "10%"
+    marginHorizontal: "5%"
   },
 
   dividerContainer: {
@@ -174,25 +174,7 @@ const styles = StyleSheet.create({
     position: "relative",
     top: "10%"
   },
-  // contentContainer: {
-  //   flex: 3,
-  //   paddingLeft: 30,
-  //   paddingRight: 30,
-  // },
-  // bottomContainer: {
-  //   flex: 0,
-  //   alignItems: 'flex-end',
-  //   flexDirection: 'row',
-  //   justifyContent: 'center'
-  // },
 
-  logoImage: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
   errorMessage: {
     fontSize: 17,
     color: Colors.errorText,
