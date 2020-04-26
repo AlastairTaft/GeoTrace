@@ -36,6 +36,7 @@ function App(props) {
       setInitialNavigationState(await getInitialState());
       // Do the work while the splash screen is showing
 
+      // TODO: UNPATCH
       // await getStatus()
       await Font.loadAsync(customFonts);
 
@@ -72,7 +73,6 @@ export default props => <UserStatusWrapper>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-
+    backgroundColor: '#fff'
   },
 });

@@ -5,7 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 // import ReportScreen from './../screens/ReportScreen'
-import ReportInfectedScreen from './../screens/ReportInfectedScreen'
+import ReportInfectedScreen, { ReportNavigator } from './../screens/ReportInfectedScreen'
 import TrackingScreen from './../screens/TrackingScreen'
 import HomeIcon from '../assets/icons/Home'
 import AlertIcon from '../assets/icons/Alert';
@@ -63,7 +63,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       /> */}
       <BottomTab.Screen
         name="Alert"
-        component={ReportInfectedScreen}
+        component={ReportNavigator}
         options={{
           title: "Alert",
           tabBarIcon: ({ focused }) => <AlertIcon focused={focused} />,

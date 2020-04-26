@@ -7,5 +7,7 @@ export default {
 
     reportHeaderSize: 30,
     reportAltHeaderSize: 27,
-    textInputSize: 27
+    textInputSize: 27,
+
+    stackHeaderSize: 22
 }

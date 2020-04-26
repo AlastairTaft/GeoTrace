@@ -8,71 +8,44 @@ import Modal from './../components/Modal'
 import DaysSelectControl from './../components/DaysSelectControl'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import ReportThankyouScreen from './ReportThankyouScreen'
+import ScanQRCodeScreen, { stackHeader } from './ScanQRCode'
 import * as centralAPI from './../global/centralAPI'
 import { getDeviceId } from './../global/deviceId'
-
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
+
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
+import { createStackNavigator } from '@react-navigation/stack';
+import StackHeaderText from '../components/StackHeaderText'
 
 // Used to calculate image dimensions
 const deviceWidth = Dimensions.get('window').width;
 const ratio = 365/771;
 
-const ReportInfectedScreen = props => {
+export const ReportInfectedScreen = (props) => {
 
 
   var [hasPermission, setHasPermission] = useState(null)
   var [showBarCodeScanner, setShowBarCodeScanner] = useState(false)
   var [scanned, setScanned] = useState(false)
   var [errorMessage, setErrorMessage] = useState(null)
+  var [modalVisible, setModalVisible] = useState(false)
+
+  function funShowBarcodeScanner() {
+    props.navigation.navigate("Scan")
+  }
 
   return <UserStatusConsumer>
     {status => {
       // if (status.infected)
       //   return <ReportThankyouScreen />
-      if (showBarCodeScanner){
-        return (
-          <View style={[
-            styles.container, 
-            { 
-              alignItems: 'flex-end', 
-              alignContent: 'flex-end',
-              flexDirection: 'row',
-            }
-          ]}>
-            <BarCodeScanner
-              type={BarCodeScanner.Constants.Type.back}
-              barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
-              onBarCodeScanned={scanned ? undefined : async function({ data, type }) {
-                var deviceId = await getDeviceId()
-                await status.reportInfected(deviceId, data)
-              }}
-              style={StyleSheet.absoluteFillObject}
-            />
-            {(
-              <View style={{
-                padding: 20,
-                width: "100%",
-              }}>
-                {scanned ?
-                  <Button 
-                    title={"Tap to Scan Again"} 
-                    onPress={() => setScanned(false)} 
-                    style={{width: "100%"}}
-                  /> :
-                  <Button 
-                    title={"Cancel"}
-                    onPress={() => setShowBarCodeScanner(false)} 
-                    style={{width: "100%"}}
-                  />
-                }
-              </View>
-            )}
-          </View>
-        )
-      } else {
         return(
           <View style={styles.container}>
+
+            <Modal visible={errorMessage} onRequestClose={() => {setModalVisible(false);setErrorMessage(null)}}>
+              <Text>{errorMessage}</Text>
+            </Modal>
 
             <HeaderText style={styles.headerTextTop}>
               Share your COVID-19 test results anonymously.
@@ -87,7 +60,9 @@ const ReportInfectedScreen = props => {
               onPress={async () => {
                 const { status } = await BarCodeScanner.requestPermissionsAsync();
                 setHasPermission(status === "granted")
-                setShowBarCodeScanner(true)
+                // setShowBarCodeScanner(hasPermission)
+                if (status === "granted")
+                  funShowBarcodeScanner()
               }}
               >
               <Image source={require("../assets/images/qrscan.png")} resizeMode={"contain"} style={styles.qrImage} />
@@ -126,16 +101,37 @@ const ReportInfectedScreen = props => {
           </View>
         )
       }
-    }}
+    }
   </UserStatusConsumer>
 }
 
 export default ReportInfectedScreen
 
+const AlertStack = createStackNavigator();
+export function ReportNavigator() {
+  return(
+    <AlertStack.Navigator>
+      <AlertStack.Screen options={{headerShown: false}} name="MAIN" component={ReportInfectedScreen} />
+      <AlertStack.Screen options={
+          ({navigation}) => ({
+            headerTransparent: true,
+            // headerTransparent: true,
+            title: "",
+            headerLeft: () => (
+              <StackHeaderText onPress={ () => navigation.goBack() } ><Icon name="keyboard-arrow-left" size={SIZES.stackHeaderSize} />Back</StackHeaderText>
+            ),
+          })
+        }
+        name="Scan"
+        component={ScanQRCodeScreen} />
+      </AlertStack.Navigator>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
   },
 
   headerTextTop: {
