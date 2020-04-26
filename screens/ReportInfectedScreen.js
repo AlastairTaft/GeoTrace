@@ -71,7 +71,7 @@ export const ReportInfectedScreen = (props) => {
 
               <View style={styles.submitContainer}>
                 <UserStatusConsumer>
-                  {status => (S
+                  {status => (
                     <Button
                       disabled={!pinSubmitEnabled}
                       title="Submit"
