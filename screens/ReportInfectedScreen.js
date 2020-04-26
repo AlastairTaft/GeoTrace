@@ -1,18 +1,14 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
+import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
 import LineText from '../components/LineText'
 import Modal from './../components/Modal'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
-import ReportThankYouScreen from './ReportThankYouScreen'
-import ReportFailedScreen from './ReportFailedScreen'
-import ScanQRCodeScreen, { stackHeader } from './ScanQRCode'
+import { verifyPinRegex } from './../global/verifyPinRegex'
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { createStackNavigator } from '@react-navigation/stack';
-import StackHeaderText from '../components/StackHeaderText'
 
 // Used to calculate image dimensions
 const deviceWidth = Dimensions.get('window').width;
@@ -24,8 +20,9 @@ export const ReportInfectedScreen = (props) => {
   var [scanned, setScanned] = useState(false)
   var [errorMessage, setErrorMessage] = useState(null)
   var [modalVisible, setModalVisible] = useState(false)
+  var [pinSubmitEnabled, setPinSubmitEnabled] = useState(false)
 
-  function funShowBarcodeScanner() {
+  function showBarcodeScanner() {
     setScanned(false)
     props.navigation.navigate("Scan")
   }
@@ -41,7 +38,7 @@ export const ReportInfectedScreen = (props) => {
               <Text>{errorMessage}</Text>
             </Modal>
 
-            <HeaderText style={styles.headerTextTop}>
+            <HeaderText style={styles.headerText}>
               Share your COVID-19 test results anonymously.
             </HeaderText>
 
@@ -54,9 +51,8 @@ export const ReportInfectedScreen = (props) => {
               onPress={async () => {
                 const { status } = await BarCodeScanner.requestPermissionsAsync();
                 setHasPermission(status === "granted")
-                // setShowBarCodeScanner(hasPermission)
                 if (status === "granted")
-                  funShowBarcodeScanner()
+                  showBarcodeScanner()
               }}
               >
               <Image source={require("../assets/images/qrscan.png")} resizeMode={"contain"} style={styles.qrImage} />
@@ -74,8 +70,19 @@ export const ReportInfectedScreen = (props) => {
               autoCorrect={false}
               autoCompleteType={"off"}
               autoCapitalize={"characters"}
+              onChangeText={(pin) => {
+                setPinSubmitEnabled(verifyPinRegex(pin))
+              }}
             />
-            
+
+            <View style={styles.submitContainer}>
+              <Button
+                disabled={!pinSubmitEnabled}
+                title="Submit"
+                // TODO: hook up submit function (check if pin is (in)valid)
+                onPress={() => {console.warn("Hook me up!")}}
+              />
+            </View>
           </View>
         )
       }
@@ -85,35 +92,13 @@ export const ReportInfectedScreen = (props) => {
 
 export default ReportInfectedScreen
 
-const AlertStack = createStackNavigator();
-export function ReportNavigator() {
-  const options = ({navigation}) => ({
-    headerTransparent: true,
-    title: "",
-    headerLeft: () =>
-      <StackHeaderText onPress={ () => navigation.goBack() }>
-        <Icon name="keyboard-arrow-left" size={SIZES.stackHeaderSize} />
-        Back
-      </StackHeaderText>
-  })
-
-  return(
-    <AlertStack.Navigator>
-      <AlertStack.Screen options={{headerShown: false}} name="MAIN" component={ReportInfectedScreen} />
-      <AlertStack.Screen options={options} name="Scan" component={ScanQRCodeScreen}/>
-      <AlertStack.Screen options={options} name="ReportThankYou" component={ReportThankYouScreen} />
-      <AlertStack.Screen options={options} name="ReportFailed" component={ReportFailedScreen} />
-      </AlertStack.Navigator>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.appBackground,
   },
 
-  headerTextTop: {
+  headerText: {
     flex: 0,
     flexDirection: "row",
     marginTop: "15%",
@@ -121,12 +106,6 @@ const styles = StyleSheet.create({
     color: COLORS.reportHeaderText,
     textAlign: "left",
     paddingBottom: 30
-  },
-
-  headerText: {
-    fontSize: SIZES.reportHeaderSize,
-    color: COLORS.altTintColor,
-    textAlign: "left"
   },
 
   subheaderText: {
@@ -159,57 +138,9 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
 
-  explanationText: {
-    flex: 1,
-    paddingLeft: 40,
-    paddingRight: 40,
-    alignItems: 'center',
-    alignContent: 'center',
+  submitContainer: {
+    marginHorizontal: "15%",
+    marginTop: "10%"
   },
-  daysControlContainer: {
-    flex: 3,
-  },
-  confirmContainer: {
-    flex: 0.7,
-    flexDirection: 'row',
-  },
-  confirmButtonContainer: {
-    flex: 3,
-    paddingLeft: 20,
-    paddingRight: 20,
-    justifyContent: 'center',
-  },
-  confirmCheckboxContainer: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    flex: 0.8,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  confirmCheckbox: {
-  },
-  confirmTextContainer: {
-    paddingRight: 20,
-    flex: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  confirmText: {
-    color: '#3750B5',
-    fontSize: 17,
-    fontFamily: 'Niveau-Grotesk',
-  },
-  errorContainer: {
-    flex: 3,
-    paddingLeft: 20,
-    paddingRight: 20,
-    justifyContent: 'center',
-  },
-  errorMessage: {
-    fontSize: 17,
-    color: COLORS.errorText,
-    lineHeight: 24,
-    textAlign: 'center',
-    backgroundColor: COLORS.errorBackground,
-  },
+
 }) 

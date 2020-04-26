@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native'
-import { SplashScreen } from 'expo';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import './global/bugTracking' // Bug tracking
-import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // Background location tracking
-import BottomTabNavigator from './navigation/BottomTabNavigator'
+import StackNavigator from './navigation/StackNavigator'
 import useLinking from './navigation/useLinking'
 import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
+import { SplashScreen } from 'expo';
 import * as Font from 'expo-font'
+import './global/bugTracking' // Bug tracking
 import { UserStatusWrapper } from './global/userStatus'
+import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // Background location tracking
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
-import { useFonts } from '@use-expo/font'
 import COLORS from './constants/Colors'
 
 const Tab = createBottomTabNavigator();
@@ -53,7 +52,7 @@ function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <BottomTabNavigator />
+          <StackNavigator />
         </NavigationContainer>
       </View>
     );
