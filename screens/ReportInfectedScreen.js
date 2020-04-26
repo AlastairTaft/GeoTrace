@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
@@ -21,6 +21,7 @@ export const ReportInfectedScreen = (props) => {
   var [errorMessage, setErrorMessage] = useState(null)
   var [modalVisible, setModalVisible] = useState(false)
   var [pinSubmitEnabled, setPinSubmitEnabled] = useState(false)
+  var [pin, setPin] = useState('')
 
   function showBarcodeScanner() {
     setScanned(false)
@@ -66,15 +67,25 @@ export const ReportInfectedScreen = (props) => {
 
               <PinInput
                 onValidation={(valid) => setPinSubmitEnabled(valid)}
+                value={pin}
+                onChangeText={(value) => setPin(value)}
               />
 
               <View style={styles.submitContainer}>
-                <Button
-                  disabled={!pinSubmitEnabled}
-                  title="Submit"
-                  // TODO: hook up submit function (check if pin is (in)valid)
-                  onPress={() => {console.warn("Hook me up!")}}
-                />
+                <UserStatusConsumer>
+                  {status => (S
+                    <Button
+                      disabled={!pinSubmitEnabled}
+                      title="Submit"
+                      onPress={async () => {
+                        setPin('')
+                        setPinSubmitEnabled(false)
+                        const success = await status.reportInfected(pin)
+                        props.navigation.navigate(success ? 'ReportThankYou' : 'ReportFailed')
+                      }}
+                    />
+                  )}
+                </UserStatusConsumer>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>

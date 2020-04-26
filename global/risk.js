@@ -91,3 +91,4 @@ export const hashRiskPoint = async function(riskPoint){
     }
   )
 }
+

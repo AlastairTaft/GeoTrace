@@ -36,7 +36,7 @@ export const submitRiskMap = async function(deviceId, riskPoints){
  * Report the user has been diagnosed with COVID-19.
  * @returns {Promise}
  */
-export const reportInfected = async function(uniqueId, code) {
+export const reportInfected = async function() {
   await new Promise(accept => setTimeout(() => accept(), 5000))
 
  // TODO
