@@ -26,12 +26,13 @@ export const ReportInfectedScreen = (props) => {
   var [errorMessage, setErrorMessage] = useState(null)
   var [modalVisible, setModalVisible] = useState(false)
   var [pinSubmitEnabled, setPinSubmitEnabled] = useState(false)
+  var [pin, setPin] = useState('')
 
   function showBarcodeScanner() {
     props.navigation.navigate("Scan")
   }
 
-  return(
+  return (
     <ImageBackground source={IMAGES.Background} style={IMAGES.BackgroundStyle}>
       <UserStatusConsumer>
         {status => {
@@ -45,7 +46,7 @@ export const ReportInfectedScreen = (props) => {
                   </Modal>
 
                   <HeaderText style={HeaderStyle}>
-                    Anonymous COVID-19 Alert
+                  Anonymous COVID-19 Alert
                   </HeaderText>
 
                   <HeaderText style={styles.subheaderText}>
@@ -72,15 +73,25 @@ export const ReportInfectedScreen = (props) => {
 
                   <PinInput
                     onValidation={(valid) => setPinSubmitEnabled(valid)}
+                    value={pin}
+                    onChangeText={(value) => setPin(value)}
                   />
 
                   <View style={styles.submitContainer}>
-                    <Button
-                      disabled={!pinSubmitEnabled}
-                      title="Submit"
-                      // TODO: hook up submit function (check if pin is (in)valid)
-                      onPress={() => {console.warn("Hook me up!")}}
-                    />
+                    <UserStatusConsumer>
+                      {status => (
+                        <Button
+                          disabled={!pinSubmitEnabled}
+                          title="Submit"
+                          onPress={async () => {
+                            setPin('')
+                            setPinSubmitEnabled(false)
+                            const success = await status.reportInfected(pin)
+                            props.navigation.navigate(success ? 'ReportThankYou' : 'ReportFailed')
+                          }}
+                        />
+                      )}
+                    </UserStatusConsumer>
                   </View>
                 </ScrollView>
               </KeyboardAvoidingView>

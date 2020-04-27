@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, Alert } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import COLORS from '../constants/Colors'
 
 const PinInput = props => {
-  const { children, style } = props;
+  const { children, style, onChangeText, onValidation, ...otherProps } = props;
 
   function onChange(value) {
-    const { onChangeText, onValidation } = props;
-
     onValidation && onValidation(value.match(/^[0-9]{4}-[0-9]{4}-[0-9]{4}/g));
     onChangeText && onChangeText(value);
   }
@@ -20,7 +18,7 @@ const PinInput = props => {
       autoCompleteType={"off"}
       onChangeText={value => onChange(value)}
       maxLength={14}
-      {...props}
+      {...otherProps}
     >
       {children}
     </TextInput>

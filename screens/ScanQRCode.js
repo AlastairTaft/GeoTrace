@@ -6,6 +6,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 import { useHeaderHeight } from '@react-navigation/stack'
 import { Pulse } from 'react-native-loader'
 import BarcodeMask  from 'react-native-barcode-mask'
+import { Consumer as UserStatusConsumer } from './../global/userStatus'
 
 import { getDeviceId } from './../global/deviceId'
 import * as trackAPI from '../global/centralAPI'
@@ -23,7 +24,7 @@ export default ({ navigation }) => {
   var [scanned, setScanned] = useState(false)
   const headerHeight = useHeaderHeight()
 
-  const renderScan = () => {
+  const renderScan = (status) => {
     if(scanned) {
       return (
         <View style={styles.contentContainer}>
@@ -46,22 +47,10 @@ export default ({ navigation }) => {
             setScanned(true)
             Vibration.vibrate(200)
 
-            try {
-              const report = await trackAPI.checkAnalysisReport(data)
-              if (!report) {
-                navigation.goBack()
-                navigation.navigate('ReportFailed')
-              }
-              if(!report.used) {
-                // TODO: Report infected
-                await trackAPI.reportInfected()
-              }
-              navigation.goBack()
-              navigation.navigate('ReportThankYou')
-            } catch(e) {
-              navigation.goBack()
-              navigation.navigate('ReportFailed')
-            }
+            const success = await status.reportInfected(data)
+
+            navigation.goBack()
+            navigation.navigate(success ? 'ReportThankYou' : 'ReportFailed')
           }}
         >
           <BarcodeMask
@@ -83,7 +72,9 @@ export default ({ navigation }) => {
         </HeaderText>
 
         <View style={styles.contentContainer}>
-          { renderScan() }
+          <UserStatusConsumer>
+          {status => renderScan(status)}
+          </UserStatusConsumer>
         </View>
       </View>
     </ImageBackground>
