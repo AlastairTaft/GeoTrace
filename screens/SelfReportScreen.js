@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
 
 import Icon from "react-native-vector-icons/FontAwesome"
 
@@ -16,6 +16,7 @@ import { useHeaderHeight } from '@react-navigation/stack'
 
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
+import IMAGES from '../constants/Images'
 
 export default ({ navigation: { goBack } }) => {
 
@@ -25,47 +26,49 @@ export default ({ navigation: { goBack } }) => {
   var [buttonSelected, setButtonSelected] = useState(-1)
 
   return (
-    <View style={{marginTop: headerHeight}}>
-      <View style={styles.container}>
+    <ImageBackground source={IMAGES.Background} style={IMAGES.BackgroundStyle}>
+      <View style={{marginTop: headerHeight}}>
+        <View style={styles.container}>
 
-          <View style={styles.logoContainer}>
-            <Logo />
-          </View>
-
-          <HeaderText style={styles.headerText}>
-            Self-Reporting
-          </HeaderText>
-
-          <EmphasizedText style={styles.pinVerified}>
-            Your PIN has been verified <Icon name="certificate" color={COLORS.verified} size={SIZES.verified} />
-          </EmphasizedText>
-          
-          <View style={styles.radioBoxContainer}>
-            <View style={styles.radioContainer}>
-              <TouchableOpacity onPress={() => setButtonSelected(0)} style={[styles.radio, buttonSelected === 0 ? styles.radioActive : undefined]}>
-                <Text style={[styles.radioTextSmall, buttonSelected === 0 ? styles.radioTextActive : undefined]}>My result was</Text>
-                <Text style={[styles.radioText, buttonSelected === 0 ? styles.radioTextActive : undefined]} adjustsFontSizeToFit={"yes"}>Negative</Text>
-              </TouchableOpacity>
+            <View style={styles.logoContainer}>
+              <Logo />
             </View>
-            <View style={[styles.radioContainer]}>
-              <TouchableOpacity onPress={() => setButtonSelected(1)} style={[styles.radio, buttonSelected === 1 ? styles.radioActive : undefined]}>
-                <Text style={[styles.radioTextSmall, buttonSelected === 1 ? styles.radioTextActive : undefined]}>My result was</Text>
-                <Text style={[styles.radioText, buttonSelected === 1 ? styles.radioTextActive : undefined]} adjustsFontSizeToFit={"yes"}>Positive</Text>
-              </TouchableOpacity>
+
+            <HeaderText style={styles.headerText}>
+              Self-Reporting
+            </HeaderText>
+
+            <EmphasizedText style={styles.pinVerified}>
+              Your PIN has been verified <Icon name="certificate" color={COLORS.verified} size={SIZES.verified} />
+            </EmphasizedText>
+            
+            <View style={styles.radioBoxContainer}>
+              <View style={styles.radioContainer}>
+                <TouchableOpacity onPress={() => setButtonSelected(0)} style={[styles.radio, buttonSelected === 0 ? styles.radioActive : undefined]}>
+                  <Text style={[styles.radioTextSmall, buttonSelected === 0 ? styles.radioTextActive : undefined]}>My result was</Text>
+                  <Text style={[styles.radioText, buttonSelected === 0 ? styles.radioTextActive : undefined]} adjustsFontSizeToFit={"yes"}>Negative</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.radioContainer]}>
+                <TouchableOpacity onPress={() => setButtonSelected(1)} style={[styles.radio, buttonSelected === 1 ? styles.radioActive : undefined]}>
+                  <Text style={[styles.radioTextSmall, buttonSelected === 1 ? styles.radioTextActive : undefined]}>My result was</Text>
+                  <Text style={[styles.radioText, buttonSelected === 1 ? styles.radioTextActive : undefined]} adjustsFontSizeToFit={"yes"}>Positive</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
 
-          <View style={styles.confirmContainer}>
-            <Button
-              disabled={buttonSelected === -1}
-              title="Confirm"
-              // TODO: hook up confirm function (code needs to be sent to the server)
-              onPress={() => {console.warn("Hook me up!")}}
-            />
-          </View>
+            <View style={styles.confirmContainer}>
+              <Button
+                disabled={buttonSelected === -1}
+                title="Confirm"
+                // TODO: hook up confirm function (code needs to be sent to the server)
+                onPress={() => {console.warn("Hook me up!")}}
+              />
+            </View>
 
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   )
 }
 

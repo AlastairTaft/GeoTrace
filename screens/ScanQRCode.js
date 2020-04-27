@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Vibration } from 'react-native'
+import { ImageBackground, StyleSheet, Vibration, View } from 'react-native'
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
@@ -12,6 +12,9 @@ import * as trackAPI from '../global/centralAPI'
 
 import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
+import IMAGES from '../constants/Images'
+
+import HeaderStyle from '../styles/HeaderStyle'
 
 import HeaderText from './../components/HeaderText'
 import EmphasizedText from '../components/EmphasizedText'
@@ -73,15 +76,17 @@ export default ({ navigation }) => {
   }
 
   return (
-    <View style={[StyleSheet.create({paddingTop: headerHeight}), styles.container]}>
-      <HeaderText style={styles.headerText}>
-        QR Scan
-      </HeaderText>
+    <ImageBackground source={IMAGES.Background} style={IMAGES.BackgroundStyle}>
+      <View style={styles.container}>
+        <HeaderText style={HeaderStyle}>
+          QR Scan
+        </HeaderText>
 
-      <View style={styles.contentContainer}>
-        { renderScan() }
+        <View style={styles.contentContainer}>
+          { renderScan() }
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   )
 }
 const styles = StyleSheet.create({
@@ -94,14 +99,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  headerText: {
-    fontSize: SIZES.reportHeaderSize,
-    color: COLORS.altTintColor,
-    textAlign: "left",
-    marginBottom: 50
-  },
   scanner: {
     height: "100%",
-    width: "100%"
+    width: "100%",
+    marginTop: "30%",
+    marginBottom: "40%"
   },
 })

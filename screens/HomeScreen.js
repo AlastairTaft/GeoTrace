@@ -1,37 +1,32 @@
 import React, { Fragment } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { ImageBackground, StyleSheet, View} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import * as Updates from 'expo-updates'
-import COLORS from './../constants/Colors'
-import SIZES from './../constants/Sizes'
-import Button from './../components/Button'
-import Colors from './../constants/Colors'
+
 import { Consumer as PermissionsConsumer, HasPermissions } from './../global/permissions'
-import { Consumer as BackgroundTrackingConsumer } from './BackgroundScriptWrapper'
-import AtRiskInfo from './../components/AtRiskInfo'
+
+import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
 import EmphasizedText from './../components/EmphasizedText'
-import Modal from './../components/Modal'
-import TextLogo from './../assets/images/TextLogo'
-import Divider from './../components/Divider'
-import Neighbourhood from './../assets/images/Neighbourhood'
+
+import { Consumer as BackgroundTrackingConsumer } from './BackgroundScriptWrapper'
+
+import COLORS from './../constants/Colors'
+import SIZES from './../constants/Sizes'
+import IMAGES from '../constants/Images'
 
 export default function HomeScreen() {
-  // TODO: logic to detect if a person is infected/exposed
-  // TODO: logic to detect if we have enough info
-  let hasEnoughInfo = true
-  let isPossibleExposure = false
-  let isInfected = false
-  if (isInfected) {
-    return (
-      <View style={styles.container}>
+
+  // Figure out which variant of home screen to show
+  const HomeScreenStyle = () => {
+    // TODO: logic to detect if a person is infected/exposed
+    // TODO: logic to detect if we have enough info
+    let hasEnoughInfo = true
+    let isPossibleExposure = false
+    let isInfected = false
+    if (isInfected) {
+      return (
         <View style={styles.contentContainer}>
           <View>
             <Icon name="verified-user" color={COLORS.headerText} size={SIZES.headerSize} />
@@ -46,13 +41,11 @@ export default function HomeScreen() {
             Your kindness will save lives. Thank you for protecting your family, friends and neighbours. 
           </EmphasizedText>
         </View>
-      </View>
-    )
-  }
+      )
+    }
 
-  if (!hasEnoughInfo) {
-    return (
-      <View style={styles.container}>
+    if (!hasEnoughInfo) {
+      return (
         <View style={styles.contentContainer}>
           <View>
             <Icon name="help" color={COLORS.unknownColor} size={SIZES.headerSize} />
@@ -67,13 +60,11 @@ export default function HomeScreen() {
             <Button title="Import past locations" style={styles.buttonContainer} />
           </View>
         </View>
-      </View>
-    )
-  }
+      )
+    }
 
-  if (isPossibleExposure) {
-    return (
-      <View style={styles.container}>
+    if (isPossibleExposure) {
+      return (
         <View style={styles.contentContainer}>
           <View>
             <Icon name="flare" color={COLORS.warningText} size={SIZES.headerSize} />
@@ -88,13 +79,11 @@ export default function HomeScreen() {
             <Button title="Next steps" style={styles.buttonContainer} icon="keyboard-arrow-right" />
           </View>
         </View>
-      </View>
-    )
-  }
+      )
+    }
 
-  if (HasPermissions()) {
-    return (
-      <View style={styles.container}>
+    if (HasPermissions()) {
+      return (
         <View style={styles.contentContainer}>
           <View>
             <Icon name="verified-user" color={COLORS.headerText} size={SIZES.headerSize} />
@@ -106,11 +95,9 @@ export default function HomeScreen() {
             Based on available location data, you have not been in contact with COVID-19.
           </EmphasizedText>
         </View>
-      </View>
-    )
-  } else {
-    return (
-      <View style={styles.container}>
+      )
+    } else {
+      return (
         <View style={styles.contentContainer}>
           <View>
             <Icon name="error" color={COLORS.errorText} size={SIZES.headerSize} />
@@ -125,15 +112,22 @@ export default function HomeScreen() {
             <Button title="Enable location data" style={styles.buttonContainer} icon="keyboard-arrow-right" />
           </View>
         </View>
-      </View>
-    )
+      )
+    }
   }
+
+  return(
+    <View style={styles.container}>
+      <ImageBackground source={IMAGES.HomeBackground} style={IMAGES.BackgroundStyle}>
+        <HomeScreenStyle />
+      </ImageBackground>
+    </View>
+  )
 }
 
 HomeScreen.navigationOptions = {
   header: null,
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -173,13 +167,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: "relative",
     top: "10%"
-  },
-
-  errorMessage: {
-    fontSize: 17,
-    color: Colors.errorText,
-    lineHeight: 24,
-    textAlign: 'center',
-    backgroundColor: Colors.errorBackground,
-  },
+  }
 });

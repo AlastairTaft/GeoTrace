@@ -1,29 +1,31 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import HeaderText from './../components/HeaderText'
+import { ImageBackground, StyleSheet, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+import HeaderText from './../components/HeaderText'
+import EmphasizedText from '../components/EmphasizedText'
+
 import COLORS from '../constants/Colors'
 import SIZES from '../constants/Sizes'
-import EmphasizedText from '../components/EmphasizedText'
-import { useHeaderHeight } from '@react-navigation/stack'
+import IMAGES from '../constants/Images'
 
 const ReportFailedScreen = props => {
-  const headerHeight = useHeaderHeight()
-
   return (
-    <View style={[StyleSheet.create({paddingTop: headerHeight}), styles.container]}>
-      <View style={styles.contentContainer}>
-        <View>
-          <Icon name="sentiment-dissatisfied" color={COLORS.errorText} size={SIZES.headerSize} />
+    <ImageBackground source={IMAGES.HomeBackground} style={IMAGES.BackgroundStyle}>
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <View>
+            <Icon name="sentiment-dissatisfied" color={COLORS.errorText} size={SIZES.headerSize} />
+          </View>
+          <HeaderText style={styles.title}>
+            Something went wrong
+          </HeaderText>
+          <EmphasizedText style={styles.emphasized}>
+            You can try again later to save lives
+          </EmphasizedText>
         </View>
-        <HeaderText style={styles.title}>
-          Something went wrong
-        </HeaderText>
-        <EmphasizedText style={styles.emphasized}>
-          You can try again later to save lives
-        </EmphasizedText>
       </View>
-    </View>
+    </ImageBackground>
   )
 }
 
@@ -44,6 +46,6 @@ const styles = StyleSheet.create({
   },
   emphasized: {
     paddingTop: "5%",
-    marginHorizontal: "10%"
+    marginHorizontal: "5%"
   },
 })
