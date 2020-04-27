@@ -1,11 +1,12 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import * as React from 'react'
 
-import HomeScreen from '../screens/HomeScreen';
-import GuideScreen from '../screens/GuideScreen';
-import ReportInfectedScreen from './../screens/ReportInfectedScreen'
+import HomeScreen from '../screens/HomeScreen'
+import GuideScreen from "../screens/GuideScreen"
+import ReportInfectedScreen from '../screens/ReportInfectedScreen'
+
 import HomeIcon from '../assets/icons/Home'
-import AlertIcon from '../assets/icons/Alert';
+import AlertIcon from '../assets/icons/Alert'
 import GuideIcon from '../assets/icons/Guide'
 import TabBar from './TabBar'
 

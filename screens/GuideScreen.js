@@ -1,84 +1,54 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
-import COLORS from '../constants/Colors'
+import React, { useState } from "react"
 
-export default function GuideScreen() {
+import { ImageBackground, StyleSheet, Text, View } from "react-native"
+import { ScrollView } from 'react-native-gesture-handler'
+
+import HeaderText from "../components/HeaderText"
+import GuideSelectorComponent from "../components/GuideSelectorComponent"
+
+import GuideAppScreen from "../screens/GuideAppScreen"
+import GuideSymptomsScreen from "../screens/GuideSymptomsScreen"
+import GuidePreventionScreen from "../screens/GuidePreventionScreen"
+
+import HeaderStyle from "../styles/HeaderStyle"
+
+import IMAGES from "../constants/Images"
+
+export const GuideScreen = props => {
+  var [selectedScreen, setSelectedScreen] = useState(0)
+  let svRef = React.createRef()
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <OptionButton
-        icon="md-heart"
-        label="Coronavirus (COVID-19) health alert - Australia Department of Health"
-        onPress={() => WebBrowser.openBrowserAsync('https://www.health.gov.au/news/health-alerts/novel-coronavirus-2019-ncov-health-alert')}
-      />
-
-      <OptionButton
-        icon="md-business"
-        label="Coronavirus information - Tasmanian Government"
-        onPress={() => WebBrowser.openBrowserAsync('https://www.coronavirus.tas.gov.au')}
-      />
-
-      <OptionButton
-        icon="md-business"
-        label="Coronavirus information - Australia Government"
-        onPress={() => WebBrowser.openBrowserAsync('https://www.australia.gov.au/')}
-      />
-
-      <OptionButton
-        icon="ios-information"
-        label="Coronavirus information - World Health Organization"
-        onPress={() => WebBrowser.openBrowserAsync('https://www.who.int/emergencies/diseases/novel-coronavirus-2019')}
-      />
-
-      
-      
-      
-    </ScrollView>
-  );
-}
-
-function OptionButton({ icon, label, onPress, isLastOption }) {
-  return (
-    <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
-        </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
+    <ImageBackground source={IMAGES.Background} style={IMAGES.BackgroundStyle}>
+      <HeaderText style={HeaderStyle}>
+        Guide
+      </HeaderText>
+      <View style={styles.selector}>
+        <GuideSelectorComponent title="App" active={selectedScreen === 0} onPressCallback={() => {setSelectedScreen(0) ; svRef.current.scrollTo({x: 0, y: 0, animated: true})}} />
+        <GuideSelectorComponent title="Symptoms" active={selectedScreen === 1} onPressCallback={() => { setSelectedScreen(1) ; svRef.current.scrollTo({x: 0, y: 0, animated: true})}} />
+        <GuideSelectorComponent title="Prevention" active={selectedScreen === 2} onPressCallback={() => { setSelectedScreen(2) ; svRef.current.scrollTo({x: 0, y: 0, animated: true})}} />
       </View>
-    </RectButton>
+      <ScrollView style={styles.container} ref={svRef}>
+        {
+          selectedScreen === 0 ? <GuideAppScreen /> :
+          selectedScreen === 1 ? <GuideSymptomsScreen /> :
+          selectedScreen === 2 ? <GuidePreventionScreen /> :
+          undefined
+        }
+      </ScrollView>
+    </ImageBackground>
   );
 }
+
+export default GuideScreen
 
 const styles = StyleSheet.create({
+  selector: {
+    flexDirection: "row",
+    marginHorizontal: "5%",
+    marginBottom: 40
+  },
   container: {
-    flex: 1,
-    backgroundColor: COLORS.appBackground,
-  },
-  contentContainer: {
-    paddingTop: 15,
-  },
-  optionIconContainer: {
-    marginRight: 12,
-  },
-  option: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: '#ededed',
-  },
-  lastOption: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  optionText: {
-    fontSize: 15,
-    alignSelf: 'flex-start',
-    marginTop: 1,
-  },
-});
+    marginHorizontal: "5%"
+  }
+})

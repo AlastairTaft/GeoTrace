@@ -18,5 +18,9 @@ export default {
     verified: 30,
 
     selfReportButtonSmall: 17,
-    selfReportButton: 30
+    selfReportButton: 30,
+
+    guideSelectorText: 22,
+    guideUnderlineThicnkess: 2.5,
+    guideText: 20
 }

@@ -34,5 +34,9 @@ export default {
 
   radioInactive: "#d7d7d7",
   radioInactiveText: "#4f4f4f",
-  radioActiveText: "#ffffff"
+  radioActiveText: "#ffffff",
+
+  guideSelectorActive: "#000000",
+  guideSelectorInactive: "#a5a5a5",
+  guideText: "#808080"
 };

@@ -46,7 +46,7 @@ export const ReportInfectedScreen = (props) => {
                   </Modal>
 
                   <HeaderText style={HeaderStyle}>
-                  Anonymous COVID-19 Alert
+                    Anonymous COVID-19 Alert
                   </HeaderText>
 
                   <HeaderText style={styles.subheaderText}>
