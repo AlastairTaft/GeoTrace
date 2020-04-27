@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native'
+import { View, Vibration, TouchableOpacity, StyleSheet, Keyboard } from 'react-native'
 import COLORS from '../constants/Colors'
 import TabBarText from '../navigation/TabBarText'
-import { Vibration } from "react-native"
 
 function TabBar({ state, descriptors, navigation }) {
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
