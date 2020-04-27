@@ -27,7 +27,7 @@ TaskManager.defineTask(
       // than 5 minutes ago
       return
     }
-    await AsyncStorage.setItem('lastTrackTime', (new Date()).valueOf())
+    await AsyncStorage.setItem('lastTrackTime', '' + (new Date()).valueOf())
 
     // If the accuracy is less than 10 meters, discard it
     locations = locations.filter(l => l.coords.accuracy <= 10)
