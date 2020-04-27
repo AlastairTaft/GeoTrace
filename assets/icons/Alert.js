@@ -6,6 +6,6 @@ import SIZES from '../../constants/Sizes'
 export default props => {
   let color = props.focused ? COLORS.tabItemActive : COLORS.tabItemInactive;
   return (
-    <Icon name="notifications" size={SIZES.tabIconSize} color={color} rounded />
+    <Icon name="add-alert" size={SIZES.tabIconSize} color={color} rounded />
   )
 }
