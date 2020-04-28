@@ -1,20 +1,28 @@
-import React from 'react'
+import React from "react"
 
-import { createStackNavigator } from '@react-navigation/stack'
-import StackHeaderText from '../components/StackHeaderText'
-import ScanQRCodeScreen from '../screens/ScanQRCode'
-import SelfReportScreen from '../screens/SelfReportScreen'
-import ReportThankYouScreen from '../screens/ReportThankYouScreen'
-import ReportFailedScreen from '../screens/ReportFailedScreen'
+import { createStackNavigator } from "@react-navigation/stack"
+import Icon from "react-native-vector-icons/MaterialIcons"
 
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import SIZES from '../constants/Sizes'
-import BottomTabNavigator from './BottomTabNavigator'
+import StackHeaderText from "../components/StackHeaderText"
+
+import ScanQRCodeScreen from "../screens/ScanQRCode"
+import SelfReportScreen from "../screens/SelfReportScreen"
+import ReportThankYouScreen from "../screens/ReportThankYouScreen"
+import ReportFailedScreen from "../screens/ReportFailedScreen"
+
+import OnboardingMain from "../screens/OnboardingMain"
+import OnboardingHeader from "../screens/OnboardingHeader"
+import OnboardingPermissions from "../screens/OnboardingPermissions"
+
+import BottomTabNavigator from "./BottomTabNavigator"
+
+import SIZES from "../constants/Sizes"
 
 const Stack = createStackNavigator();
 
-export default () => {
-  const StackScreenOptions = ({navigation}) => ({
+export default (props) => {
+  // Custom header design
+  const StackScreenBackHeader = ({navigation}) => ({
     headerTransparent: true,
     title: "",
     headerLeft: () =>
@@ -24,13 +32,22 @@ export default () => {
       </StackHeaderText>
   })
 
+  const StackScreenNoHeader = () => ({
+    headerShown: false
+  })
+
   return(
-    <Stack.Navigator initialRouteName="Main">
-      <Stack.Screen options={{headerShown: false}} name="Main" component={BottomTabNavigator} />
-      <Stack.Screen options={StackScreenOptions} name="SelfReport" component={SelfReportScreen} />
-      <Stack.Screen options={StackScreenOptions} name="Scan" component={ScanQRCodeScreen}/>
-      <Stack.Screen options={StackScreenOptions} name="ReportThankYou" component={ReportThankYouScreen} />
-      <Stack.Screen options={StackScreenOptions} name="ReportFailed" component={ReportFailedScreen} />
+    <Stack.Navigator initialRouteName={props.initialRoute}>
+      <Stack.Screen options={StackScreenNoHeader} name="Main" component={BottomTabNavigator} />
+
+      <Stack.Screen options={StackScreenNoHeader} name="OnboardingMain" component={OnboardingMain} />
+      <Stack.Screen options={StackScreenNoHeader} name="OnboardingHeader" component={OnboardingHeader} />
+      <Stack.Screen options={StackScreenNoHeader} name="OnboardingPermissions" component={OnboardingPermissions} />
+
+      <Stack.Screen options={StackScreenBackHeader} name="SelfReport" component={SelfReportScreen} />
+      <Stack.Screen options={StackScreenBackHeader} name="Scan" component={ScanQRCodeScreen}/>
+      <Stack.Screen options={StackScreenBackHeader} name="ReportThankYou" component={ReportThankYouScreen} />
+      <Stack.Screen options={StackScreenBackHeader} name="ReportFailed" component={ReportFailedScreen} />
     </Stack.Navigator>
   )
 }

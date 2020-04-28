@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import HomeScreen from '../screens/HomeScreen'
 import GuideScreen from "../screens/GuideScreen"
-import ReportInfectedScreen from '../screens/ReportInfectedScreen'
+import ReportScreen from '../screens/ReportScreen'
 
 import HomeIcon from '../assets/icons/Home'
 import AlertIcon from '../assets/icons/Alert'
@@ -43,7 +43,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Alert"
-        component={ReportInfectedScreen}
+        component={ReportScreen}
         options={{
           title: "Alert",
           tabBarIcon: ({ focused }) => <AlertIcon focused={focused} />,

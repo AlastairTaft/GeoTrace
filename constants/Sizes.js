@@ -7,6 +7,9 @@ export default {
     linkSize: 16,
     emphasizedSize: 18,
 
+    onboardingSmallSize: 20,
+    onboardingIconSize: 25,
+
     reportHeaderSize: 40,
     reportAltHeaderSize: 27,
     textInputSize: 23,

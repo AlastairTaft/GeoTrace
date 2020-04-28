@@ -32,8 +32,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: COLORS.textInputBackground,
     height: 65,
-    marginHorizontal: "5%",
-    marginTop: 22,
     textAlign: "center",
     fontSize: 27,
     fontWeight: "bold"

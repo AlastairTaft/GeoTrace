@@ -10,6 +10,7 @@ import { useHeaderHeight } from '@react-navigation/stack'
 import COLORS from '../constants/Colors'
 import IMAGES from '../constants/Images'
 import SIZES from '../constants/Sizes'
+import { DefaultMargin } from "./../constants/Layout"
 
 const ReportThankYouScreen = () => {
   const headerHeight = useHeaderHeight()
@@ -41,6 +42,7 @@ export default ReportThankYouScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: DefaultMargin
   },
   contentContainer: {
     flex: 30,
@@ -50,6 +52,5 @@ const styles = StyleSheet.create({
   },
   emphasized: {
     paddingTop: "5%",
-    marginHorizontal: "10%"
   },
 })

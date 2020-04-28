@@ -5,6 +5,10 @@ export default {
   tabItemActive: "#0091ff",
   tabBackground: "#ffffff",
   headerText: "#49a5b0",
+
+  tintOnboarding: "#00a9be",
+  emphasizedOnboarding: "#b4b4b4",
+  onboardingIconInactive: "#cdcdcd",
   
   reportHeaderText: "#000000",
 
@@ -22,7 +26,7 @@ export default {
   appBackground: "#ffffff",
   
   lineText: "#5656564d",
-  line: "#56565680",
+  line: "#d1d1d180",
   
   textInputBackground: "#EFEFEFB3",
   textInputColor: "#5b5b5c",

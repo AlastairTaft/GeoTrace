@@ -18,7 +18,6 @@ var styles = StyleSheet.create({
     color: COLORS.headerText,
     textAlign: 'center',
     fontFamily: 'Niveau-Grotesk',
-    fontWeight: 'bold',
-    marginHorizontal: "5%"
+    fontWeight: 'bold'
   }
 })

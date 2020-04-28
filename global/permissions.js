@@ -32,7 +32,7 @@ const askRequiredPermissions = async () => {
   })
 }
 
-export async function HasPermissions() {
+export async function hasPermission() {
   let hasPermissions
   await askRequiredPermissions().then(status => {
     hasPermissions = status
@@ -66,3 +66,72 @@ export var PermissionsWrapper = props => {
 }
 
 
+/*
+  Permission status:
+    - -1: blocked
+    -  0: denied
+    -  1: granted
+*/
+export async function LocationPermissionStatus() {
+  const { status, canAskAgain } = await Permissions.getAsync(Permissions.LOCATION)
+  if (status === "granted") {
+    return 1
+  } else if (canAskAgain) {
+    return 0
+  } else {
+    return -1
+  }
+}
+
+export async function NotificationsPermissionStatus() {
+  const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+  if (status === "granted") {
+    return 1
+  } else if (canAskAgain) {
+    return 2
+  } else {
+    return -1
+  }
+}
+
+// Not implemented yet
+export async function BluetoothPermissionStatus() {
+  return 1
+}
+
+export async function GetAllPermissionStatus() {
+  const status = await Promise.all([
+    LocationPermissionStatus(),
+    NotificationsPermissionStatus(),
+    BluetoothPermissionStatus()
+  ])
+  return status
+}
+
+
+export async function GetLocationPermission() {
+  const { status, canAskAgain } = await Permissions.askAsync(Permissions.LOCATION)
+  if (status === "granted") {
+    return 1
+  } else if (canAskAgain) {
+    return 2
+  } else {
+    return -1
+  }
+}
+
+export async function GetNotificationsPermission() {
+  const { status, canAskAgain } = await Permissions.askAsync(Permissions.NOTIFICATIONS, Permissions.USER_FACING_NOTIFICATIONS)
+  if (status === "granted") {
+    return 1
+  } else if (canAskAgain) {
+    return 2
+  } else {
+    return -1
+  }
+}
+
+// TODO: NOT IMPLEMENTED YET
+export async function GetBluetoothPermission() {
+  return 1
+}

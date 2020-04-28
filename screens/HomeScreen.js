@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react'
+import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { ImageBackground, StyleSheet, View} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import * as Updates from 'expo-updates'
 
-import { Consumer as PermissionsConsumer, HasPermissions } from './../global/permissions'
+import { LocationPermissionStatus } from './../global/permissions'
 
 import Button from './../components/Button'
 import HeaderText from './../components/HeaderText'
@@ -15,14 +15,15 @@ import { Consumer as BackgroundTrackingConsumer } from './BackgroundScriptWrappe
 import COLORS from './../constants/Colors'
 import SIZES from './../constants/Sizes'
 import IMAGES from '../constants/Images'
+import { DefaultMargin } from "../constants/Layout"
 
 export default function HomeScreen() {
 
   // Figure out which variant of home screen to show
-  const HomeScreenStyle = () => {
+  const HomeScreenVariant = () => {
     // TODO: logic to detect if a person is infected/exposed
     // TODO: logic to detect if we have enough info
-    let hasEnoughInfo = true
+    let hasEnoughInfo = false
     let isPossibleExposure = false
     let isInfected = false
     if (isInfected) {
@@ -31,7 +32,7 @@ export default function HomeScreen() {
           <View>
             <Icon name="verified-user" color={COLORS.headerText} size={SIZES.headerSize} />
           </View>
-          <HeaderText style={styles.headerText}>
+          <HeaderText>
             You are a hero
           </HeaderText>
           <EmphasizedText style={styles.emphasized}>
@@ -42,9 +43,24 @@ export default function HomeScreen() {
           </EmphasizedText>
         </View>
       )
-    }
-
-    if (!hasEnoughInfo) {
+    } else if (LocationPermissionStatus() !== 1) {
+      return (
+        <View style={styles.contentContainer}>
+          <View>
+            <Icon name="error" color={COLORS.errorText} size={SIZES.headerSize} />
+          </View>
+          <HeaderText style={styles.errorHeader}>
+            Unknown
+          </HeaderText>
+          <EmphasizedText style={styles.emphasized}>
+            I can’t tell if you’ve been in contact unless you enable the app to access your location.
+          </EmphasizedText>
+          <View style={styles.buttonContainer}>
+            <Button title="Enable location data" icon="keyboard-arrow-right" />
+          </View>
+        </View>
+      )
+    } else if (!hasEnoughInfo) {
       return (
         <View style={styles.contentContainer}>
           <View>
@@ -57,13 +73,11 @@ export default function HomeScreen() {
             You do not have enough location data to detect exposure.
           </EmphasizedText>
           <View style={styles.buttonContainer}>
-            <Button title="Import past locations" style={styles.buttonContainer} />
+            <Button title="Import past locations" icon="keyboard-arrow-right" />
           </View>
         </View>
       )
-    }
-
-    if (isPossibleExposure) {
+    } else if (isPossibleExposure) {
       return (
         <View style={styles.contentContainer}>
           <View>
@@ -76,13 +90,11 @@ export default function HomeScreen() {
             Based on available location data, you may have come into contact with COVID-19.
           </EmphasizedText>
           <View style={styles.buttonContainer}>
-            <Button title="Next steps" style={styles.buttonContainer} icon="keyboard-arrow-right" />
+            <Button title="Next steps" icon="keyboard-arrow-right" />
           </View>
         </View>
       )
-    }
-
-    if (HasPermissions()) {
+    } else {
       return (
         <View style={styles.contentContainer}>
           <View>
@@ -96,30 +108,13 @@ export default function HomeScreen() {
           </EmphasizedText>
         </View>
       )
-    } else {
-      return (
-        <View style={styles.contentContainer}>
-          <View>
-            <Icon name="error" color={COLORS.errorText} size={SIZES.headerSize} />
-          </View>
-          <HeaderText style={styles.errorHeader}>
-            Unknown
-          </HeaderText>
-          <EmphasizedText style={styles.emphasized}>
-            I can’t tell if you’ve been in contact unless you enable the app to access your location.
-          </EmphasizedText>
-          <View style={styles.buttonContainer}>
-            <Button title="Enable location data" style={styles.buttonContainer} icon="keyboard-arrow-right" />
-          </View>
-        </View>
-      )
     }
   }
 
   return(
     <View style={styles.container}>
       <ImageBackground source={IMAGES.HomeBackground} style={IMAGES.BackgroundStyle}>
-        <HomeScreenStyle />
+        <HomeScreenVariant />
       </ImageBackground>
     </View>
   )
@@ -152,20 +147,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+    marginHorizontal: DefaultMargin
   },
 
   emphasized: {
     paddingTop: "5%",
-    marginHorizontal: "5%"
-  },
-
-  dividerContainer: {
-    flex: 0.8,
-    alignItems: 'center',
   },
 
   buttonContainer: {
-    position: "relative",
-    top: "10%"
+    position: "absolute",
+    bottom: "10%",
+    width: "100%"
   }
 });

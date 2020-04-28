@@ -15,10 +15,11 @@ import SIZES from '../constants/Sizes'
 import COLORS from '../constants/Colors'
 import IMAGES from '../constants/Images'
 
-import HeaderStyle from '../styles/HeaderStyle'
+import HeaderStyle from '../styles/HeaderStyleApp'
 
 import HeaderText from './../components/HeaderText'
 import EmphasizedText from '../components/EmphasizedText'
+import { DefaultMargin } from '../constants/Layout'
 
 export default ({ navigation }) => {
   var [scanned, setScanned] = useState(false)
@@ -83,6 +84,7 @@ export default ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: DefaultMargin
   },
   contentContainer: {
     flex: 30,

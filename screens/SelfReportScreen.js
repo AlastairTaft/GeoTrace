@@ -1,22 +1,25 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
+import { Image, View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
 
 import Icon from "react-native-vector-icons/FontAwesome"
+import { useHeaderHeight } from '@react-navigation/stack'
 
-import Logo from "../components/Logo"
 import HeaderText from "../components/HeaderText"
 import Button from './../components/Button'
 import EmphasizedText from "../components/EmphasizedText"
+import AdjustableText from "../components/AdjustableText"
 
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import * as centralAPI from './../global/centralAPI'
 import { getDeviceId } from './../global/deviceId'
 
-import { useHeaderHeight } from '@react-navigation/stack'
+import SIZES from "./../constants/Sizes"
+import COLORS from "./../constants/Colors"
+import IMAGES from "./../constants/Images"
+import { DefaultMargin } from "./../constants/Layout"
 
-import SIZES from '../constants/Sizes'
-import COLORS from '../constants/Colors'
-import IMAGES from '../constants/Images'
+const ratio = 1149/157
+const imageHeight = 36
 
 export default ({ navigation: { goBack } }) => {
 
@@ -31,7 +34,7 @@ export default ({ navigation: { goBack } }) => {
         <View style={styles.container}>
 
             <View style={styles.logoContainer}>
-              <Logo />
+              <Image source={IMAGES.LogoText} resizeMode={"cover"} resizeMethod={"resize"} style={styles.logoStyle} />
             </View>
 
             <HeaderText style={styles.headerText}>
@@ -46,13 +49,13 @@ export default ({ navigation: { goBack } }) => {
               <View style={styles.radioContainer}>
                 <TouchableOpacity onPress={() => setButtonSelected(0)} style={[styles.radio, buttonSelected === 0 ? styles.radioActive : undefined]}>
                   <Text style={[styles.radioTextSmall, buttonSelected === 0 ? styles.radioTextActive : undefined]}>My result was</Text>
-                  <Text style={[styles.radioText, buttonSelected === 0 ? styles.radioTextActive : undefined]} adjustsFontSizeToFit={"yes"}>Negative</Text>
+                  <AdjustableText style={[styles.radioText, buttonSelected === 0 ? styles.radioTextActive : undefined]} fontSize={SIZES.selfReportButton} numberOfLines={1}>Negative</AdjustableText>
                 </TouchableOpacity>
               </View>
               <View style={[styles.radioContainer]}>
                 <TouchableOpacity onPress={() => setButtonSelected(1)} style={[styles.radio, buttonSelected === 1 ? styles.radioActive : undefined]}>
                   <Text style={[styles.radioTextSmall, buttonSelected === 1 ? styles.radioTextActive : undefined]}>My result was</Text>
-                  <Text style={[styles.radioText, buttonSelected === 1 ? styles.radioTextActive : undefined]} adjustsFontSizeToFit={"yes"}>Positive</Text>
+                  <AdjustableText style={[styles.radioText, buttonSelected === 1 ? styles.radioTextActive : undefined]} fontSize={SIZES.selfReportButton} numberOfLines={1}>Positive</AdjustableText>
                 </TouchableOpacity>
               </View>
             </View>
@@ -75,27 +78,33 @@ export default ({ navigation: { goBack } }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
+    marginHorizontal: DefaultMargin,
+    marginTop: 20
   },
 
   logoContainer: {
+    marginBottom: "5%"
+  },
+
+  logoStyle: {
+    height: imageHeight,
+    width: imageHeight * ratio
   },
 
   headerText: {
     fontSize: SIZES.selfReportHeader,
     color: COLORS.altTintColor,
-    textAlign: "left",
+    textAlign: "left"
   },
 
   pinVerified: {
     color: COLORS.verified,
     fontSize: SIZES.verified,
     textAlign: "left",
-    marginHorizontal: "5%",
     marginTop: "10%"
   },
 
   radioBoxContainer: {
-    marginHorizontal: "5%",
     marginTop: 50,
     flexDirection: "row",
     justifyContent: "space-between"
@@ -131,7 +140,7 @@ const styles = StyleSheet.create({
   radioText: {
     color: COLORS.radioInactiveText,
     textAlign: "center",
-    fontSize: SIZES.selfReportButton,
+    
     fontWeight: "bold"
   },
 
@@ -140,8 +149,7 @@ const styles = StyleSheet.create({
   },
 
   confirmContainer: {
-    marginTop: 50,
-    marginHorizontal: "5%"
+    marginTop: 50
   }
   
 })

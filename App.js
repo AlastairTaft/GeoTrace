@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native'
+import { AsyncStorage, Platform, StatusBar, StyleSheet, View, Text } from 'react-native'
+
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import StackNavigator from './navigation/StackNavigator'
-import useLinking from './navigation/useLinking'
-import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
+
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font'
-import './global/bugTracking' // Bug tracking
+
+import StackNavigator from './navigation/StackNavigator'
+import useLinking from './navigation/useLinking'
+
+import { PermissionsWrapper, Consumer as PermissionsConsumer } from './global/permissions'
 import { UserStatusWrapper } from './global/userStatus'
+import './global/bugTracking' // Bug tracking
+
 import { BackgroundScriptWrapper } from './screens/BackgroundScriptWrapper' // Background location tracking
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
+
 import COLORS from './constants/Colors'
 
 const Tab = createBottomTabNavigator();
@@ -20,6 +26,7 @@ function App(props) {
 
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
+  const [isFirstRun, setIsFirstRun] = React.useState(true);
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
   let customFonts = {
@@ -32,12 +39,15 @@ function App(props) {
     async function loadResourcesAndDataAsync() {
       SplashScreen.preventAutoHide()
       // Load our initial navigation state
-      setInitialNavigationState(await getInitialState());
+      setInitialNavigationState(await getInitialState())
       // Do the work while the splash screen is showing
 
       // TODO: UNPATCH
       // await getStatus()
-      await Font.loadAsync(customFonts);
+      await Font.loadAsync(customFonts)
+      
+      // Check if the app is started for the first time
+      setIsFirstRun((await AsyncStorage.getItem("firstRun")) === null)
 
       setLoadingComplete(true)
       SplashScreen.hide()
@@ -52,7 +62,7 @@ function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <StackNavigator />
+          <StackNavigator initialRoute={isFirstRun ? "OnboardingMain" : "Main"} />
         </NavigationContainer>
       </View>
     );
@@ -60,13 +70,15 @@ function App(props) {
 }
 
 export default props => <UserStatusWrapper>
-  <PermissionsWrapper>
+  {/* TODO: implement background tracking script */}
+  {/* <PermissionsWrapper>
     <PermissionsConsumer>
       {permissionsOk => <BackgroundScriptWrapper>
         <App {...props} />
       </BackgroundScriptWrapper>}
     </PermissionsConsumer>
-  </PermissionsWrapper>
+  </PermissionsWrapper> */}
+  <App {...props} />
 </UserStatusWrapper>
 
 const styles = StyleSheet.create({

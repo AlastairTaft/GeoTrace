@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     backgroundColor: COLORS.altTintColor,
     borderRadius: 10,
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
   },
   text: {
     fontSize: SIZES.buttonFontSize,
@@ -46,7 +49,7 @@ const Button = props => {
           props.disabled ? styles.disabled : undefined,
         ]}
       >
-        <Text style={styles.text}>{props.title} <Icon name={props.icon} color={COLORS.altTextColor} size={SIZES.buttonFontSize} /></Text>
+        <Text style={styles.text}>{props.title} </Text><Icon name={props.icon} color={COLORS.altTextColor} size={SIZES.buttonFontSize} />
       </TouchableOpacity>
     );
   }

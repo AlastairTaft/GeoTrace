@@ -18,6 +18,6 @@ var styles = StyleSheet.create({
     color: COLORS.emphasizedColor,
     textAlign: 'center',
     fontFamily: 'Niveau-Grotesk',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   }
 })
