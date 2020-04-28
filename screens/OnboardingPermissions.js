@@ -49,12 +49,7 @@ export default function OnboardingPermissions(props) {
         setBluetoothPermissionStatus(result)
       })
     } else {
-      try {
-        await AsyncStorage.setItem("firstRun", "false")
-      } catch (error) {
-        console.log("Error saving data")
-      }
-      props.navigation.navigate("Main")
+        AsyncStorage.setItem("firstRun", "false").then(() => props.navigation.navigate("Main")).catch(() => console.log("Error saving data"))
     }
   }
 
