@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { ImageBackground, StyleSheet, View } from "react-native"
+import { AsyncStorage, ImageBackground, StyleSheet, View } from "react-native"
 
 import Button from "./../components/Button"
 import HeaderText from "./../components/HeaderText"
@@ -49,6 +49,11 @@ export default function OnboardingPermissions(props) {
         setBluetoothPermissionStatus(result)
       })
     } else {
+      try {
+        await AsyncStorage.setItem("firstRun", "false")
+      } catch (error) {
+        console.log("Error saving data")
+      }
       props.navigation.navigate("Main")
     }
   }
