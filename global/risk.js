@@ -33,10 +33,10 @@ export const getRiskPoints = function(location, elapsed){
   )
   var riskPoints = []
   positionBlocks.forEach(position => {
-    var t3Hours = 1000 * 60 * 60 * 3
+    var t2Hours = 1000 * 60 * 60 * 3
     // Let's record the area at risk in 5 minute blocks for the first 3 hours
     var tBlockSize = 1000 * 60 * 5
-    for (var i = 0; i < t3Hours; i += tBlockSize){
+    for (var i = 0; i < t2Hours; i += tBlockSize){
       var timeBlock = getBlockIdentifierForTimestamp(elapsed + i, tBlockSize)
       riskPoints.push({
         // The point in time this block represents
@@ -47,7 +47,7 @@ export const getRiskPoints = function(location, elapsed){
         positionBlockSize: APPROX_BLOCK_SIZE,
       })
     }
-    var t9Hours = 1000 * 60 * 60 * 9
+    /*var t9Hours = 1000 * 60 * 60 * 9
     // Let's record every hour block after that up to 9 hours
     var t2BlockSize = 1000 * 60 * 60
     for (; i < t9Hours; i += t2BlockSize){
@@ -60,7 +60,7 @@ export const getRiskPoints = function(location, elapsed){
         position,
         positionBlockSize: APPROX_BLOCK_SIZE,
       })
-    }
+    }*/
   })
   return riskPoints
 }
@@ -90,4 +90,36 @@ export const hashRiskPoint = async function(riskPoint){
       encoding: Crypto.CryptoEncoding.BASE64,
     }
   )
+}
+
+
+/**
+ * @typedef RiskDataPoint
+ * @property {string} hash The simple device location/time hash. 
+ * @property {number} timePassedSinceExposure This is for future projecting, so 
+ * when the user visits X location, this is the hash for the same location Y 
+ * time in the future. So that if this user becomes infected, we know a risk
+ * point for a point in time in the future at the same location. e.g. if this
+ * user is likely to touch surfaces, someone who visits here later is at risk
+ * @property {string} preSaltHash This is a hash of a 50 kilometer squared block
+ * this location point is in. The idea is it is not specific enough to identify
+ * any one person but it will be used to determine which salt server to ask for 
+ * a salt from.
+ * @property {number} timestamp Purely used locally to prune old data
+ */
+
+
+/**
+ * Validate its a valid risk point object. Throws if not valid.
+ * @param {object} riskPoint
+ */
+export const validateRiskDataPoint = async function(riskPoint){
+  if (!riskPoint.hash)
+    throw new Error('Missing \'hash\' value.')
+  if (!riskPoint.preSaltHash)
+    throw new Error('Missing \'preSaltHash\' value.')
+  if (!riskPoint.timestamp)
+    throw new Error('Missing \'timestamp\' value.')
+  if (riskPoint.timePassedSinceExposure === undefined || riskPoint.timePassedSinceExposure === null)
+    throw new Error('Missing \'timePassedSinceExposure\' value.')
 }
