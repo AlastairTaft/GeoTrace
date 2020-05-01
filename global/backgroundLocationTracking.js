@@ -26,8 +26,7 @@ TaskManager.defineTask(
     // Must manually limit the data points we store because iOS will fire this
     // everytime the user's location significantly changes
     var lastTrackTime = await AsyncStorage.getItem('lastTrackTime')
-    //var t5MinsAgo = (new Date()).valueOf() - (1000 * 60 * 5)
-    var t5MinsAgo = (new Date()).valueOf() - (1000 * 10)
+    var t5MinsAgo = (new Date()).valueOf() - (1000 * 60 * 5)
     if (lastTrackTime && Number(lastTrackTime) > t5MinsAgo){
       // Don't track another data point if the last one was less
       // than 5 minutes ago
@@ -50,7 +49,6 @@ TaskManager.defineTask(
       // Location type info here 
       // https://docs.expo.io/versions/latest/sdk/location/#location
 
-      
       // The current time right now is 10:06 AEST, we don't care about anything
       // before then so let's remove that time from the EPOCH.
       var elapsed = Math.round(l.timestamp) - RELATIVE_EPOCH_START

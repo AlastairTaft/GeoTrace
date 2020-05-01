@@ -29,5 +29,4 @@ const backgroundTaskFunc = createBackgroundSyncFunction({
 })
 
 TaskManager.defineTask(BACKGROUND_SYNC_TASK_NAME, backgroundTaskFunc)
-backgroundTaskFunc()
 
