@@ -33,8 +33,8 @@ export const getRiskPoints = function(location, elapsed){
   )
   var riskPoints = []
   positionBlocks.forEach(position => {
-    var t2Hours = 1000 * 60 * 60 * 3
-    // Let's record the area at risk in 5 minute blocks for the first 3 hours
+    var t2Hours = 1000 * 60 * 60 * 2
+    // Let's record the area at risk in 5 minute blocks for the first 2 hours
     var tBlockSize = 1000 * 60 * 5
     for (var i = 0; i < t2Hours; i += tBlockSize){
       var timeBlock = getBlockIdentifierForTimestamp(elapsed + i, tBlockSize)

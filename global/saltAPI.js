@@ -1,14 +1,17 @@
 import * as Sentry from 'sentry-expo'
-import * as Crypto from 'expo-crypto'
 
-//var { hashRiskPoint } = require('./risk')
-
-// Can add multiple servers
-export const SALT_SERVERS = [
-  __DEV__ ? 
-    'http://localhost:3000/dev/get-salt' : 
-    'https://au-tas-api.trackcovid19spread.com/get-salt'
-]
+export const SALT_SERVERS = __DEV__ ? 
+  [ 'http://localhost:3000/dev/get-salt' ] :
+  [
+    'salt1.geotrace.io/get-salt',
+    'salt2.geotrace.io/get-salt',
+    'salt3.geotrace.io/get-salt',
+    'salt4.geotrace.io/get-salt',
+    'salt5.geotrace.io/get-salt',
+    'salt6.geotrace.io/get-salt',
+    'salt7.geotrace.io/get-salt',
+    'salt8.geotrace.io/get-salt',
+  ]
 
 /**
  * Get the url of which salt server to use, given a random string it should

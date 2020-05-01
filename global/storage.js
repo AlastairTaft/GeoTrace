@@ -71,8 +71,7 @@ export const pushRiskPoints = async function(newRiskPoints){
     (new Date()).valueOf(), 
     // We'll keep only 1 hour 30 of data, salt servers will error if the data
     // is too stale
-    //1000 * 60 * 60 * 1.5,
-    1000 * 60,
+    1000 * 60 * 60 * 1.5,
   )
   var riskPoints = existingRiskPoints.concat(newRiskPoints)
   var newRiskPointsHash = {}

@@ -2,7 +2,6 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import StyledText from './../components/StyledText'
 import HighlightText from './../components/HighlightText'
-import './../global/saltAPI'
 
 const TrackingScreen = props => {
   return <View style={styles.content}>
@@ -21,8 +20,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     minHeight: '100%',
   }, 
-  testView: {
-    backgroundColor: 'orange',
-  },
 })
 

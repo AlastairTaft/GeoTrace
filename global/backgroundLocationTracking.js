@@ -11,9 +11,6 @@ import { AsyncStorage } from 'react-native'
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
-//TaskManager.unregisterAllTasksAsync()
-//AsyncStorage.setItem('riskPoints',  JSON.stringify({}))
-
 TaskManager.defineTask(
   BACKGROUND_TRACKING_TASK_NAME, 
   async ({ data: { locations }, error }) => {
