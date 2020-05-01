@@ -1,30 +1,37 @@
 import { AsyncStorage } from 'react-native'
-import { RELATIVE_EPOCH_START } from './constants'
+import { validateRiskDataPoint } from './risk'
 
+/**
+ * Returns a hash map of RiskDataPoint where the key is the hash.
+ * @return {object}
+ */
 export const getStoredRiskData = async function(){
   const riskPointDTOsStr = await AsyncStorage.getItem('riskPoints')
-  if (riskPointDTOsStr === null) return []
+  if (riskPointDTOsStr === null) return {}
   try {
     return JSON.parse(riskPointDTOsStr)
   } catch (err){
     // The only scenario ^ where it is acceptable to eat an error
-    return []
+    return {}
   }
 }
 
+/**
+ * Pops all the stored risk data points as a hashmap, i.e. retrieves them and 
+ * clears them from local storage.
+ * @return {Promise<object>}
+ */
 export const popStoredRiskData = async function(){
   var data = await getStoredRiskData()
-  await AsyncStorage.setItem('riskPoints',  JSON.stringify([]))
+  await AsyncStorage.setItem('riskPoints',  JSON.stringify({}))
   return data
 }
 
 
 /**
- * @param {object} riskPoints[0].preSaltHash
- * @param {object} riskPoints[0].hashedRiskPoints
- * @param {string} riskPoints[0].hashedRiskPoints[0].hash
- * @param {number} riskPoints[0].hashedRiskPoints[0].timePassedSinceExposure     
- * @param {object} riskPoints[0].timestamp
+ * Stores risk points in local storage, this operation is destructive it will
+ * override any existing stored data points
+ * @param {Array<RiskDataPoint>} riskPoints
  */
 export const setStoredRiskData = async function(riskPoints){
   await AsyncStorage.setItem('riskPoints', JSON.stringify(riskPoints))
@@ -32,9 +39,9 @@ export const setStoredRiskData = async function(riskPoints){
 
 /**
  * Purges old data thats older than the purgeTimeout.
- * risk data must be in order of oldest to newest.
- * @param {number} riskData[0].timestamp
- * @param {number} nowTimestamp
+ * risk data must be in order of oldest to newest. 
+ * @param {Array<RiskDataPoint>} riskData
+ * @param {number} nowTimestamp a UNIX epoch of what the current time is
  * @param {number} purgeTimeout
  */
 export const purgeStaleRiskPoints = function(
@@ -54,21 +61,23 @@ export const purgeStaleRiskPoints = function(
 
 /**
  * Adds new risk points to existing stored risk points
- * @param {object} newRiskPoints[0].preSaltHash
- * @param {object} newRiskPoints[0].hashedRiskPoints
- * @param {string} newRiskPoints[0].hashedRiskPoints[0].hash
- * @param {number} newRiskPoints[0].hashedRiskPoints[0].timePassedSinceExposure     
- * @param {object} newRiskPoints[0].timestamp
+ * @param {Array<RiskDataPoint>} newRiskPoints
  */
 export const pushRiskPoints = async function(newRiskPoints){
-  var existingRiskPoints = await getStoredRiskData()
-  var now = (new Date()).valueOf() - RELATIVE_EPOCH_START
+  var existingRiskPointsHash = await getStoredRiskData()
+  var existingRiskPoints = Object.values(existingRiskPointsHash)
   existingRiskPoints = purgeStaleRiskPoints(
     existingRiskPoints, 
-    now, 
-    // We'll keep only up to 14 days of data locally
-    1000 * 60 * 60 * 24 * 14,
+    (new Date()).valueOf(), 
+    // We'll keep only 1 hour 30 of data, salt servers will error if the data
+    // is too stale
+    1000 * 60 * 60 * 1.5,
   )
   var riskPoints = existingRiskPoints.concat(newRiskPoints)
-  await setStoredRiskData(riskPoints)
+  var newRiskPointsHash = {}
+  riskPoints.forEach(rp => {
+    validateRiskDataPoint(rp)
+    newRiskPointsHash[rp.hash] = rp
+  })
+  await setStoredRiskData(newRiskPointsHash)
 }

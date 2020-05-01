@@ -47,7 +47,8 @@
     "babel-preset-expo": "~8.1.0",
     "commander": "^5.0.0",
     "expo-cli": "^3.17.11",
-    "jest-expo": "~37.0.0"
+    "jest-expo": "~37.0.0",
+    "sinon": "^9.0.2"
   },
   "private": true
 }

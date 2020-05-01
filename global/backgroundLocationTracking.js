@@ -2,13 +2,12 @@ import * as TaskManager from 'expo-task-manager'
 import * as Sentry from 'sentry-expo'
 import * as Crypto from 'expo-crypto'
 import './bugTracking'
-import * as trackAPI from './centralAPI'
-import { getDeviceId } from './deviceId'
 import { getRiskPoints } from './risk'
 import { getBlockIdentifierForLocation } from './blocks'
 import { RELATIVE_EPOCH_START } from './constants'
 import { pushRiskPoints } from './storage'
 import { hashRiskPoint } from './risk'
+import { AsyncStorage } from 'react-native'
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 
@@ -21,6 +20,17 @@ TaskManager.defineTask(
       return;
     }
 
+    // Must manually limit the data points we store because iOS will fire this
+    // everytime the user's location significantly changes
+    var lastTrackTime = await AsyncStorage.getItem('lastTrackTime')
+    var t5MinsAgo = (new Date()).valueOf() - (1000 * 60 * 5)
+    if (lastTrackTime && Number(lastTrackTime) > t5MinsAgo){
+      // Don't track another data point if the last one was less
+      // than 5 minutes ago
+      return
+    }
+    await AsyncStorage.setItem('lastTrackTime', '' + (new Date()).valueOf())
+
     // If the accuracy is less than 10 meters, discard it
     locations = locations.filter(l => l.coords.accuracy <= 10)
     // Won't track if moving faster than 30 meters per second, assuming they 
@@ -30,28 +40,17 @@ TaskManager.defineTask(
     // Filter out home sensitive location data, e.g. their home address
     locations = scrambleSensitiveLocations(locations)
 
+    var riskPoints = []
     // We need to map each location to its respective grid block
-    var riskPoints = await Promise.all(locations.map(async l => {
+    await Promise.all(locations.map(async l => {
       // Location type info here 
       // https://docs.expo.io/versions/latest/sdk/location/#location
 
-      
       // The current time right now is 10:06 AEST, we don't care about anything
       // before then so let's remove that time from the EPOCH.
       var elapsed = Math.round(l.timestamp) - RELATIVE_EPOCH_START
      
-      var riskPoints = getRiskPoints(l.coords, elapsed)
-      var hashedRiskPoints = await Promise.all(riskPoints.map(
-        async dto => {
-          var hash = await hashRiskPoint(dto)
-          return {
-            timePassedSinceExposure: dto.timePassedSinceExposure,
-            hash,
-          }
-        }
-      ))
-
-      // Not specific geographic block the user is in, used to get the salt
+     // Not specific geographic block the user is in, used to get the salt
       var nonSpecificGeoBlock = getBlockIdentifierForLocation(
         {
           latitude: l.latitude,
@@ -70,12 +69,18 @@ TaskManager.defineTask(
         }
       )
 
-      return {
-        preSaltHash,
-        hashedRiskPoints,
-        timestamp: Math.round(l.timestamp),
-      }
-      
+      var localRiskPoints = getRiskPoints(l.coords, elapsed)
+      await Promise.all(localRiskPoints.map(
+        async dto => {
+          var hash = await hashRiskPoint(dto)
+          riskPoints.push({
+            timePassedSinceExposure: dto.timePassedSinceExposure,
+            hash,
+            preSaltHash,
+            timestamp: Math.round(l.timestamp),
+          })
+        }
+      ))      
     }))
 
     // Puts the hashed risk points in local storage
