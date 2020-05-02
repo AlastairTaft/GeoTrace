@@ -7,6 +7,9 @@ export const createBackgroundSyncFunction = ({
   submitRiskMap,
   onError,
   hashFunction,
+  warnAtRisk,
+  getStoredUserData,
+  setStoredUserData,
 }) => async () => {
   try {
     var riskPointsHash = await popStoredRiskData()
@@ -34,7 +37,13 @@ export const createBackgroundSyncFunction = ({
       }))
     }))
     var deviceId = await getDeviceId()
-    await submitRiskMap(deviceId, finalHashes)
+    var newUserInfo = await submitRiskMap(deviceId, finalHashes)
+    var user = await getStoredUserData()
+    if (newUserInfo.atRisk && user.atRisk != newUserInfo.atRisk){
+      // Warn possible exposure
+      await warnAtRisk()
+    }
+    await setStoredUserData(newUserInfo)
     return BackgroundFetch.Result.NewData
   } catch (error) {
     if (!onError)

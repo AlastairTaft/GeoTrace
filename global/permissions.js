@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
 import * as BackgroundFetch from 'expo-background-fetch'
+import Constants from 'expo-constants'
+import { Notifications } from 'expo'
 import { BACKGROUND_TRACKING_TASK_NAME } from './../global/backgroundLocationTracking'
 import { BACKGROUND_SYNC_TASK_NAME } from './../global/backgroundSync'
 
@@ -30,6 +32,29 @@ const askRequiredPermissions = async () => {
     stopOnTerminate: false,
     startOnBoot: true,
   })
+
+  // We need to notify when there's possible exposure detected
+  if (Constants.isDevice) {
+    var { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+    if (status !== 'granted') {
+      var { status: status2 } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+      status = status2
+    }
+    if (status !== 'granted') {
+      return falses
+    }
+  } else {
+    //alert('Must use physical device for Push Notifications')
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.createChannelAndroidAsync('default', {
+      name: 'default',
+      sound: true,
+      priority: 'max',
+      vibrate: [0, 250, 250, 250],
+    });
+  }
 }
 
 /**

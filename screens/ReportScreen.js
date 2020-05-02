@@ -11,16 +11,10 @@ import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import ReportInfectedScreen from './ReportInfectedScreen'
 
 const ReportInfected = props => {
-
-
-  var [infected, setInfected] = useState(false)
-
-
-  if (infected)
-    return <ReportThankyouScreen />
-
   return <UserStatusConsumer>
     {status => {
+      if (status.infected)
+        return <ReportThankyouScreen />
       // TODO Report 
       return <ReportInfectedScreen />
     }}
