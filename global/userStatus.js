@@ -48,7 +48,7 @@ export var UserStatusWrapper = props => {
             infected: true,
           })
           return reportInfected(...args)
-        }
+        },
       }
       setStatus(status)
     })

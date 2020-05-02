@@ -4,6 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 import Button from './../components/Button'
 import StyledText from './../components/StyledText'
 import HighlightText from './../components/HighlightText'
+import HeaderText from './../components/HeaderText'
 import CheckBox from './../components/CheckBox'
 import DaysSelectControl from './../components/DaysSelectControl'
 import { Consumer as UserStatusConsumer } from './../global/userStatus'
@@ -67,9 +68,10 @@ const ReportInfectedScreen = props => {
       }
       return <View style={styles.container}>
         <View style={styles.explanationText}>
+          <HeaderText>Report</HeaderText>
           <StyledText style={{fontSize: 20}}>
-            {'\n'}
-            Report: I have <HighlightText>COVID-19</HighlightText>
+            
+            I have <HighlightText>COVID-19</HighlightText>
           
             {'\n'}{'\n'}
             Your health authority will have provided you with a QR code to scan.
@@ -104,6 +106,7 @@ export default ReportInfectedScreen
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 50,
     flex: 1,
     backgroundColor: '#fff',
   },

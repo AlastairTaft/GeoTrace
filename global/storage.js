@@ -81,3 +81,27 @@ export const pushRiskPoints = async function(newRiskPoints){
   })
   await setStoredRiskData(newRiskPointsHash)
 }
+
+
+/**
+ * Returns the status of the user
+ * @return {object}
+ */
+export const getStoredUserData = async function(){
+  const userStr = await AsyncStorage.getItem('user')
+  if (userStr === null) return {}
+  try {
+    return JSON.parse(userStr)
+  } catch (err){
+    // The only scenario ^ where it is acceptable to eat an error
+    return {}
+  }
+}
+
+/**
+ * Stores user data
+ * @param {object} user
+ */
+export const setStoredUserData = async function(user){
+  await AsyncStorage.setItem('user', JSON.stringify(user))
+}

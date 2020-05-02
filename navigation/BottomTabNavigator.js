@@ -49,14 +49,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <ReportIcon />,
         }}
       />
-      <BottomTab.Screen
+      {/*<BottomTab.Screen
         name="Resources"
         component={LinksScreen}
         options={{
           title: 'Resources',
           tabBarIcon: ({ focused }) => <ResourcesIcon />,
         }}
-      />
+      />*/}
     </BottomTab.Navigator>
   );
 }
