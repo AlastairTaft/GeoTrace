@@ -17,8 +17,10 @@ export const createBackgroundSyncFunction = ({
      * @type {Array<RiskDataPoint>}
      */
     var riskPoints = Object.values(riskPointsHash)
-    if (!riskPoints.length)
-      return BackgroundFetch.Result.NoData
+    // Don't do this because we still need to ask the server if the user has 
+    // been put at risk
+    //if (!riskPoints.length)
+    //  return BackgroundFetch.Result.NoData
     var finalHashes = []
     // Group risk points by pre salt hashes
     var saltGroups = groupBy(riskPoints, 'preSaltHash')
@@ -28,7 +30,7 @@ export const createBackgroundSyncFunction = ({
       await Promise.all(saltDtos.map(async (dto, i) => {
         var { success, hash: salt, error } = salts[i]
         if (!success){
-          Sentry.captureMessage(Sentry.captureMessage(error))
+          Sentry.captureMessage(error)
           return BackgroundFetch.Result.Failed
         }
         var { timePassedSinceExposure, hash } = dto
