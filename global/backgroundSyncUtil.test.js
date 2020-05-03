@@ -4,7 +4,8 @@ import sinon from 'sinon'
 describe('#backgroundSync', () => {
 
   it(`should work`.replace(/\s+/g, ' '), async () => {
-    var submitRiskMap = sinon.spy()
+    var submitRiskMap = sinon.stub()
+    submitRiskMap.returns({})
     var deps = {
       popStoredRiskData: () => ({
         "+/uQQpBNx0b/zktnefcCjiVSCJ6Gp9ueukiuTaRTKLFcnQCDRayq0yeFWqmwRYk4dYEDorbuIA0TKorVy02VZw==": {
@@ -35,6 +36,9 @@ describe('#backgroundSync', () => {
       submitRiskMap,
       onError: err => { throw err },
       hashFunction: str => str,
+      warnAtRisk: () => {},
+      getStoredUserData: () => ({}),
+      setStoredUserData: () => {},
     }
     await methods.createBackgroundSyncFunction(deps)()
     expect(submitRiskMap.calledOnce).toBe(true)
@@ -60,7 +64,8 @@ describe('#backgroundSync', () => {
 
   it(`should request salts from two different servers because there's two 
     different pre salt hashes.`.replace(/\s+/g, ' '), async () => {
-    var submitRiskMap = sinon.spy()
+    var submitRiskMap = sinon.stub()
+    submitRiskMap.returns({})
     const getSalts = sinon.stub()
     getSalts.onCall(0).returns(([
       { success: true, hash: 'IWCGLNNbDHYAjcIcq9Hi1AhpzTMJE8AfhF8urSqcK1vortAuELTqdG3iEMCGLvpOFq5UpUnnJeHr+heR7fSRiw==', },
@@ -96,6 +101,9 @@ describe('#backgroundSync', () => {
       submitRiskMap,
       onError: err => { throw err },
       hashFunction: str => str,
+      warnAtRisk: () => {},
+      getStoredUserData: () => ({}),
+      setStoredUserData: () => {},
     }
     await methods.createBackgroundSyncFunction(deps)()
     expect(submitRiskMap.calledOnce).toBe(true)

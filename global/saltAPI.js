@@ -1,7 +1,9 @@
 import * as Sentry from 'sentry-expo'
 
 export const SALT_SERVERS = __DEV__ ? 
-  [ 'http://localhost:3000/dev/get-salt' ] :
+  [ Platform.OS === 'android'
+    ? 'http://10.0.2.2:3000/dev/get-salt'
+    : 'http://localhost:3000/dev/get-salt' ] :
   [
     'salt1.geotrace.io/get-salt',
     'salt2.geotrace.io/get-salt',

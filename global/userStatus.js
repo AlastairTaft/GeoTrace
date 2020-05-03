@@ -42,12 +42,12 @@ export var UserStatusWrapper = props => {
     .then(status => {
       status = {
         ...status,
-        reportInfected: (...args) => {
+        reportInfected: async (...args) => {
+          await reportInfected(...args)
           setStatus({
             ...status,
             infected: true,
           })
-          return reportInfected(...args)
         },
       }
       setStatus(status)
