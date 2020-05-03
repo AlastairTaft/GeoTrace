@@ -11,6 +11,7 @@ import { Consumer as UserStatusConsumer } from './../global/userStatus'
 import ReportInfectedScreen from './ReportInfectedScreen'
 
 const ReportInfected = props => {
+  
   return <UserStatusConsumer>
     {status => {
       if (status.infected)

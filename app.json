@@ -2,7 +2,7 @@
   "expo": {
     "name": "Geo Trace",
     "icon": "./assets/images/logo.png",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "slug": "geo-trace",
     "sdkVersion": "37.0.0",
     "ios": {

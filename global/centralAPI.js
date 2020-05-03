@@ -1,7 +1,5 @@
 import * as Sentry from 'sentry-expo'
-import { Platform } from 'react-native'
-
-
+import { Platform, Alert } from 'react-native'
 
 if (__DEV__){
   var API_URL = Platform.OS === 'android'
@@ -53,6 +51,17 @@ export const reportInfected = async function(uniqueId, code){
   })
   var result = await response.json()
   if (response.status != 200){
+    if (result.code == 'INVALID_CODE'){
+      Alert.alert(
+        "Invalid code",
+        "The QR code was not recognised.",
+        [
+          { text: "OK" }
+        ],
+        { cancelable: false }
+      )
+    }
+      
     Sentry.captureMessage(JSON.stringify(result))
     throw new Error('Unable to report user has been diagnosed with COVID-19.')
   }
