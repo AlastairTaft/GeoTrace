@@ -4,6 +4,8 @@ import * as Location from 'expo-location'
 import * as BackgroundFetch from 'expo-background-fetch'
 import Constants from 'expo-constants'
 import { Notifications } from 'expo'
+import * as Sentry from 'sentry-expo'
+import { Alert } from 'react-native'
 import { BACKGROUND_TRACKING_TASK_NAME } from './../global/backgroundLocationTracking'
 import { BACKGROUND_SYNC_TASK_NAME } from './../global/backgroundSync'
 
@@ -26,12 +28,25 @@ const askRequiredPermissions = async () => {
     mayShowUserSettingsDialog: false,
     activityType: Location.ActivityType.Fitness,
   }
-  await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
-  await BackgroundFetch.registerTaskAsync(BACKGROUND_SYNC_TASK_NAME, {
-    minimumInterval: 1 * 60 * 60, // 1 hour 
-    stopOnTerminate: false,
-    startOnBoot: true,
-  })
+  try {
+    await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)
+    await BackgroundFetch.registerTaskAsync(BACKGROUND_SYNC_TASK_NAME, {
+      //minimumInterval: 1 * 60 * 60, // 1 hour 
+      stopOnTerminate: false,
+      startOnBoot: true,
+    })
+  } catch (err){
+    Sentry.captureException(error)
+    Alert.alert(
+      "Error",
+      "Unable to start background sync.",
+      [
+        { text: "OK" }
+      ],
+      { cancelable: false }
+    )
+    throw err
+  }
 
   // We need to notify when there's possible exposure detected
   if (Constants.isDevice) {
@@ -41,7 +56,7 @@ const askRequiredPermissions = async () => {
       status = status2
     }
     if (status !== 'granted') {
-      return falses
+      return false
     }
   } else {
     //alert('Must use physical device for Push Notifications')
