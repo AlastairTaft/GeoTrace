@@ -1,10 +1,15 @@
 import * as Sentry from 'sentry-expo'
+import { Platform } from 'react-native'
 
-if (__DEV__)
-  var API_URL = 'http://localhost:3000/dev/'
-else 
-  var API_URL = 'https://au-tas-api.trackcovid19spread.com/'
 
+
+if (__DEV__){
+  var API_URL = Platform.OS === 'android'
+    ? 'http://10.0.2.2:3000/dev/'
+    : 'http://localhost:3000/dev/'
+} else { 
+  var API_URL = 'https://api.geotrace.io/'
+}
 /**
  * Submits location data to the server
  * @param {string} deviceId

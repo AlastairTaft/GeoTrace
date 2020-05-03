@@ -1,12 +1,12 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
 import HeaderText from './../components/HeaderText'
 import StyledText from './../components/StyledText'
 import ConfirmIllustration from './../assets/images/Confirm'
 import HighlightText from './../components/HighlightText'
 
 const ReportThankyouScreen = props => {
-  return <View style={styles.content}>
+  return <ScrollView style={styles.content}>
     <HeaderText>Thank you</HeaderText>
     <StyledText style={{fontSize: 20}}>For reporting your diagnosis</StyledText>
     <View style={styles.illustrationContainer}>
@@ -17,7 +17,7 @@ const ReportThankyouScreen = props => {
       who may be at risk.
     </StyledText>
     <Text />
-  </View>
+  </ScrollView>
 }
 
 export default ReportThankyouScreen

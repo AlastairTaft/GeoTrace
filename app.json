@@ -2,7 +2,7 @@
   "expo": {
     "name": "geo-trace",
     "icon": "./assets/images/logo.png",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "slug": "geo-trace",
     "sdkVersion": "37.0.0",
     "ios": {
@@ -11,9 +11,9 @@
       "buildNumber": "0.0.0",
       "supportsTablet": false,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow use of your location to track community COVID-19 spread.",
-        "NSLocationAlwaysUsageDescription": "Allow use of your location to track community COVID-19 spread.",
+        "NSLocationWhenInUseUsageDescription": "To check if you have been exposed to the virus.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "To check if you have been exposed to the virus.",
+        "NSLocationAlwaysUsageDescription": "To check if you have been exposed to the virus.",
         "UIBackgroundModes": [
           "location",
           "fetch"
