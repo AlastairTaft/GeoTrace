@@ -18,7 +18,6 @@ if (__DEV__){
  * @returns {Promise}
  */
 export const submitRiskMap = async function(deviceId, riskPoints){
-  console.log('submitRiskMap#riskPoints', riskPoints)
   var response = await fetch(API_URL + 'submit-risk-map', {
     method: 'post',
     body: JSON.stringify({

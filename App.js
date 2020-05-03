@@ -13,6 +13,7 @@ import { useFonts } from '@use-expo/font'
 import { UserStatusWrapper } from './global/userStatus'
 // Fire off the background scripts
 import './global/backgroundLocationTracking'
+import appJson from './app.json'
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,13 @@ function App(props) {
             <Stack.Screen name="Home" component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
+        <Text 
+          style={[
+            Platform.OS === 'ios' ? styles.versionNoteIOS : styles.versionNote
+          ]}
+        >
+          v{appJson.expo.version}
+        </Text>
       </View>
     );
   }
@@ -77,5 +85,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     
+  },
+  versionNoteIOS: {
+    position: 'absolute',
+    top: 20,
+    right: 5,
+    color: '#00000088',
+  },
+  versionNote: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    color: '#00000088',
   },
 });
