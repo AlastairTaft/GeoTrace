@@ -38,8 +38,11 @@ const ReportInfectedScreen = props => {
             type={BarCodeScanner.Constants.Type.back}
             barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
             onBarCodeScanned={scanned ? undefined : async function({ data, type }){
-              if (data.startsWith('Geo Trace:') == false)
-                return setErrorMessage('Unrecognised QR code.')
+              if (data.startsWith('Geo Trace:') == false){
+                setErrorMessage('Unrecognised QR code.')
+                setShowBarCodeScanner(false)
+                return
+              }
               var deviceId = await getDeviceId()
               await status.reportInfected(deviceId, data.slice('Geo Trace:'.length))
             }}
