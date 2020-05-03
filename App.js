@@ -59,7 +59,7 @@ function App(props) {
           </Stack.Navigator>
         </NavigationContainer>
         <Text 
-          style={styles.versionNote}
+          style={Platform.OS === 'ios' ? styles.versionNoteIOS : styles.versionNote}
         >
           v{appJson.expo.version}
         </Text>
@@ -87,6 +87,12 @@ const styles = StyleSheet.create({
   versionNote: {
     position: 'absolute',
     top: 20,
+    right: 5,
+    color: '#00000088',
+  },
+  versionNoteIOS: {
+    position: 'absolute',
+    top: 40,
     right: 5,
     color: '#00000088',
   },
