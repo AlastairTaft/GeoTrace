@@ -23,10 +23,16 @@ const askRequiredPermissions = async () => {
   }
   const options = {
     accuracy: Location.Accuracy.Highest,
-    distanceInterval: 10,
-    timeInterval: 5 * 60000, // 5 minute
-    mayShowUserSettingsDialog: false,
+    //sdistanceInterval: 0,
+    //timeInterval: 5 * 60 * 1000, // 5 minute
+    //mayShowUserSettingsDialog: false,
     activityType: Location.ActivityType.Fitness,
+    foregroundService: {
+      notificationTitle: 'Tracking active',
+      notificationBody: 'Location data is being encrypted.',
+      notificationColor: '#627EEE88',
+    },
+    showsBackgroundLocationIndicator: true,
   }
   try {
     await Location.startLocationUpdatesAsync(BACKGROUND_TRACKING_TASK_NAME, options)

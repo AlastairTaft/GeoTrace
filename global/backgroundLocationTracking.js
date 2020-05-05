@@ -20,6 +20,23 @@ TaskManager.defineTask(
       return;
     }
 
+    // If the accuracy is less than 10 meters, discard it
+    locations = locations.filter(l => l.coords.accuracy <= 10)
+    // Won't track if moving faster than 30 meters per second, assuming they 
+    // are in a car, where this kind of data isn't all that useful
+    locations = locations.filter(l => l.coords.speed <= 30000)
+
+    var lastLocationPoint = locations[locations.length - 1]
+    if (!lastLocationPoint)
+      return
+    await AsyncStorage.setItem(
+      'lastLocation', 
+      JSON.stringify({
+        location: lastLocationPoint,
+        timestamp: (new Date()).valueOf(),
+      }),
+    )
+
     // Must manually limit the data points we store because iOS will fire this
     // everytime the user's location significantly changes
     var lastTrackTime = await AsyncStorage.getItem('lastTrackTime')
@@ -31,11 +48,14 @@ TaskManager.defineTask(
     }
     await AsyncStorage.setItem('lastTrackTime', '' + (new Date()).valueOf())
 
-    // If the accuracy is less than 10 meters, discard it
-    locations = locations.filter(l => l.coords.accuracy <= 10)
-    // Won't track if moving faster than 30 meters per second, assuming they 
-    // are in a car, where this kind of data isn't all that useful
-    locations = locations.filter(l => l.coords.speed <= 30000)
+    var lastLocationStr = await AsyncStorage.getItem('lastLocation')
+    var lastLocation = JSON.parse(lastLocationStr)
+    if (lastLocation.timestamp < t5MinsAgo){
+      // If the data is stale don't log it to the server
+      return
+    }
+
+    var locations = [lastLocation.location]
 
     // Filter out home sensitive location data, e.g. their home address
     locations = scrambleSensitiveLocations(locations)
