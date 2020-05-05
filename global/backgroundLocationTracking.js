@@ -14,10 +14,11 @@ export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 TaskManager.defineTask(
   BACKGROUND_TRACKING_TASK_NAME, 
   async ({ data: { locations }, error }) => {
+    
     if (error) {
       // check `error.message` for more details.
       Sentry.captureException(error)
-      return;
+      return
     }
 
     // If the accuracy is less than 10 meters, discard it
@@ -54,8 +55,7 @@ TaskManager.defineTask(
       // If the data is stale don't log it to the server
       return
     }
-
-    var locations = [lastLocation.location]
+    locations = [lastLocation.location]
 
     // Filter out home sensitive location data, e.g. their home address
     locations = scrambleSensitiveLocations(locations)
