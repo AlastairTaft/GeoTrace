@@ -1,0 +1,134 @@
+
+import { getBlockIdentifierForLocation } from './blocks'
+import { RELATIVE_EPOCH_START } from './constants'
+import { getBlockIdentifierForTimestamp } from './blocks'
+
+export const createBackgroundTrackFunction = ({
+  getStoredLocation,
+  setStoredLocation,
+  timeBlockSize,
+  onError,
+}) => async ({ data: { locations }, error }) => {
+  if (error) return onError(error)
+  await Promise.all(locations.map(async l => {
+    // For each location, if its more accurate than the one we have stored for
+    // that time block, then override it
+    var tId = getBlockIdentifierForTimestamp(l.timestamp, timeBlockSize)
+    var storageKey = `${timeBlockSize}-${tId}`
+    var curLocation = await getStoredLocation(storageKey)
+    // If the location isn't accurate to at least 10 meters, throw it out
+    if (l.coords.accuracy > 10) return
+    if (!curLocation || l.coords.accuracy < curLocation.coords.accuracy){
+      await setStoredLocation(storageKey, l)
+    }
+  }))
+}
+
+/**
+ * Scrambles all sensitive location data, e.g. the users home address.
+ * @param {Array<Location>}
+ * @returns {Array<Location>}
+ */
+function scrambleSensitiveLocations(locations){
+  // TODO
+  // We scramble rather than remove so that its harder to infer the user is
+  // near to their home if there is a gap in data
+  // TODO Must scramble in a way that won't cause fake collisions to be 
+  // detected
+  return locations
+}
+
+var foo = async ({
+  hashFunction,
+  hashRiskPoint,
+  pushRiskPoints,
+  getRiskPoints,  
+}) => {
+
+  if (error) {
+    return onError(error)
+  }
+
+  // If the accuracy is less than 10 meters, discard it
+  locations = locations.filter(l => l.coords.accuracy <= 10)
+  // Won't track if moving faster than 30 meters per second, assuming they 
+  // are in a car, where this kind of data isn't all that useful
+  locations = locations.filter(l => l.coords.speed <= 30000)
+
+  var lastLocationPoint = locations[locations.length - 1]
+  if (!lastLocationPoint)
+    return
+  await setItem(
+    'lastLocation', 
+    JSON.stringify({
+      location: lastLocationPoint,
+      timestamp: (new Date()).valueOf(),
+    }),
+  )
+
+  // Must manually limit the data points we store because iOS will fire this
+  // everytime the user's location significantly changes
+  var lastTrackTime = await getItem('lastTrackTime')
+  var t5MinsAgo = (new Date()).valueOf() - (1000 * 60 * 5)
+  if (lastTrackTime && Number(lastTrackTime) > t5MinsAgo){
+    // Don't track another data point if the last one was less
+    // than 5 minutes ago
+    return
+  }
+  await storage.setItem('lastTrackTime', '' + (new Date()).valueOf())
+
+  var lastLocationStr = await getItem('lastLocation')
+  var lastLocation = JSON.parse(lastLocationStr)
+  if (lastLocation.timestamp < t5MinsAgo){
+    // If the data is stale don't log it to the server
+    return
+  }
+  locations = [lastLocation.location]
+
+  // Filter out home sensitive location data, e.g. their home address
+  locations = scrambleSensitiveLocations(locations)
+
+  var riskPoints = []
+  // We need to map each location to its respective grid block
+  await Promise.all(locations.map(async l => {
+    // Location type info here 
+    // https://docs.expo.io/versions/latest/sdk/location/#location
+
+    // The current time right now is 10:06 AEST, we don't care about anything
+    // before then so let's remove that time from the EPOCH.
+    var elapsed = Math.round(l.timestamp) - RELATIVE_EPOCH_START
+    
+    // Not specific geographic block the user is in, used to get the salt
+    var nonSpecificGeoBlock = getBlockIdentifierForLocation(
+      {
+        latitude: l.latitude,
+        longitude: l.longitude,
+      },
+      1000 * 50 // Will represent a 50km squared block
+    )
+    var preSaltHash = await hashFunction(`
+      This block, if reverse hashed identifies that somebody with a certain 
+      IP was somewhere within a 50 square meter block at a certain time.`
+      .replace(/\s+/g, ' ') + 
+      nonSpecificGeoBlock.id.latitudeBlockNumber + '-' + 
+      nonSpecificGeoBlock.id.longitudeBlockNumber
+    )
+
+    var localRiskPoints = getRiskPoints(l.coords, elapsed)
+    await Promise.all(localRiskPoints.map(
+      async dto => {
+        var hash = await hashRiskPoint(dto)
+        riskPoints.push({
+          timePassedSinceExposure: dto.timePassedSinceExposure,
+          hash,
+          preSaltHash,
+          timestamp: Math.round(l.timestamp),
+        })
+      }
+    ))      
+  }))
+
+  // Puts the hashed risk points in local storage
+  await pushRiskPoints(riskPoints)
+
+}

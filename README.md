@@ -1,12 +1,22 @@
 # Why?
 One of the most useful tools we have in limiting the spread of the virus is contact tracing. If we can quickly inform those who are at risk of unknowingly contracting the virus, those individuals can take precautions to prevent passing it on to others. Speed is an advantage. It also means that once we ease out of lockdown we can selectively isolate to prevent further outbreaks without bringing the economy to a halt.
 
-# Planned Spec (DRAFT)
-
 ## 1. Introduction
-We propose to improve on the existing solutions that are actively being worked on or already in the app stores. 
+This is a proposal to solve contact tracing in a privacy first way. Contact tracing is the process of contacting all the people who have been in contact with someone who has newly been diagnosed with the virus so that those people can self isolate and prevent spreading the virus further. Typically this is done by health authorities asking the person where they have been, which is slow and doesn't catch everyone at risk. Many solutions have or are being developed to solve this problem and some raise questions about privacy. Governments want to open back up and get their economy going again. Effective contact tracing is a useful tool to do this without risking further out breaks, which is why it's not surprising we're seeing some governments make their contact tracing app mandatory, i.e. mandatory tracking of their citizens. This raises serious ethical concerns. We have seen in the past that changes of law and technology during times of crisis often stick around permanently. Now more than ever it's important to build tools that solve the problem of the crisis but can not be abused for other purposes.
 
-Let’s evaluate a few and look at the drawbacks.
+### 1.1 Privacy & Utility Goals
+Our system has some guiding principles.
+
+- Unguessable one way data encryption
+- A central database
+
+#### 1.1.1 Unguessable one way data encryption
+All location and timestamp data is hashed. This is one way encryption that removes the original information from the data yet a hash can still be compared against other user's hashes to find matches to determine risk. That's all well and good but without any additional measures that data can be very easily reverse engineered. In the same way a malicious user can target location and timestamp points to generate hashes and look for collisions to figure out the original data.
+
+We solve this by throwing in short lived salts that can only be obtained en-mass by a very large network (i.e. millions of unique devices with their own IPs), this is very difficult for a malicious user to emulate and thus not practical to search for hash collisions. Our salts are only active for a short window of time which means any possible attack must be done in this same window of time. This will prevent malicious actors from reverse engineering the data at some point in the future.
+
+#### 1.1.2 A Central Database
+We store the hashed data from both infected and non infected users. This gives us maximum utility, it is quick to determine if someone is at risk and we can calculate the infection chain across multiple levels of contacts. Something which can't be done if only data from infected users is shared.
 
 ### 1.1 Bluetooth 
 Solutions such as Singapore’s Trace Together app, COVID Watch and CoEpi record when users come in close proximity to each other. Once diagnosed with the virus contact data is then shared with an authority this data is then shared with all users who can then see if they've come in contact with the virus using data stored locally on their device. While this is a promising option it has one drawback, it can’t keep track of an at risk area. I.e. if an infected person visits a location, touches surfaces and leaves, then five minutes later another person may visit the same location and touches the same surface, that person is then at risk but was not picked up by Bluetooth ping. A further drawback is tracking the infection chain can be slow. If an 'at risk' person self identified by the user's app goes on to develop symptoms, it's not until that person is officially diagnosed do the second tier of people this person has been in contact with end up being notified, this might not be quick enough to stop the spread, given that it can take on average 5 to 6 days to develop symptoms.

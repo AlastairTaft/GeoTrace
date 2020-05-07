@@ -64,3 +64,24 @@ function groupBy(arr, key) {
   })
   return obj
 }
+
+/**
+ * Deletes stale locations from a hashmap. The hashmap must follow a specific 
+ * structure.
+ * e.g.
+ * ```
+ * {
+ *   '300000': {
+ *     '2': { location },
+ *     '3': { location },
+ *   }
+ * }
+ */
+export const purgeStaleLocations = function(hashmap, earliestBlock){
+  for (var blockSize in hashmap){
+    for (var blockId in hashmap[blockSize]){
+      if (Number(blockId) < earliestBlock)
+        delete hashmap[blockSize][blockId]
+    }
+  }
+}

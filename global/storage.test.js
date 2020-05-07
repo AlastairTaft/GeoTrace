@@ -1,6 +1,6 @@
 import * as methods from './storage'
 
-describe('#purgeStaleRiskPoints', () => {
+xdescribe('#purgeStaleRiskPoints', () => {
   it('should remove risk points that are older than 2 weeks.', () => {
     var riskData = [
       {

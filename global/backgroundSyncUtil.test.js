@@ -127,3 +127,22 @@ describe('#backgroundSync', () => {
     ])
   })
 })
+
+describe('#purgeStaleLocations', () => {
+  it('should purge old locations', () => {
+    var hashmap = {
+      '300000': {
+        '1': { foo: 'bar' },
+        '2': { foo2: 'bar2' },
+        '3': { foo3: 'bar3' },
+      },
+    }
+    methods.purgeStaleLocations(hashmap, 2)
+    expect(hashmap).toEqual({
+      '300000': {
+        '2': { foo2: 'bar2' },
+        '3': { foo3: 'bar3' },
+      },
+    })
+  })
+})
