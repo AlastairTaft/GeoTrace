@@ -5,14 +5,14 @@ export const SALT_SERVERS = __DEV__ ?
     ? 'http://10.0.2.2:3000/dev/get-salt'
     : 'http://localhost:3000/dev/get-salt' ] :
   [
-    'salt1.geotrace.io/get-salt',
-    'salt2.geotrace.io/get-salt',
-    'salt3.geotrace.io/get-salt',
-    'salt4.geotrace.io/get-salt',
-    'salt5.geotrace.io/get-salt',
-    'salt6.geotrace.io/get-salt',
-    'salt7.geotrace.io/get-salt',
-    'salt8.geotrace.io/get-salt',
+    'https://salt1.geotrace.io/get-salt',
+    'https://salt2.geotrace.io/get-salt',
+    'https://salt3.geotrace.io/get-salt',
+    'https://salt4.geotrace.io/get-salt',
+    'https://salt5.geotrace.io/get-salt',
+    'https://salt6.geotrace.io/get-salt',
+    'https://salt7.geotrace.io/get-salt',
+    'https://salt8.geotrace.io/get-salt',
   ]
 
 /**
