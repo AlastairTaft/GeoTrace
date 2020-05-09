@@ -35,12 +35,12 @@ We scramble this data to remove the user’s home location and any location poin
 
 We then split the world into three layers split by hexagonal blocks, each one shifted to compensate if location points are at the edge of any block, so we have a block layer A, B and C. Each block is then given a predefined reference value. We also divide the area over a single hexagonal grid that’s split by 50 kilometer blocks, layer D (used to get the salt, more on that later).
 
-Layer A, B and C looks like this. [!example](https://i.imgur.com/wC0rKkT.png)
+Layer A, B and C looks like this. ![example](https://i.imgur.com/wC0rKkT.png)
 Red dots indicate real location positions. They are sifted into their matching hexagonal block for each layer.
 
 We also split the current time into different block intervals. We store the block of the current time and the next block so we can track at risk areas over time. We store blocks at interval sizes of 5, 10, 20, 40 and 80 minutes.
 
-[!time block example](https://i.imgur.com/k5XAlQ3.png)
+![time block example](https://i.imgur.com/k5XAlQ3.png)
 
 So each location point is now represented with the following data points.
 
