@@ -1,7 +1,11 @@
 # What is Geo Trace?
 Geo Trace is a GPS based contact tracing app that emphasises privacy. It uniquely encrypts location data points in a way that can be compared without being decrypted. 
 
-# Why?
+## Download
+- [Android APK](https://exp-shell-app-assets.s3.us-west-1.amazonaws.com/android/%40alastairtaft/geo-trace-575a423259ef44d2adcb2721e868f41c-signed.apk)
+- iOS - Available only as an internal tester via TestFlight
+
+## Why?
 One of the most useful tools we have in limiting the spread of the virus is contact tracing. If we can quickly inform those who are at risk of unknowingly contracting the virus, those individuals can take precautions to prevent passing it on to others. Speed is an advantage. It also means that once lockdown is eased people can selectively isolate to prevent further outbreaks without bringing the economy to a halt.
 
 ## 1. Introduction
