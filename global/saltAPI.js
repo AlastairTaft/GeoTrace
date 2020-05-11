@@ -25,7 +25,7 @@ export const SALT_SERVERS = __DEV__ ?
 export const getServerUrl = function(preSaltHash, urlList = SALT_SERVERS){
   // Grab the last few characters that we'll use to figure out a modulus and
   // get the salt
-  var val = base64ToBase10(preSaltHash.slice(-8, -2))
+  var val = base66ToBase10(preSaltHash.slice(-8, -2))
   return urlList[(val + urlList.length) % urlList.length]
 }
 
@@ -35,8 +35,8 @@ export const getServerUrl = function(preSaltHash, urlList = SALT_SERVERS){
  * @param {string}
  * @return {number}
  */
-function base64ToBase10(str) {
-  var order = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/"
+function base66ToBase10(str) {
+  var order = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_~."
   var base = order.length
   var num = 0, r
   while (str.length) {
