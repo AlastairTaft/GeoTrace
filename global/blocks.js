@@ -3,12 +3,24 @@
  * into equal area blocks.
  */
 
+import { RELATIVE_EPOCH_START } from './constants'
+
 // In metres
 export const EARTH_CIRCUMFERENCE = 40075000
 export const EARTH_CIRCUMFERENCE_POLE_TO_POLE = 40008000
 export const APPROX_BLOCK_SIZE = 10 // Meters
-export const LATITUDE_BLOCK_SIZE = 90 / 
-  Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / 10)
+
+/**
+ * Calculate how much latitude degress makes up a block.
+ * @param {number} blockSize In meters
+ * @return {number}
+ */
+export const calculateLatitudeBlockSize = function(blockSize){
+  return 90 / Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / blockSize)
+}
+
+
+export const LATITUDE_BLOCK_SIZE = calculateLatitudeBlockSize(10)
 
 /**
  * Get the Earth's circumference at a specific latitude, i.e. if the sphere 
@@ -17,6 +29,8 @@ export const LATITUDE_BLOCK_SIZE = 90 /
  * @returns {number}
  */
 export const getEarthCircumferenceAtLatitude = function(latitude){
+  if (isNaN(latitude) || latitude === null)
+    throw new Error(`Invalid latitude ${latitude}`)
   return EARTH_CIRCUMFERENCE * Math.cos(convertDegreesToRadians(latitude))
 }
 
@@ -57,15 +71,31 @@ export const getNoLongitudeBlocks = function(
 }
 
 /**
+ * @typedef BlockIdentifierId
+ * @property {number} latitudeBlockNumber An integer identifying the block
+ * @property {number} longitudeBlockNumber An integer identifying the block
+ * 
+ * @typedef BlockIdentifier
+ * @property {BlockIdentifierId} id
+ * @property {GeoJSONFeature} geoJSON Useful for debugging, a geoJSON polygon of
+ * the block area.
+ * 
+ * Gets back more information than `getDetailedBlockIdentifierForLocation`, 
+ * however this is to only be used internally, its only exported for testing
+ * Use `getLocationBlockId` instead.
  * @param {number} location.latitude
  * @param {number} location.longitude
- * @returns {tbd}
+ * @returns {BlockIdentifier}
  */
-export const getBlockIdentifierForLocation = function(
+export const getDetailedBlockIdentifierForLocation = function(
   location, 
   opt_blockSize = APPROX_BLOCK_SIZE
 ){
   var { latitude, longitude } = location
+  if (isNaN(latitude))
+    throw new Error(`Invalid latitude ${latitude}.`)
+  if (isNaN(longitude))
+    throw new Error(`Invalid longitude ${longitude}.`)
   var latBlockSize = 90 / 
     Math.round((EARTH_CIRCUMFERENCE_POLE_TO_POLE / 4) / opt_blockSize)
   ////0.000001 accurate to 0.11m which is accurate enough for our purposes
@@ -115,14 +145,38 @@ export const getBlockIdentifierForLocation = function(
   }
 }
 
+/**
+ * Converts a location to an id that represents its position accurate to the 
+ * provided block size.
+ * @param {number} location.latitude
+ * @param {number} location.longitude
+ * @param {number} opt_blockSize The size of the block in meters. Defaults to 
+ * 10.
+ * @returns {string} 
+ */
+export const getLocationBlockId = function(location, opt_blockSize){
+  var { id } = getDetailedBlockIdentifierForLocation(location, opt_blockSize)
+  return id.longitudeBlockNumber + '-' + id.latitudeBlockNumber
+} 
+
 
 /**
- * Get the block identifier for the timestamp
- * @param {number} elapsed
- * @param {number} blockSize The block size in milliseconds
- * @returns {number} A value uniquely identifying the block that the 
- * milliseconds amount falls within.
+ * @deprecated. Use `getTimeBlockId`.
  */
 export const getBlockIdentifierForTimestamp = function(elapsed, blockSize){
+  return Math.floor(elapsed / blockSize)
+}
+
+/**
+ * Get the block id for the timestamp
+ * @param {number} blockSize The block size in milliseconds
+ * @param {number} timestamp A UNIX epoch.
+ * @returns {number} A value uniquely identifying the block that the 
+ * milliseconds amount falls within. This will be an integer so if you want to
+ * get the previous time block you can subtract 1, to get the next, add 1.
+ */
+export const getTimeBlockId = function(blockSize, timestamp){
+  // Make the timestamp relative to the app tracking start time
+  var elapsed = timestamp - RELATIVE_EPOCH_START
   return Math.floor(elapsed / blockSize)
 }

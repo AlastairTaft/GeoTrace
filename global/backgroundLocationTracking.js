@@ -5,6 +5,7 @@ import { AsyncStorage } from 'react-native'
 import './bugTracking'
 import { getStoredLocationData, setStoredLocationData } from './storage'
 import { hashRiskPoint, getRiskPoints } from './risk'
+import { createBackgroundTrackFunction } from './backgroundLocationUtil'
 
 export const BACKGROUND_TRACKING_TASK_NAME = 'COVID19_LOCATION_TRACKING'
 

@@ -10,6 +10,7 @@ import TrackingIcon from './../assets/icons/Tracking'
 import ReportIcon from './../assets/icons/Report'
 import ResourcesIcon from './../assets/icons/Resources'
 import TabBar from './TabBar'
+import DebugScreen from './../screens/DebugScreen'
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -57,6 +58,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <ResourcesIcon />,
         }}
       />*/}
+      {(__DEV__ || Constants.manifest.releaseChannel == 'debug') ? <BottomTab.Screen
+        name="Debug"
+        component={DebugScreen}
+        options={{
+          title: 'Debug',
+          tabBarIcon: ({ focused }) => <ResourcesIcon />,
+        }}
+      /> : null}
     </BottomTab.Navigator>
   );
 }

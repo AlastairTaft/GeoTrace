@@ -108,7 +108,7 @@ export const setStoredUserData = async function(user){
 export const getStoredLocationData = async function(){
   var storedLocationsStr = await AsyncStorage.getItem('storedLocations')
   try {
-    return JSON.parse(storedLocationsStr)
+    return JSON.parse(storedLocationsStr) || {}
   } catch (err){
     return {}
   }

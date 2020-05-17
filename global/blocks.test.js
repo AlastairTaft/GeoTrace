@@ -34,9 +34,9 @@ describe('#blocks', () => {
     })
   })
 
-  describe('#getBlockIdentifierForLocation', () => {
+  describe('#getDetailedBlockIdentifierForLocation', () => {
     it('should get the correct grid block for the Eiffel Tower', () => {
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: 48.8576733,
         longitude: 2.294044,
       })
@@ -80,7 +80,7 @@ describe('#blocks', () => {
     })
     it(`should get the correct grid block for the Black Star Square, which is
       near to the equator`.replace(/\s+/g, ' '), () => {
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: 5.54834,
         longitude: -0.1930962,
       })
@@ -124,7 +124,7 @@ describe('#blocks', () => {
     })
     it(`should get the correct grid block for Hotel Tulpan which is very far 
       north`.replace(/\s+/g, ' '), () => {
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: 78.6589801,
         longitude: 16.3149812,
       })
@@ -168,7 +168,7 @@ describe('#blocks', () => {
     })
     it(`should get the correct grid block for Otuhaka Beach, Tonga, which has
       a very extreme negative longitude`.replace(/\s+/g, ' '), () => {
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: -21.082144,
         longitude: -175.3437198,
       })
@@ -214,7 +214,7 @@ describe('#blocks', () => {
       Zealand, has an extreme negative longitude and moderate negative 
       latitude`.replace(/\s+/g, ' '), () => {
 
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: -44.271032,
         longitude: -176.282394,
       })
@@ -258,7 +258,7 @@ describe('#blocks', () => {
     })
     it(`should get the correct block when in the block band right below 
       the equator, near Gabon`.replace(/\s+/g, ' '), () => {
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: -0.00005,
         longitude: 9.44682,
       })
@@ -301,7 +301,7 @@ describe('#blocks', () => {
       })
     })
     it(`should get the right value at the 0,0 coordinates`, () => {
-      var result = methods.getBlockIdentifierForLocation({
+      var result = methods.getDetailedBlockIdentifierForLocation({
         latitude: 0,
         longitude: 0,
       })
