@@ -169,7 +169,7 @@ export const getBlockIdentifierForTimestamp = function(elapsed, blockSize){
 
 /**
  * Get the block id for the timestamp
- * @param {number} blockSize The block size in milliseconds
+ * @param {number} blockSize The block size in minutes
  * @param {number} timestamp A UNIX epoch.
  * @returns {number} A value uniquely identifying the block that the 
  * milliseconds amount falls within. This will be an integer so if you want to
@@ -178,5 +178,16 @@ export const getBlockIdentifierForTimestamp = function(elapsed, blockSize){
 export const getTimeBlockId = function(blockSize, timestamp){
   // Make the timestamp relative to the app tracking start time
   var elapsed = timestamp - RELATIVE_EPOCH_START
-  return Math.floor(elapsed / blockSize)
+  return Math.floor(elapsed / (blockSize * 60 * 1000))
+}
+
+
+/**
+ * Convert a time block id back into its UNIX timestamp.
+ * @param {number} blockId
+ * @param {number} blockSize
+ * @returns {number}
+ */
+export const getTimestampFromBlock = function(blockId, blockSize){
+
 }

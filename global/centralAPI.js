@@ -21,6 +21,7 @@ export const submitRiskMap = async function(deviceId, riskPoints){
     body: JSON.stringify({
       uniqueId: deviceId,
       hashes: riskPoints.map(rp => ({
+        // TODO Update what we send to the server
         timePassedSinceExposure: rp.timePassedSinceExposure,
         hash: rp.hash,
       })),

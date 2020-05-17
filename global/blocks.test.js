@@ -371,4 +371,12 @@ describe('#blocks', () => {
       expect(result).toBe(1)
     })
   })
+
+  describe('#getTimeBlockId', () => {
+    // TODO
+  })
+
+  describe('#getTimestampFromBlock', () => {
+    // TODO 
+  })
 })

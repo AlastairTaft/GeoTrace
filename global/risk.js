@@ -1,9 +1,5 @@
-import * as Crypto from 'expo-crypto'
 import { 
-  LATITUDE_BLOCK_SIZE,
-  getBlockIdentifierForLocation, 
   getNoLongitudeBlocks,
-  getBlockIdentifierForTimestamp,
   APPROX_BLOCK_SIZE,
   getLocationBlockId,
   calculateLatitudeBlockSize,
@@ -22,18 +18,18 @@ export const convertLocationToRiskPoints = function(location){
   let l = location
   const positionBlockSize = 10
   var layerBlockIds = getPositionLayerGroupForLocation(l, positionBlockSize)
-  var layerNames = Object.keys(layerBlockIds)
+  var layerIds = Object.keys(layerBlockIds)
   var timeBlocksMins = [5, 10, 20]
   var riskPoints = []
-  layerNames.forEach((positionLayer, index) => {
+  layerIds.forEach((positionLayerId, index) => {
     var positionBlockId = layerBlockIds[layerNames[index]]
     timeBlocksMins.forEach(mins => {
       var riskPoint = {
-        positionLayer,
+        positionLayerId,
         positionBlockId,
         positionBlockSize,
         timeBlockSize: mins,
-        timeBlockId: getTimeBlockId(1000 * 60 * mins, l.timestamp),
+        timeBlockId: getTimeBlockId(mins, l.timestamp),
         timeUntilVisit: 0,
       }
       riskPoints.push(riskPoint)
@@ -95,63 +91,45 @@ const getPositionLayerGroupForLocation = function(
 }
 
 /**
- * Hash a risk point.
- * @returns {Promise<string>}
+ * @typedef HashedRiskPoint
+ * @property {number} timeUntilVisit The time in minutes before our current user
+ * will visit this location after this point in time. e.g. if this value was
+ * 5, for the same location in 5 minutes our current user will visit.
+ * @property {string} hash This is a hashed combination of all the risk point
+ * details minus the timeUntilVisit value.
+ * @property {string} preSaltHash This is a less specific hash of the risk 
+ * point.
+ * @property {number} timeBlockId An integer that identifies at what point in
+ * time this risk point represents. Can use it to keep chronological order of
+ * contact events.
+ * @property {number} timeBlockSize The window in which the time block is
+ * accurate to, in minutes.
+ * @property {number} positionBlockSize The size of the block in which the 
+ * location is accurate to. In meters.
+ * @property {string} positionLayerId Identifies the position layer this hash
+ * comes from, at the time of writing there are three different position layers.
+ * 
+ * @typedef RiskPoint This is the same as HashedRiskPoint however it includes
+ * the `positionBlockId` prop.
+ * @property {string} positionBlockId This identifies the position of the risk
+ * point accurately.
+ * @property {number} timeUntilVisit The time in minutes before our current user
+ * will visit this location after this point in time. e.g. if this value was
+ * 5, for the same location in 5 minutes our current user will visit.
+ * @property {string} hash This is a hashed combination of all the risk point
+ * details minus the timeUntilVisit value.
+ * @property {string} preSaltHash This is a less specific hash of the risk 
+ * point.
+ * @property {number} timeBlockId An integer that identifies at what point in
+ * time this risk point represents. Can use it to keep chronological order of
+ * contact events.
+ * @property {number} timeBlockSize The window in which the time block is
+ * accurate to, in minutes.
+ * @property {number} positionBlockSize The size of the block in which the 
+ * location is accurate to. In meters.
+ * @property {string} positionLayerId Identifies the position layer this hash
+ * comes from, at the time of writing there are three different position layers.
  */
-export const hashRiskPoint = async function(riskPoint){
-  var { 
-    timeBlockSize,
-    timeBlockNumber,
-    timePassedSinceExposure,
-    position,
-    positionBlockSize,
-  } = riskPoint
-  return Crypto.digestStringAsync(
-    Crypto.CryptoDigestAlgorithm.SHA512,
-    `This additional text here doesn\'t do much apart from make a malicious 
-     actor have to track this down in the source code.` + JSON.stringify({
-      timeBlockSize,
-      timeBlockNumber,
-      position,
-      positionBlockSize
-    }),
-    {
-      encoding: Crypto.CryptoEncoding.BASE64,
-    }
-  )
-}
-
-
-/**
- * @typedef RiskDataPoint
- * @property {string} hash The simple device location/time hash. 
- * @property {number} timePassedSinceExposure This is for future projecting, so 
- * when the user visits X location, this is the hash for the same location Y 
- * time in the future. So that if this user becomes infected, we know a risk
- * point for a point in time in the future at the same location. e.g. if this
- * user is likely to touch surfaces, someone who visits here later is at risk
- * @property {string} preSaltHash This is a hash of a 50 kilometer squared block
- * this location point is in. The idea is it is not specific enough to identify
- * any one person but it will be used to determine which salt server to ask for 
- * a salt from.
- * @property {number} timestamp Purely used locally to prune old data
- */
-
-
-/**
- * Validate its a valid risk point object. Throws if not valid.
- * @param {object} riskPoint
- */
-export const validateRiskDataPoint = async function(riskPoint){
-  if (!riskPoint.hash)
-    throw new Error('Missing \'hash\' value.')
-  if (!riskPoint.preSaltHash)
-    throw new Error('Missing \'preSaltHash\' value.')
-  if (!riskPoint.timestamp)
-    throw new Error('Missing \'timestamp\' value.')
-  if (riskPoint.timePassedSinceExposure === undefined || riskPoint.timePassedSinceExposure === null)
-    throw new Error('Missing \'timePassedSinceExposure\' value.')
-}
 
 
 /**
@@ -160,50 +138,98 @@ export const validateRiskDataPoint = async function(riskPoint){
  * at the edge of a block not matching to another person at the edge of their
  * block. We also calculate historic points to track if this user was at the 
  * location sometime after an infected person was.
- * @param {Location} props.l See 
+ * @param {Location} location See 
  * https://docs.expo.io/versions/latest/sdk/location/#location
- * @param {Function} props.hashFunction
- * @returns {Array<RiskDataPoint>}
+ * @param {Function} options.hashFunction
+ * @returns {Array<HashedRiskPoint>}
  */
-export const convertLocationToHashPoints = async function(props){
-  const { location: l, hashFunction } = props
-  // The current time right now is 10:06 AEST, we don't care about anything
-  // before then so let's remove that time from the EPOCH.
-  var elapsed = Math.round(l.timestamp) - RELATIVE_EPOCH_START
-  
-  // Not specific geographic block the user is in, used to get the salt
-  var nonSpecificBlockId = getLocationBlockId(
+export const convertLocationToHashedRiskPoints = async function(location, options){
+  var { hashFunction } = options
+  let l = location
+  var riskPoints = convertLocationToRiskPoints(l)
+  var preSaltHash = await getPreSaltHash(l, { hashFunction })
+
+  await Promise.all(riskPoints.map(
+    async dto => {
+
+      var {
+        positionLayerId,
+        positionBlockId,
+        positionBlockSize,
+        timeBlockSize,
+        timeBlockId,
+        timeUntilVisit,
+      } = dto
+
+      // The only thing we don't hash is the timeUntilVisit prop. This prop
+      // is special because we are hashing the points in time before the 
+      // current user has visited the location. i.e. if we decide its valuable
+      // to track the virus staying around on surfaces we can match these 
+      // hashes to complete the infection chain as they are synomous with 
+      // the hashes of when an infected user visited the location.
+      // TODO Opportunity to memorizee here to get 2x less hashes being done
+      var hash = await hashFunction(
+        positionLayer + '-'
+        + positionBlockId + '-' +
+        + positionBlockSize + '-' + 
+        + timeBlockSize + '-'
+        + timeBlockId
+      )
+      return {
+        // Server needs this to tweak the risk algorithm to consider the virus
+        // remaining on surfaces
+        timeUntilVisit,
+        // We don't reveal the specific location, that is encoded in the hash.
+        hash,
+        preSaltHash,
+        // If we don't send this to the server we don't know the cronological
+        // order of the infection chain and thus we'd end up notifying double
+        // the amount of people that they are at risk, with these people being
+        // incorrectly labelled as at risk
+        timeBlockId,
+        // Useful info to tweak the risk algorithm on the central server.
+        timeBlockSize,
+        // Useful to know the block size on the server, it doesn't reveal any
+        // location info.
+        positionBlockSize,
+        // Need to know, may help optimisation on the server, in the future
+        // the layer id may change when we optimise with Hexagons
+        positionLayerId,
+      }
+    }
+  ))   
+}
+
+/**
+ * Get a pre salt hash for the current location. This pre salt hash is non
+ * specific enough so that it does not reveal any sensitive location info.
+ * However it makes uses of the location details it has so that anyone in the
+ * same location at the same time will agree on the same generated hash. i.e.
+ * it goes to some degree of specificness to get a first level of protection
+ * but not enough to reveal sensitive details
+ * @param {Location} location An expo location object.
+ * @param {Function} options.hashFunction A function to generate a hash
+ * @returns {Promise<string>}
+ */
+export const getPreSaltHash = function(location, options){
+  var { hashFunction } = options
+
+  let l = location
+  // We'll take the location block accurate to 50 kilometers squared, that is
+  // not specific enough to be sensitive
+
+  var nonSpecificPositionBlockId = getLocationBlockId(
     {
-      latitude: l.latitude,
-      longitude: l.longitude,
+      latitude: l.coords.latitude,
+      longitude: l.coords.longitude,
     },
     1000 * 50 // Will represent a 50km squared block
   )
-  var preSaltHash = await hashFunction(`
-    This block, if reverse hashed identifies that somebody with a certain 
-    IP was somewhere within a 50 square meter block at a certain time.`
-    .replace(/\s+/g, ' ') + 
-    nonSpecificBlockId
-  )
 
-  
+  var nonSpecificTimeBlockId = getTimeBlockId(80, l.timestamp)
 
-
-
-  
-  return 
-
-
-  var localRiskPoints = getRiskPoints(l.coords, elapsed)
-  await Promise.all(localRiskPoints.map(
-    async dto => {
-      var hash = await hashRiskPoint(dto)
-      riskPoints.push({
-        timePassedSinceExposure: dto.timePassedSinceExposure,
-        hash,
-        preSaltHash,
-        timestamp: Math.round(l.timestamp),
-      })
-    }
-  ))   
+  // Because we are only taking the current and previous time blocks for
+  // 5, 10 and 20 min intervals, we can take the 80 min interval here without
+  // impacting more specific time block points
+  return hashFunction(nonSpecificPositionBlockId + '-' + nonSpecificTimeBlockId)
 }

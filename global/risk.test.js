@@ -14,42 +14,42 @@ describe('#risk', () => {
     // We collect the first 2 hours in 5 minute blocks
     expect(result.slice(0, 6)).toEqual([
       {
-        positionLayer: 'A',
+        positionLayerId: 'A',
         positionBlockId: '0-0',
         positionBlockSize: 10,
         timeBlockId: 0,
         timeBlockSize: 5,
         timeUntilVisit: 0,
       },{
-        positionLayer: 'A',
+        positionLayerId: 'A',
         positionBlockId: '0-0',
         positionBlockSize: 10,
         timeBlockId: -1,
         timeBlockSize: 5,
-        timeUntilVisit: 5,
+        timeUntilVisit: 5,  
       },{
-        positionLayer: 'A',
+        positionLayerId: 'A',
         positionBlockId: '0-0',
         positionBlockSize: 10,
         timeBlockId: 0,
         timeBlockSize: 10,
         timeUntilVisit: 0,
       },{
-        positionLayer: 'A',
+        positionLayerId: 'A',
         positionBlockId: '0-0',
         positionBlockSize: 10,
         timeBlockId: -1,
         timeBlockSize: 10,
         timeUntilVisit: 10,
       },{
-        positionLayer: 'A',
+        positionLayerId: 'A',
         positionBlockId: '0-0',
         positionBlockSize: 10,
         timeBlockId: 0,
         timeBlockSize: 20,
         timeUntilVisit: 0,
       },{
-        positionLayer: 'A',
+        positionLayerId: 'A',
         positionBlockId: '0-0',
         positionBlockSize: 10,
         timeBlockId: -1,
@@ -58,7 +58,7 @@ describe('#risk', () => {
       },
     ])
     expect(result[6]).toEqual({
-      positionLayer: 'B',
+      positionLayerId: 'B',
       positionBlockId: '0-0',
       positionBlockSize: 10,
       timeBlockId: 0,
@@ -66,7 +66,7 @@ describe('#risk', () => {
       timeUntilVisit: 0,
     })
     expect(result[12]).toEqual({
-      positionLayer: 'C',
+      positionLayerId: 'C',
       positionBlockId: '1-1',
       positionBlockSize: 10,
       timeBlockId: 0,
@@ -87,7 +87,7 @@ describe('#risk', () => {
       timestamp: 111672937 + constants.RELATIVE_EPOCH_START,
     })
     expect(result[0]).toEqual({
-      positionLayer: 'A',
+      positionLayerId: 'A',
       positionBlockId: '0-0',
       positionBlockSize: 10,
       timeBlockId: 372,
@@ -95,7 +95,7 @@ describe('#risk', () => {
       timeUntilVisit: 0,
     })
     expect(result[1]).toEqual({
-      positionLayer: 'A',
+      positionLayerId: 'A',
       positionBlockId: '0-0',
       positionBlockSize: 10,
       timeBlockId: 371,
@@ -103,7 +103,7 @@ describe('#risk', () => {
       timeUntilVisit: 5,
     })
     expect(result[5]).toEqual({
-      positionLayer: 'A',
+      positionLayerId: 'A',
       positionBlockId: '0-0',
       positionBlockSize: 10,
       timeBlockId: 92,
@@ -118,7 +118,7 @@ describe('#risk', () => {
       timestamp: 0 + constants.RELATIVE_EPOCH_START,
     })
     expect(result[0]).toEqual({
-      positionLayer: 'A',
+      positionLayerId: 'A',
       positionBlockId: '124498--622347',
       positionBlockSize: 10,
       timeBlockId: 0,
@@ -126,7 +126,7 @@ describe('#risk', () => {
       timeUntilVisit: 0,
     })
     expect(result[6]).toEqual({
-      positionLayer: 'B',
+      positionLayerId: 'B',
       positionBlockId: '124499--622346',
       positionBlockSize: 10,
       timeBlockId: 0,
@@ -134,7 +134,7 @@ describe('#risk', () => {
       timeUntilVisit: 0,
     })
     expect(result[12]).toEqual({
-      positionLayer: 'C',
+      positionLayerId: 'C',
       positionBlockId: '124499--622346',
       positionBlockSize: 10,
       timeBlockId: 0,

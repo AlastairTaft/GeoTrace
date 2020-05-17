@@ -1,4 +1,5 @@
 import * as Sentry from 'sentry-expo'
+import './risk'
 
 export const SALT_SERVERS = __DEV__ ? 
   [ Platform.OS === 'android'
@@ -62,7 +63,7 @@ export const getSalts = async function(preSaltHash, dtos){
     body: JSON.stringify({
       seeds: dtos.map(dto => ({
         seed: dto.preSaltHash,
-        timestamp: dto.timestamp,
+        timestamp: dto.time,
       }))
     }),
   })
