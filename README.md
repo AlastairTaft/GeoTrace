@@ -1,3 +1,6 @@
+# ⚠️ Archived
+This repo archived. It was built as part of a [hackathon project](https://devpost.com/software/trace-together).
+
 # What is Geo Trace?
 Geo Trace is a GPS based contact tracing app that emphasises privacy. It uniquely encrypts location data points in a way that can be compared without being decrypted. 
 
